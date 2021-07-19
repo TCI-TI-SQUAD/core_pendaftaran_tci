@@ -126,9 +126,9 @@
                             @foreach($real_period as $index => $period_jadwal)
                                 <tr>
                                     <td>{{ $index }}</td>
-                                    <td>{{$period_jadwal['period']->format('l, Y-m-d H:i:s')}}</td>
+                                    <td>{{$period_jadwal['period']->format('l, Y-m-d')}}</td>
                                     <td>{{$period_jadwal['jadwal']->waktu_mulai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
-                                    <td>{{$period_jadwal['jadwal']->waktu_mulai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
+                                    <td>{{$period_jadwal['jadwal']->waktu_selesai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
