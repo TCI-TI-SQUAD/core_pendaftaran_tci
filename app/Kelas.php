@@ -23,6 +23,10 @@ class Kelas extends Model
         'logo_kelas'
     ];
 
+    public function Pendaftaran(){
+        return $this->belongsTo('App\Pendaftaran','id_pendaftaran','id');
+    }
+
     public function DetailKelas(){
         return $this->hasMany('App\DetailKelas','id_kelas','id');
     }
@@ -33,5 +37,9 @@ class Kelas extends Model
 
     public function Pengajar(){
         return $this->belongsTo('App\Pengajar','id_pengajar','id');
+    }
+
+    public function JadwalKelas(){
+        return $this->hasMany('App\JadwalKelas','id_kelas','id');
     }
 }

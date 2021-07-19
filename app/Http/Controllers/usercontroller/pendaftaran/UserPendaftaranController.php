@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\usercontroller;
+namespace App\Http\Controllers\usercontroller\pendaftaran;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

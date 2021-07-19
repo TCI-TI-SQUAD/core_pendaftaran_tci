@@ -109,7 +109,7 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <a href="#" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                                    <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
                                 </div>
                                 <div class="col">
                                     <a href="#" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</a>
