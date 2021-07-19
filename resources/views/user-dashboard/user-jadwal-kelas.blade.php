@@ -52,7 +52,11 @@
                                         </div>
                                     </div>
                             @endforeach
+                        @else
+                            <div class="text-center w-100">Jadwal kelas belum diatur !</div>
                         @endif
+                    @else
+                        <div class="text-center w-100">Jadwal kelas belum diatur !</div>
                     @endif
                 </div>
                 
