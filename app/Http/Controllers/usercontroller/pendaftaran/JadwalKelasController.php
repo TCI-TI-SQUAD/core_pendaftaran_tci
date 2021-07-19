@@ -5,12 +5,16 @@ namespace App\Http\Controllers\usercontroller\pendaftaran;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+
 
 use App\Kelas;
 
 class JadwalKelasController extends Controller
 {
     public function index($id_kelas){
+
         // SECURITY
             $validator = Validator::make(['id_kelas' => $id_kelas],[
                 'id_kelas' => 'required|numeric|exists:kelas,id',
@@ -34,9 +38,29 @@ class JadwalKelasController extends Controller
                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'));
                                 })->where('status','buka')->findOrFail($id_kelas);
 
-                $days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+                $periods = CarbonPeriod::create($kelas->tanggal_mulai,$kelas->tanggal_selesai)->toArray();
+
+                if($kelas->JadwalKelas->count() <= 0){
+                    return redirect()->route('user.dashboard')->with([
+                        'status' => 'fail',
+                        'icon' => 'error',
+                        'title' => 'Kelas tidak ditemukan',
+                        'message' => 'Kelas tidak ditemukan di dalam sistem',
+                    ]);
+                }
+
+                $real_period = [];
+
+                foreach($periods as $index => $period){
+                    foreach($kelas->JadwalKelas as $jadwal){
+                        if(strtolower($period->format('l')) == $jadwal->hari){
+                            $real_period[$index]['period'] = $period;
+                            $real_period[$index]['jadwal'] = $jadwal;
+                        }
+                    }
+                }
                 
-                return view('user-dashboard.user-jadwal-kelas',compact(['kelas','days']));
+                return view('user-dashboard.user-jadwal-kelas',compact(['kelas','real_period']));
 
             }catch(ModelNotFoundException $err){
 

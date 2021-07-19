@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col">
                 <nav aria-label="breadcrumb">
@@ -24,48 +24,119 @@
                 </nav>
             </div>
         </div>
-        <div class="row d-flex justify-content-center pl-3 pr-3">
-            <div class="col-sm">
-                <div class="row justify-content-baseline">
-                    @if(isset($kelas->JadwalKelas) && isset($days))
-                        @if($kelas->JadwalKelas->count() > 0)
-                            @foreach($days as $index => $day)
-                                    <div class="col-md-3 card text-center m-2 p-0" style="overflow:hidden;">
-                                        <h4 class="card-title p-2 text-white" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">{{ strtoupper($day) }}</h4>
-                                        <!-- Card content -->
-                                        <div class="card-body">
-                                            <!-- Title -->
-                                            <!-- Text -->
-                                            @if(!$kelas->JadwalKelas->where('hari',$day)->isEmpty())
-                                                
-                                                @php $jadwal=$kelas->JadwalKelas->where('hari',$day)->first(); @endphp
+    </div>
 
-                                                <h5 class="bg-success p-3 font-weight-bold text-white rounded">ADA KELAS</h5>
-                                                <p class="mt-3 font-weight-bold">{{ $jadwal->waktu_mulai.' - '.$jadwal->waktu_selesai.' '.strtoupper($jadwal->zona_waktu) }}</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <!-- Card -->
+                <div class="card z-depth-2 mr-3 mb-3" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
-                                            @else
+                    <!-- Card image -->
+                    <img class="card-img-top" src="{{ url('storage\image_kelas',[$kelas->logo_kelas]) }}" alt="Card image cap" style="height:200px;object-fit:cover;">
 
-                                                <h5 class="p-3 font-weight-bold text-white rounded text-dark">TIDAK ADA KELAS</h5>
-                                                <p class="card-text font-weight-bold text-dark"></p>
+                    <!-- Card content -->
+                    <div class="card-body text-center">
 
-                                            @endif
-                                        </div>
-                                    </div>
-                            @endforeach
-                        @else
-                            <div class="text-center w-100">Jadwal kelas belum diatur !</div>
-                        @endif
-                    @else
-                        <div class="text-center w-100">Jadwal kelas belum diatur !</div>
-                    @endif
+                        <!-- Title -->
+                        <h4 class="card-title" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><a>{{ $kelas->nama_kelas }}</a></h4>
+                        <!-- Text -->
+                        <div class="row mt-3">
+
+                            <div class="col">
+                                <img src="{{ url('storage\image_pengajar',[$kelas->Pengajar->foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ $kelas->Pengajar->nama_pengajar }}</b>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col" data-toggle="tooltip" title="HSK merupakan tingkatan dari kelas course ini">
+                                <p>{{ strtoupper($kelas->hsk) }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                @if($kelas->isLocked)
+                                    <small class="badge badge-pill badge-danger" data-toggle="tooltip" title="Kelas ini ditutup oleh admin">CLOSED</small>
+                                @else
+                                    <small class="badge badge-pill badge-success" data-toggle="tooltip" title="Kelas ini tersedia">OPEN</small>
+                                @endif
+
+                                @if($kelas->isBerbayar)
+                                    <small class="badge badge-pill badge-success" data-toggle="tooltip" title="Kelas ini berbayar">BERBAYAR</small>
+                                @else
+                                    <small class="badge badge-pill badge-warning" data-toggle="tooltip" title="Kelas ini Gratis">GRATIS</small>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="row m-3">
+                            <div class="col">
+                                <input type="text" class="form-control font-weight-bold text-center border border-secondary" value="@if($kelas->isBerbayar){{ 'Rp.'.number_format($kelas->harga) }}@else GRATIS @endif" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                Kuota : {{$kelas->DetailKelas->count().'/'.$kelas->kuota}}
+                            </div>
+                        </div>
+
+                        <div class="progress ml-1 mr-1 mb-1 border border-secondary">
+                            <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
+                            >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                            </div>
+                        </div>
+                        <!-- Button -->
+
+                    </div>
+
                 </div>
-                
             </div>
 
-            <div class="col-sm-5 jumbotron bg-danger">
-                
+            <div class="col-sm-8 jumbotron p-3">
+                <h5 class="font-weight-bold">{{ strtoupper($kelas->nama_kelas) }}</h5>
+                <div class="table-responsive-sm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nomor</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Waktu Mulai</th>
+                                <th scope="col">Waktu Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($real_period as $index => $period_jadwal)
+                                <tr>
+                                    <td>{{ $index }}</td>
+                                    <td>{{$period_jadwal['period']->format('l, Y-m-d H:i:s')}}</td>
+                                    <td>{{$period_jadwal['jadwal']->waktu_mulai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
+                                    <td>{{$period_jadwal['jadwal']->waktu_mulai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        
     </div>
 @endsection
 
