@@ -21,7 +21,7 @@
         <!-- Split button -->
         <div class="btn-group">
         <button type="button" class="btn">{{ strtoupper($pendaftaran->nama_pendaftaran) }}</button>
-        <button type="button" class="btn dropdown-toggle px-3 bg-primary" data-toggle="dropdown" aria-haspopup="true"
+        <button type="button" class="btn dropdown-toggle px-3 bg-secondary text-white" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             <span class="sr-only">Toggle Dropdown</span>
         </button>
@@ -148,27 +148,41 @@
         <h5 class="text-center text-white p-2" style="margin:-10px -10px 10px -10px;background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">PENGUMUMAN</h5>
 
             <div class="swiper-wrapper mb-5" style="height:50vh;overflow-x:hidden;">
-
-                <div class="swiper-slide">
-                            
-                            <!-- CARD -->
-                            <div class="card-pengumuman">
-
+                @if(isset($pendaftaran->PengumumanPendaftaran))
+                    @if($pendaftaran->PengumumanPendaftaran->count() > 0)
+                        @foreach($pendaftaran->PengumumanPendaftaran as $pengumuman)
+                            <div class="swiper-slide">
+                                        
+                                        <!-- CARD -->
+                                        <div class="card-pengumuman">
+                                            {!! $pengumuman->pengumuman !!}
+                                        </div>
+                                        <!-- END CARD -->
 
                             </div>
-                            <!-- END CARD -->
+                        @endforeach
+                    @else
+                        <div class="swiper-slide d-flex justify-content-center align-items-center">
+                                    
+                                    <!-- CARD -->
+                                    <div class="card-pengumuman text-center">
+                                        TIDAK ADA PENGUMUMAN
+                                    </div>
+                                    <!-- END CARD -->
 
-                </div>
+                        </div>
+                    @endif
+                @else
+                    <div class="swiper-slide">
+                                
+                                <!-- CARD -->
+                                <div class="card-pengumuman">
+                                    TIDAK ADA PENGUMUMAN
+                                </div>
+                                <!-- END CARD -->
 
-                <div class="swiper-slide d-flex justify-content-center align-items-center">
-                        a
-                            
-                </div>
-
-                <div class="swiper-slide d-flex justify-content-center align-items-center">
-                               
-                        b
-                </div>
+                    </div>
+                @endif
             </div>
             
             <div class="swiper-pagination"></div>

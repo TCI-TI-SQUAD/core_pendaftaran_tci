@@ -62,6 +62,8 @@ class UserPendaftaranController extends Controller
                             return true;
                         }
                     })->sortBy('isLocked')->values());
+
+                    $pendaftaran->setRelation('PengumumanPendaftaran',$pendaftaran->PengumumanPendaftaran);
                     
                     return view('user-dashboard.user-pendaftaran',compact(['pendaftaran','semua_pendaftaran']));
 
