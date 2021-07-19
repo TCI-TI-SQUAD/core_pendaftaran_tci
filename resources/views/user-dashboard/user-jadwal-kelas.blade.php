@@ -89,18 +89,22 @@
                             </div>
                         </div>
 
-                        <div class="progress ml-1 mr-1 mb-1 border border-secondary">
+                        <div class="row">
+                            <div class="col-12">
+                            <div class="progress border border-secondary">
                             <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
                             >
                             </div>
                         </div>
+                            </div>
+                        </div>
 
                         <div class="row">
-                            <div class="col-sm-6">
-                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class=" mt-3 mr-1 btn btn-block btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
                             </div>
-                            <div class="col-sm-6">
-                                <a href="#" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <a href="#" class="mt-3 ml-1 btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
                             </div>
                         </div>
                         <!-- Button -->
