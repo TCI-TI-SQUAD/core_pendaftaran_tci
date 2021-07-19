@@ -28,7 +28,7 @@
 
     <div class="container">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-5 col-sm-12 col-lg-4 mb-3 animated slideInLeft">
+            <div class="col-md-5 col-sm-10 col-lg-4 mb-3 animated slideInLeft">
                 <!-- Card -->
                 <div class="card" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
