@@ -286,7 +286,6 @@
 
     function hideInputSystem(status){
         if(status == 'siswa'){
-
             resetSiswa();
             $('#universitas_wrapper').css('display','none');
             $('#universitas_wrapper select').prop('disabled',true);
@@ -524,7 +523,7 @@
     // INSTANSI
         function resetInstansi(){
             $('#instansi_input').val("").change();
-            $('#instansi_input').reset('trigger');
+            $('#instansi_input').trigger('click');
         }
     // END
 

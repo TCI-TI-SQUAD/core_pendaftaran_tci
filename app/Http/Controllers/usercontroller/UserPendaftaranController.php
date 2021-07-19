@@ -38,6 +38,7 @@ class UserPendaftaranController extends Controller
                                                         ->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
                                                         ->get();
+
                     if($id != null){
                         $pendaftaran = $semua_pendaftaran->where('id',$id)->first();
                     }
@@ -61,7 +62,6 @@ class UserPendaftaranController extends Controller
                             return true;
                         }
                     })->sortBy('isLocked')->values());
-
                     
                     return view('user-dashboard.user-pendaftaran',compact(['pendaftaran','semua_pendaftaran']));
 
