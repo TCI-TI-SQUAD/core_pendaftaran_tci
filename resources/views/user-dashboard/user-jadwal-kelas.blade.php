@@ -19,7 +19,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-white m-3">
                         <li class="breadcrumb-item"><a href="{{ route('user.pendaftaran') }}">Pendaftaran</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url()->current() }}">@if(isset($kelas))Jadwal {{ $kelas->nama_kelas }}@endif</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url()->current() }}" class="text-dark">@if(isset($kelas))Jadwal {{ $kelas->nama_kelas }}@endif</a></li>
                     </ol>
                 </nav>
             </div>
@@ -27,10 +27,10 @@
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5 col-sm-12 col-lg-4 mb-3 animated slideInLeft">
                 <!-- Card -->
-                <div class="card z-depth-2 mr-3 mb-3" @if($kelas->isLocked)style="opacity:0.6;"@endif>
+                <div class="card" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
                     <!-- Card image -->
                     <img class="card-img-top" src="{{ url('storage\image_kelas',[$kelas->logo_kelas]) }}" alt="Card image cap" style="height:200px;object-fit:cover;">
@@ -110,9 +110,9 @@
                 </div>
             </div>
 
-            <div class="col-sm-8 jumbotron p-3">
+            <div class="col-md-7 col-sm-12 col-lg-8 jumbotron p-3 mb-3 animated slideInRight">
                 <h5 class="font-weight-bold">{{ strtoupper($kelas->nama_kelas) }}</h5>
-                <div class="table-responsive-sm">
+                <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
