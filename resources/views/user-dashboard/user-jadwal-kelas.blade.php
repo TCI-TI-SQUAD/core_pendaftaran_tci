@@ -101,10 +101,10 @@
 
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-6">
-                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class=" mt-3 mr-1 btn btn-block btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class=" m-2 btn btn-block btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-6">
-                                <a href="#" class="mt-3 ml-1 btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                                <a href="#" class="m-2 btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
                             </div>
                         </div>
                         <!-- Button -->
