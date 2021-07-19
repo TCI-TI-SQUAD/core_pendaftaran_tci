@@ -27,7 +27,7 @@
                 @if($errors->has('email'))<small class="text-danger">{{ $errors->first('email') }}</small>@endif
 
                 <label class="mt-3" for="exampleForm2">Password</label>
-                <input name="password" type="text" id="exampleForm2" class="form-control mt-1 @if($errors->has('email')){{ 'border border-danger' }}@endif" minlength="5" maxlength="100">
+                <input name="password" type="password" id="exampleForm2" class="form-control mt-1 @if($errors->has('email')){{ 'border border-danger' }}@endif" minlength="5" maxlength="100">
                 @if($errors->has('password'))<small class="text-danger">{{ $errors->first('password') }}</small>@endif
 
                 <div class="row mt-3">
