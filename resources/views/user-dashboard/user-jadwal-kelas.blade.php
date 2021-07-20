@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+<div class="container">
         <div class="row">
             <div class="col">
                 <nav aria-label="breadcrumb">
@@ -28,7 +28,8 @@
 
     <div class="container">
         <div class="row d-flex justify-content-center">
-            <div class="col-md-5 col-sm-9 col-lg-4 mb-3 animated slideInLeft">
+
+            <div class="col-md-12 col-sm-12 col-lg-4 m-1 p-0 animated slideInLeft">
                 <!-- Card -->
                 <div class="card" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
@@ -90,21 +91,21 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12">
-                            <div class="progress border border-secondary">
-                            <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
-                            >
-                            </div>
-                        </div>
+                            <div class="col-12 p-4">
+                                <div class="progress border border-secondary">
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
+                                    >
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-6">
-                                <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class=" m-2 btn btn-block btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                            <div class="col-sm-12 col-md-12 col-lg-6 p-2">
+                                <a href="{{ route('user.pendaftaran') }}" class="btn btn-block btn-outline-danger waves-effect @if($kelas->isLocked) disabled @endif">Back</a>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-6">
-                                <a href="#" class="m-2 btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                            <div class="col-sm-12 col-md-12 col-lg-6 p-2">
+                                <a href="#" class="btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
                             </div>
                         </div>
                         <!-- Button -->
@@ -114,11 +115,29 @@
                 </div>
             </div>
 
-            <div class="col-md-7 col-sm-12 col-lg-8 jumbotron p-3 mb-3 animated slideInRight">
+            <div class="col-md-12 col-sm-12 col-lg-7 m-1 p-3 jumbotron animated slideInRight">
                 <h5 class="font-weight-bold">{{ strtoupper($kelas->nama_kelas) }}</h5>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+                <table class="mt-3">
+                    <tr>
+                        <th class="pr-2">
+                            Tanggal Mulai 
+                        </th>
+                        <td>
+                            : Tanggal Mulai {{ strtoupper($kelas->tanggal_mulai) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="pr-2">
+                            Tanggal Selesai
+                        </th>
+                        <td>
+                            : Tanggal Selesai {{ strtoupper($kelas->tanggal_selesai) }}
+                        </td>
+                    </tr>
+                </table>
+                <div class="table-responsive-sm">
+                    <table class="table table-striped mt-3 text-nowrap">
+                        <thead class="bg-primary text-white">
                             <tr>
                                 <th scope="col">Nomor</th>
                                 <th scope="col">Tanggal</th>
@@ -129,8 +148,8 @@
                         <tbody>
                             @foreach($real_period as $index => $period_jadwal)
                                 <tr>
-                                    <td>{{ $index }}</td>
-                                    <td>{{$period_jadwal['period']->format('l, Y-m-d')}}</td>
+                                    <td>{{ $index+1 }}</td>
+                                    <td>{{$period_jadwal['period']->translatedFormat('l, Y-m-d')}}</td>
                                     <td>{{$period_jadwal['jadwal']->waktu_mulai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
                                     <td>{{$period_jadwal['jadwal']->waktu_selesai.' '.strtoupper($period_jadwal['jadwal']->zona_waktu)}}</td>
                                 </tr>
@@ -139,6 +158,7 @@
                     </table>
                 </div>
             </div>
+
         </div>
         
     </div>

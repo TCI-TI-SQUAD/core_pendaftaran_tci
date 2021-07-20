@@ -38,7 +38,7 @@ class JadwalKelasController extends Controller
                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'));
                                 })->where('status','buka')->findOrFail($id_kelas);
 
-                $periods = CarbonPeriod::create($kelas->tanggal_mulai,$kelas->tanggal_selesai)->toArray();
+                $periods = CarbonPeriod::create($kelas->tanggal_mulai,$kelas->tanggal_selesai);
 
                 if($kelas->JadwalKelas->count() <= 0){
                     return redirect()->route('user.dashboard')->with([
@@ -59,6 +59,8 @@ class JadwalKelasController extends Controller
                         }
                     }
                 }
+
+                $real_period = array_values($real_period);
                 
                 return view('user-dashboard.user-jadwal-kelas',compact(['kelas','real_period']));
 
