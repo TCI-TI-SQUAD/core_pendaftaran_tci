@@ -18,7 +18,7 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-white m-3">
-                        <li class="breadcrumb-item"><a href="{{ route('user.pendaftaran') }}">Pendaftaran</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('user.pendaftaran') }}" class="text-secondary font-weight-bold">Pendaftaran</a></li>
                         <li class="breadcrumb-item"><a href="{{ url()->current() }}" class="text-dark">@if(isset($kelas))Jadwal {{ $kelas->nama_kelas }}@endif</a></li>
                     </ol>
                 </nav>
@@ -44,26 +44,30 @@
                         <!-- Text -->
                         <div class="row mt-3">
 
-                            <div class="col">
-                                @php $foto_pengajar = isset($kelas->Pengajar->foto_pengajar) ? $kelas->Pengajar->foto_pengajar : 'default.jpg' @endphp
-                                <img src="{{ url('storage\image_pengajar',[$foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
+                            <div class="col-12 d-flex justify-content-center align-items-start text-left">
+
+                                <div>
+                                    @php $foto_pengajar = isset($kelas->Pengajar->foto_pengajar) ? $kelas->Pengajar->foto_pengajar : 'default.jpg' @endphp
+                                    <img src="{{ url('storage\image_pengajar',[$foto_pengajar]) }}" alt="" class="rounded bg-secondary" style="width:80px;height:70px;object-fit:cover;display:block;margin:auto;">
+                                </div>
+
+                                <div class="ml-1">
+                                    <small  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width:200px;" class="font-weight-bold">
+                                        @if(isset($kelas->Pengajar->nama_pengajar))
+                                            {{ $kelas->Pengajar->nama_pengajar }}
+                                        @else
+                                            Pengajar belum ditentukan
+                                        @endif
+                                    </small>
+                                    <div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><small>{{ 'Pengajar '.strtoupper($kelas->hsk) }}</small></div>
+                                    <div style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" class="text-secondary"><small class="font-weight-bold">{{ 'Rp.'. number_format($kelas->harga) }}</small></div>
+                                </div>
+
                             </div>
 
                         </div>
 
-                        <div class="row">
-                            <div class="col">
-                                <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ isset($kelas->Pengajar->nama_pengajar) ? $kelas->Pengajar->nama_pengajar : 'Belum ada pengajar' }}</b>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col" data-toggle="tooltip" title="HSK merupakan tingkatan dari kelas course ini">
-                                <p>{{ strtoupper($kelas->hsk) }}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
+                        <div class="row mt-4">
                             <div class="col">
                                 @if($kelas->isLocked)
                                     <small class="badge badge-pill badge-danger" data-toggle="tooltip" title="Kelas ini ditutup oleh admin">CLOSED</small>
@@ -79,20 +83,14 @@
                             </div>
                         </div>
 
-                        <div class="row m-3">
-                            <div class="col">
-                                <input type="text" class="form-control font-weight-bold text-center border border-secondary" value="@if($kelas->isBerbayar){{ 'Rp.'.number_format($kelas->harga) }}@else GRATIS @endif" readonly>
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                {{$kelas->DetailKelas->count().'/'.$kelas->kuota}}
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6">
-                                Kuota : {{$kelas->DetailKelas->count().'/'.$kelas->kuota}}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12 p-4">
+                            <div class="col-12 p-2 m-0">
                                 <div class="progress border border-secondary">
                                     <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
                                     >

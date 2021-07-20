@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\usercontroller\pendaftaran;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -56,14 +57,14 @@ class DaftarKelasController extends Controller
 
     // CHECK APAKAH USER SUDAH MENDAFTAR
         try{
-            $jmlh_kelas_aktif_user = Auth::user()->whereHas(
+            $jmlh_kelas_aktif_user = User::whereHas(
                 'DetailKelas' , function($query){
                     $query->whereHas('Kelas',function($query_2){
                         $query_2->whereDate('tanggal_selesai','>',date('Y-m-d'));
                     })->whereHas('Transaksi', function($query_3){
                         $query_3->where('status','memilih_metode_pembayaran')->orWhere('status','menunggu_pembayaran')->orWhere('status','menunggu_konfirmasi')->orWhere('status','lunas');
                     });
-            })->count();
+            });
 
             if($jmlh_kelas_aktif_user > 0){
                 return redirect()->back()->with([
@@ -75,12 +76,7 @@ class DaftarKelasController extends Controller
             }
 
         }catch(ModelNotFoundException $err){
-            return redirect()->back()->with([
-                'status' => 'fail',
-                'icon' => 'error',
-                'title' => 'Anda Telah Mendaftar',
-                'message' => 'Saat ini anda telah mendaftar di salah satu course TCI Universitas Udayana, lebih lengkap cek pada halaman KELAS SAYA',
-            ]);
+
         }
     // END
         
@@ -109,6 +105,8 @@ class DaftarKelasController extends Controller
             })->where('status','buka')->where('id',$request->id_kelas)->whereDate('tanggal_mulai','<=',date('Y-m-d')
                 )->whereDate('tanggal_selesai','>',date('Y-m-d'))
                 ->firstOrFail();
+
+            dd("masuk");
             
         }catch(ModelNotFoundException $err){
             return redirect()->back()->with([
