@@ -45,14 +45,15 @@
                         <div class="row mt-3">
 
                             <div class="col">
-                                <img src="{{ url('storage\image_pengajar',[$kelas->Pengajar->foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
+                                @php $foto_pengajar = isset($kelas->Pengajar->foto_pengajar) ? $kelas->Pengajar->foto_pengajar : 'default.jpg' @endphp
+                                <img src="{{ url('storage\image_pengajar',[$foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
                             </div>
 
                         </div>
 
                         <div class="row">
                             <div class="col">
-                                <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ $kelas->Pengajar->nama_pengajar }}</b>
+                                <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ isset($kelas->Pengajar->nama_pengajar) ? $kelas->Pengajar->nama_pengajar : 'Belum ada pengajar' }}</b>
                             </div>
                         </div>
 
@@ -123,7 +124,7 @@
                             Tanggal Mulai 
                         </th>
                         <td>
-                            : Tanggal Mulai {{ strtoupper($kelas->tanggal_mulai) }}
+                            : {{ Carbon\Carbon::create($kelas->tanggal_mulai)->translatedFormat('l, Y-m-d')}}
                         </td>
                     </tr>
                     <tr>
@@ -131,7 +132,7 @@
                             Tanggal Selesai
                         </th>
                         <td>
-                            : Tanggal Selesai {{ strtoupper($kelas->tanggal_selesai) }}
+                            : {{ Carbon\Carbon::create($kelas->tanggal_selesai)->translatedFormat('l, Y-m-d')}}
                         </td>
                     </tr>
                 </table>

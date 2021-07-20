@@ -64,6 +64,8 @@ use Illuminate\Support\Facades\Route;
                     Route::get('/pendaftaran/{nama?}','usercontroller\pendaftaran\UserPendaftaranController@index')->name('user.pendaftaran');
 
                     Route::get('/jadwalkelas/{id_kelas}','usercontroller\pendaftaran\JadwalKelasController@index')->name('user.jadwal.kelas');
+
+                    Route::post('/daftarkelas','usercontroller\pendaftaran\DaftarKelasController@index')->name('user.daftar.kelas');
                 // AKHIR
             });
         // END

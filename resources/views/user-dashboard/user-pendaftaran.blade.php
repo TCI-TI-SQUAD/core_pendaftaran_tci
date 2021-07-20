@@ -42,7 +42,7 @@
             @if(!$pendaftaran->Kelas->isEmpty())
                 @foreach($pendaftaran->Kelas as $index => $kelas)
                     <!-- Card -->
-                    <div class="card z-depth-2 mr-3 mb-3" @if($kelas->isLocked)style="opacity:0.6;"@endif>
+                    <div class="card z-depth-1 mr-3 mb-3" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
                         <!-- Card image -->
                         <img class="card-img-top" src="{{ url('storage\image_kelas',[$kelas->logo_kelas]) }}" alt="Card image cap" style="height:200px;object-fit:cover;">
@@ -56,14 +56,27 @@
                             <div class="row mt-3">
 
                                 <div class="col">
-                                    <img src="{{ url('storage\image_pengajar',[$kelas->Pengajar->foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
+
+                                    @if(isset($kelas->Pengajar->foto_pengajar))
+                                        @php $foto_pengajar = $kelas->Pengajar->foto_pengajar @endphp
+                                    @else
+                                        @php $foto_pengajar = "default.jpg" @endphp
+                                    @endif
+
+                                    <img src="{{ url('storage\image_pengajar',[$foto_pengajar]) }}" alt="" class="img-thumbnail rounded-circle bg-secondary" style="width:50px;height:50px;object-fit:cover;">
                                 </div>
 
                             </div>
 
                             <div class="row">
                                 <div class="col">
-                                    <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ $kelas->Pengajar->nama_pengajar }}</b>
+                                    <b style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                    @if(isset($kelas->Pengajar->nama_pengajar))
+                                        {{$kelas->Pengajar->nama_pengajar}}
+                                    @else
+                                        Pengajar Belum Ditentukan
+                                    @endif
+                                    </b>
                                 </div>
                             </div>
 
@@ -112,7 +125,13 @@
                                     <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
                                 </div>
                                 <div class="col">
-                                    <a href="#" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                                    <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-{{ $kelas->id }}" style="display:none;"
+                                    >
+                                        @csrf
+                                        @method('POST')
+                                        <input name="id_kelas" type="text" value="{{$kelas->id}}">
+                                    </form>
+                                    <button onclick="daftarKelas({{ $kelas->id }},'{{ $kelas->nama_kelas }}')" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</button>
                                 </div>
                             </div>
                             <!-- Button -->
@@ -219,6 +238,29 @@
             clickable: true,
             }
         });
+
+
+        function daftarKelas(id_kelas,nama_kelas){
+
+            Swal.fire({
+            title: 'Yakin mengikuti kelas '+nama_kelas+' ?',
+            icon:'question',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Ikuti`,
+            denyButtonText: `Batal`,
+            footer:'Saya telah menyetujui semua  &nbsp; <a href="#">   persyaratan dan persetujuan</a>',
+            position:'top',
+            }).then((result) => {
+                
+            if (result.isConfirmed) {
+                $('#form-daftar-kelas-'+id_kelas).submit();
+            } else if (result.isDenied) {
+            }
+            })
+            
+        }
+
         // SWEETALERT2
         @if(Session::has('status'))
                 Swal.fire({

@@ -44,8 +44,8 @@ class JadwalKelasController extends Controller
                     return redirect()->route('user.dashboard')->with([
                         'status' => 'fail',
                         'icon' => 'error',
-                        'title' => 'Kelas tidak ditemukan',
-                        'message' => 'Kelas tidak ditemukan di dalam sistem',
+                        'title' => 'Kelas Belum Memiliki Jadwal',
+                        'message' => 'Kelas belum memiliki jadwal, apabila diperlukan silahkan hubungi admin sistem',
                     ]);
                 }
 

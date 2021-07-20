@@ -12,4 +12,12 @@ class DetailKelas extends Model
         'nomor_pelajar_kelas',
         'nilai',
     ];
+
+    public function Kelas(){
+        return $this->belongsTo('App\Kelas','id_kelas','id');
+    }
+
+    public function Transaksi(){
+        return $this->hasOne('App\Transaksi','id_detail_kelas','id');
+    }
 }
