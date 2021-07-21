@@ -84,7 +84,10 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-12 text-right">
+                            <div class="col-sm-12 mt-3 text-center">
+                                KUOTA
+                            </div>
+                            <div class="col-sm-12 text-center">
                                 {{$kelas->DetailKelas->count().'/'.$kelas->kuota}}
                             </div>
                         </div>
@@ -103,8 +106,13 @@
                             <div class="col-sm-12 col-md-12 col-lg-6 p-2">
                                 <a href="{{ route('user.pendaftaran') }}" class="btn btn-block btn-outline-danger waves-effect @if($kelas->isLocked) disabled @endif">Back</a>
                             </div>
+                            <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-{{ $kelas->id }}" style="display:none;">
+                                @csrf
+                                @method('POST')
+                                <input name="id_kelas" type="text" value="{{$kelas->id}}">
+                            </form>
                             <div class="col-sm-12 col-md-12 col-lg-6 p-2">
-                                <a href="#" class="btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</a>
+                                <button onclick="daftarKelas({{ $kelas->id }},'{{ $kelas->nama_kelas }}')" class="btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</button>
                             </div>
                         </div>
                         <!-- Button -->
@@ -115,18 +123,17 @@
             </div>
 
             <div class="col-md-12 col-sm-12 col-lg-7 m-1 p-3 jumbotron animated slideInRight">
-                <h5 class="font-weight-bold">{{ strtoupper($kelas->nama_kelas) }}</h5>
                 <table class="mt-3">
                     <tr>
-                        <th class="pr-2">
-                            Tanggal Mulai 
+                        <th class="pr-2 font-weight-bold">
+                            Tanggal Mulai
                         </th>
                         <td>
                             : {{ Carbon\Carbon::create($kelas->tanggal_mulai)->translatedFormat('l, Y-m-d')}}
                         </td>
                     </tr>
                     <tr>
-                        <th class="pr-2">
+                        <th class="pr-2 font-weight-bold">
                             Tanggal Selesai
                         </th>
                         <td>
@@ -175,6 +182,24 @@
                 $('#navigation-block').toggleClass('active');
             })
         });
+        function daftarKelas(id_kelas,nama_kelas){
+            Swal.fire({
+            title: 'Yakin mengikuti kelas '+nama_kelas+' ?',
+            icon:'question',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Ikuti`,
+            denyButtonText: `Batal`,
+            footer:'Saya telah menyetujui semua  &nbsp; <a href="#"> persyaratan dan persetujuan</a>',
+            }).then((result) => {
+                
+            if (result.isConfirmed) {
+                $('#form-daftar-kelas-'+id_kelas).submit();
+            } else if (result.isDenied) {
+            }
+            })
+
+        }
     </script>
 <script>
     // SWEETALERT2

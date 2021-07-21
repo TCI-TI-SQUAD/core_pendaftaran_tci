@@ -47,7 +47,7 @@ class CreateTableUsers extends Migration
             'nomor_pelajar_tci' => '2021210001',
             'username' => 'alsan',
             'password' => Hash::make('alsan4154'),
-            'email' => 'alingotama@gmail.com',
+            'email' => 'alingotama14@gmail.com',
             'phone_number' => '081246082357',
             'line' => 'alsan4154',
             'wa' => '081246082357',

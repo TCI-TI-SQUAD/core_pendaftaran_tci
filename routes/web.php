@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
+    Route::get('/test',function(){
+        return view('user-dashboard.user-kelas-saya.user-pembayaran');
+    });
 // AKHIR
 
 // ABOUT PAGE

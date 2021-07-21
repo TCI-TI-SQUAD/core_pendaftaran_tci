@@ -250,7 +250,6 @@
             confirmButtonText: `Ikuti`,
             denyButtonText: `Batal`,
             footer:'Saya telah menyetujui semua  &nbsp; <a href="#">   persyaratan dan persetujuan</a>',
-            position:'top',
             }).then((result) => {
                 
             if (result.isConfirmed) {

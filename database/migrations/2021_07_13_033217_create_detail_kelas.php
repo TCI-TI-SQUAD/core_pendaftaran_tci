@@ -26,11 +26,11 @@ class CreateDetailKelas extends Migration
         });
 
         DetailKelas::insert([
-            [
-                'id_kelas' => 1,
-                'id_user' => 1,
-                'nomor_pelajar_kelas' => 01,
-            ]
+            // [
+            //     'id_kelas' => 1,
+            //     'id_user' => 1,
+            //     'nomor_pelajar_kelas' => 01,
+            // ]
         ]);
     }
 
