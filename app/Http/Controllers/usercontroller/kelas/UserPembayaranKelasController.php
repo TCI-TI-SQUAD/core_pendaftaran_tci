@@ -143,8 +143,8 @@ class UserPembayaranKelasController extends Controller
     public function postBuktiPembayaran(Request $request){
         // DECRYPT
             try {
-                $request->merge(['id_kelas' => Crypt::decryptString($request->id_kelas)]);
-            } catch (DecryptException $e) {
+                $request->merge(['id_detail_kelas' => Crypt::decryptString($request->id_detail_kelas)]);
+            } catch (DecryptException $err) {
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
@@ -156,7 +156,7 @@ class UserPembayaranKelasController extends Controller
 
         // SECURITY
             $validator = Validator::make($request->all(),[
-                'id_kelas' => 'required|exists:kelas,id',
+                'id_detail_kelas' => 'required|exists:kelas,id',
                 'file_bukti_pembayaran' => 'required|mimes:jpg,png,jtiff,bmp,jpeg,gif|max:2000'
             ]);
             
@@ -182,23 +182,9 @@ class UserPembayaranKelasController extends Controller
 
         // MAIN LOGIC
             try{
-                $kelas = Kelas::with(['DetailKelas' => function($query){
-                            $query->where('id_user',Auth::user()->id)
-                                    ->with(['Transaksi' => function($query_2){
-                                        $query_2->where('status','!=','ditolak_admin')->where('status','!=','dibatalkan_user')->where('status','!=','expired_system');
-                                    }])->whereHas('Transaksi',function($query_3){
-                                        $query_3->where('status','!=','ditolak_admin')->where('status','!=','dibatalkan_user')->where('status','!=','expired_system');
-                                    });
-                }])->findOrFail($request->id_kelas);
-                
-                if($kelas->DetailKelas->isEmpty()){
-                    throw new ModelNotFoundException;
-                }
 
-                if(!isset($kelas->DetailKelas[0]->Transaksi)){
-                    throw new ModelNotFoundException;
-                }
-                
+                $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])->whereHas('Kelas')->whereHas('Transaksi')->findOrFail($request->id_detail_kelas);
+            
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
@@ -209,44 +195,50 @@ class UserPembayaranKelasController extends Controller
             }
 
             // DELETE APABILA SUDAH ADA IMAGE SEBELUMNYA
-                if($kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi != null){
-                    Storage::delete('public\image_bukti_transaksi\\'.$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi);
+                if($detail_kelas->Transaksi->file_bukti_transaksi != null){
+                    Storage::delete('public\image_bukti_transaksi\\'.$detail_kelas->Transaksi->file_bukti_transaksi);
                 }
             // SAVE IMAGE
                 $nama_file = basename($request->file('file_bukti_pembayaran')->store('public/image_bukti_transaksi'));
 
-            switch ($kelas->DetailKelas[0]->Transaksi->status) {
+            switch ($detail_kelas->Transaksi->status) {
+                
                 case 'menunggu_pembayaran':
                     
-                    $kelas->DetailKelas[0]->Transaksi->status = 'menunggu_konfirmasi';
-                    $kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi = $nama_file;
-                    $kelas->DetailKelas[0]->Transaksi->save();
+                    $detail_kelas->Transaksi->status = 'menunggu_konfirmasi';
+                    $detail_kelas->Transaksi->file_bukti_transaksi = $nama_file;
+                    $detail_kelas->Transaksi->save();
 
                     break;
+
                 case 'menunggu_konfirmasi':
-                    $kelas->DetailKelas[0]->Transaksi->status = 'menunggu_konfirmasi';
-                    $kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi = $nama_file;
-                    $kelas->DetailKelas[0]->Transaksi->save();
+                    
+                    $detail_kelas->Transaksi->status = 'menunggu_konfirmasi';
+                    $detail_kelas->Transaksi->file_bukti_transaksi = $nama_file;
+                    $detail_kelas->Transaksi->save();
 
                     break;
+
                 default:
+                    
                     return redirect()->back()->with([
                         'status' => 'fail',
                         'icon' => 'error',
                         'title' => 'Selesaikan sesuai tahapan',
                         'message' => 'Mohon selesaikan sesuai tahapan'
                     ]);
+
                     break;
             }
 
-            return redirect()->route('user.verifikasi.kelas',[Crypt::encryptString($kelas->id)]);
+            return redirect()->route('user.verifikasi.kelas',[Crypt::encryptString($detail_kelas->id)]);
         // END
     }
 
     public function stepVerifikasi(Request $request){
         // DECRYPT
             try {
-                $request->merge(['id_kelas' => Crypt::decryptString($request->id_kelas)]);
+                $request->merge(['id_detail_kelas' => Crypt::decryptString($request->id_detail_kelas)]);
             } catch (DecryptException $e) {
                 return redirect()->back()->with([
                     'status' => 'fail',
@@ -259,7 +251,7 @@ class UserPembayaranKelasController extends Controller
 
         // SECURITY
             $validator = Validator::make($request->all(),[
-                'id_kelas' => 'required|exists:kelas,id',
+                'id_detail_kelas' => 'required|exists:kelas,id',
             ]);
 
             if($validator->fails()){
@@ -274,23 +266,9 @@ class UserPembayaranKelasController extends Controller
 
         // MAIN LOGIC
             try{
-                $kelas = Kelas::with(['DetailKelas' => function($query){
-                            $query->where('id_user',Auth::user()->id)
-                                    ->with(['Transaksi' => function($query_2){
-                                        $query_2->where('status','!=','ditolak_admin')->where('status','!=','dibatalkan_user')->where('status','!=','expired_system');
-                                    }])->whereHas('Transaksi',function($query_3){
-                                        $query_3->where('status','!=','ditolak_admin')->where('status','!=','dibatalkan_user')->where('status','!=','expired_system');
-                                    });
-                }])->findOrFail($request->id_kelas);
                 
-                if($kelas->DetailKelas->isEmpty()){
-                    throw new ModelNotFoundException;
-                }
+                $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])->whereHas('Kelas')->whereHas('Transaksi')->findOrFail($request->id_detail_kelas);
 
-                if(!isset($kelas->DetailKelas[0]->Transaksi)){
-                    throw new ModelNotFoundException;
-                }
-                
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
@@ -300,15 +278,13 @@ class UserPembayaranKelasController extends Controller
                 ]);
             }
 
-            $encrypt_kelas_id = Crypt::encryptString($kelas->id);
-
             // CHECK APAKAH STATUS SUDAH MENUNGGU KONFIRMASI
-                switch ($kelas->DetailKelas[0]->Transaksi->status) {
+                switch ($detail_kelas->Transaksi->status) {
                     case 'menunggu_konfirmasi':
-                        if($kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi == null){
+                        if($detail_kelas->Transaksi->file_bukti_transaksi == null){
                             
-                            $kelas->DetailKelas[0]->Transaksi->status = 'menunggu_pembayaran';
-                            $kelas->DetailKelas[0]->Transaksi->save();
+                            $detail_kelas->Transaksi->status = 'menunggu_pembayaran';
+                            $detail_kelas->Transaksi->save();
 
                             return redirect()->Route('user.upload.kelas',[$encrypt_kelas_id])->with([
                                 'status' => 'fail',
@@ -317,7 +293,7 @@ class UserPembayaranKelasController extends Controller
                                 'message' => 'Lakukan pembayaran sesuai dengan langkah-langkah yang telah diberikan'
                             ]);    
                         }else{
-                            return view('user-dashboard.user-kelas-saya.user-verifikasi',compact(['kelas']));
+                            return view('user-dashboard.user-kelas-saya.user-verifikasi',compact(['detail_kelas']));
                         }
                         break;
                     case 'memilih_metode_pembayaran':

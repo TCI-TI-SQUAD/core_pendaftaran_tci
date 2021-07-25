@@ -97,7 +97,7 @@
                             @if($detail_kelas->Transaksi->file_bukti_transaksi == null)
                                 <img src="{{ asset('asset\image\main_asset\upload_bukti.png') }}" id="imgpreview" alt="UPLOAD IMAGE" class="w-25">
                             @else
-                                <img src="{{ url('storage\image_bukti_transaksi',[$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi]) }}" id="imgpreview" alt="UPLOAD IMAGE" class="w-25">
+                                <img src="{{ url('storage\image_bukti_transaksi',[$detail_kelas->Transaksi->file_bukti_transaksi]) }}" id="imgpreview" alt="UPLOAD IMAGE" class="w-25">
                             @endif
                         </div>
 
@@ -114,11 +114,11 @@
                         </div>
                         
                         <div class="d-flex justify-content-center align-items-center mt-3">
-                            <button class="btn btn-sm btn-outline-secondary" style="width:200px;">PANDUAN PEMBAYARAN</button>
+                            <button class="btn btn-sm btn-outline-secondary" style="width:180px;">PANDUAN PEMBAYARAN</button>
                         </div>
 
                         <div class="d-flex justify-content-center align-items-center mb-3">
-                            <button href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:200px;" form="form-upload-bukti">UPLOAD & VERIFIKASI</button>
+                            <button href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:180px;" form="form-upload-bukti">UPLOAD & VERIFIKASI</button>
                         </div>
 
                         <form action="{{ route('user.upload.bukti') }}" enctype="multipart/form-data" method="POST" id="form-upload-bukti" style="display:none;">

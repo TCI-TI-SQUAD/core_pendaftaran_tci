@@ -13,8 +13,11 @@
 @endsection
 
 @section('content')
-    @if(isset($kelas))
-        @php $encrypt_kelas_id = Crypt::encryptString($kelas->id)@endphp
+    @if(isset($detail_kelas))
+        @php 
+            $encrypt_kelas_id = Crypt::encryptString($detail_kelas->Kelas->id);
+            $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
+        @endphp
     @endif
     <!-- CONTAINER -->
     <div class="container">
@@ -25,7 +28,7 @@
                     <ol class="breadcrumb bg-white">
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">Kelas Saya</a></li>
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">
-                            @if(isset($kelas)){{ $kelas->nama_kelas }}@endif
+                            @if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }}@endif
                         </a></li>
                         <li class="breadcrumb-item active"><a href="" class="text-secondary font-weight-bold">Pembayaran</a></li>
                         <li class="breadcrumb-item active">Verifikasi</li>
@@ -37,10 +40,10 @@
                 <!-- Horizontal Steppers -->
                 <div class="row m-0 justify-content-center align-items-center">
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-1 order-lg-1">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
+                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-3 order-lg-2">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
+                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
                     </div>
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12 order-xl-2  order-lg-3">
 
@@ -81,7 +84,7 @@
             </div>
         </div>
 
-        @if(isset($kelas->DetailKelas[0]->Transaksi))
+        @if(isset($detail_kelas->Transaksi))
                 <div class="row d-flex justify-content-center p-2">
                     <div class="col-xl-8 col-md-8 col-12 jumbotron p-0 z-depth-1 d-flex flex-column justify-content-center align-items-center">
                         <div class="bg-secondary w-100" style="height:10px;"></div>
@@ -89,7 +92,7 @@
                             <h5 class="font-weight-bold text-secondary text-center">MENUNGGU KONFIRMASI ADMIN</h5>
                         </div>
                         <div class="mt-2">
-                            <img src="{{ url('storage/image_bukti_transaksi',[$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi]) }}" alt="" style="width:200px;max-height:300px;">
+                            <img src="{{ url('storage/image_bukti_transaksi',[$detail_kelas->Transaksi->file_bukti_transaksi]) }}" alt="" style="width:200px;max-height:300px;">
                         </div>
                         <div class="pl-5 pr-5 text-center">
                             <h4>Berhasil menggunggah bukti pembayaran ! Mohon tunggu konfirmasi dari admin</h4>

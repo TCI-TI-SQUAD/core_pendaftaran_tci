@@ -161,20 +161,46 @@ class UserKelasSayaController extends Controller
                 ]);
             }
             
-            switch ($detail_kelas->Transaksi->status) {
-                case 'lunas':
-                    dd("lunas");
-                    break;
-                default:
-                    return redirect()->route('user.pembayaran.kelas',[Crypt::encryptString($detail_kelas->id)])
-                        ->with([
-                            'status' => 'fail',
-                            'icon' => 'info',
-                            'title' => 'Selesaikan Administrasi Kelas !',
-                            'message' => 'Untuk dapat masuk ke dalam kelas anda harus menyelesaikan administrasi kelas terlebih dahulu'
-                        ]);
-                    break;
+            if($detail_kelas->Kelas->isBerbayar){
+                switch ($detail_kelas->Transaksi->status) {
+                    case 'lunas':
+                        dd("lunas");
+                        break;
+                    
+                    case 'menunggu_pembayaran':
+                        return redirect()->route('user.upload.kelas',[Crypt::encryptString($detail_kelas->id)])
+                            ->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Mohon Upload Bukti Pembayaran',
+                                'message' => 'Mohon untuk mengunggah bukti pembayaran'
+                            ]);
+                        break;
+                    
+                    case 'menunggu_konfirmasi':
+                        return redirect()->route('user.verifikasi.kelas',[Crypt::encryptString($detail_kelas->id)])
+                            ->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Mohon tunggu ',
+                                'message' => 'Admin akan segera memverivikasi bukti pembayaran anda'
+                            ]);
+                        break;
+    
+                    default:
+                        return redirect()->route('user.pembayaran.kelas',[Crypt::encryptString($detail_kelas->id)])
+                            ->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Selesaikan Administrasi Kelas !',
+                                'message' => 'Untuk dapat masuk ke dalam kelas anda harus menyelesaikan administrasi kelas terlebih dahulu'
+                            ]);
+                        break;
+                }
+            }else{
+                dd("kelas gratis");
             }
+            
         // NED
     }
 }

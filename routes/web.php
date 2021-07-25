@@ -82,7 +82,7 @@ use Illuminate\Support\Facades\Route;
                     
                     Route::put('/kelas/upload','usercontroller\kelas\UserPembayaranKelasController@postBuktiPembayaran')->name('user.upload.bukti');
 
-                    Route::get('/kelas/verifikasi/{id_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepVerifikasi')->name('user.verifikasi.kelas');
+                    Route::get('/kelas/verifikasi/{id_detail_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepVerifikasi')->name('user.verifikasi.kelas');
                 // AKHIR
             });
         // END
