@@ -268,7 +268,7 @@ class UserPembayaranKelasController extends Controller
             try{
                 
                 $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])->whereHas('Kelas')->whereHas('Transaksi')->findOrFail($request->id_detail_kelas);
-
+                $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
@@ -286,7 +286,7 @@ class UserPembayaranKelasController extends Controller
                             $detail_kelas->Transaksi->status = 'menunggu_pembayaran';
                             $detail_kelas->Transaksi->save();
 
-                            return redirect()->Route('user.upload.kelas',[$encrypt_kelas_id])->with([
+                            return redirect()->Route('user.upload.kelas',[$encrypt_detail_kelas_id])->with([
                                 'status' => 'fail',
                                 'icon' => 'error',
                                 'title' => 'Mohon Upload Bukti Transaksi Terlebih Dahulu',
@@ -297,7 +297,7 @@ class UserPembayaranKelasController extends Controller
                         }
                         break;
                     case 'memilih_metode_pembayaran':
-                        return redirect()->Route('user.pembayaran.kelas',[$encrypt_kelas_id])->with([
+                        return redirect()->Route('user.pembayaran.kelas',[$encrypt_detail_kelas_id])->with([
                             'status' => 'fail',
                             'icon' => 'error',
                             'title' => 'Mohon Lakukan Pembayaran Sesuai Step',
@@ -305,7 +305,7 @@ class UserPembayaranKelasController extends Controller
                         ]);
                         break;
                     case 'menunggu_pembayaran':
-                        return redirect()->Route('user.upload.kelas',[$encrypt_kelas_id])->with([
+                        return redirect()->Route('user.upload.kelas',[$encrypt_detail_kelas_id])->with([
                             'status' => 'fail',
                             'icon' => 'error',
                             'title' => 'Mohon Upload Bukti Pembayaran Terlebih Dahulu',
