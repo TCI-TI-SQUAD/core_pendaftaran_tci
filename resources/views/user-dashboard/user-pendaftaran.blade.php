@@ -28,7 +28,7 @@
         <div class="dropdown-menu">
             @if(isset($semua_pendaftaran))
                 @foreach($semua_pendaftaran as $index => $pendaftaran_lain)
-                    <a class="dropdown-item" href="{{ Route('user.pendaftaran',[$pendaftaran_lain->id]) }}">{{ $pendaftaran_lain->nama_pendaftaran }}</a>
+                    <a class="dropdown-item" href="{{ Route('user.pendaftaran',[Crypt::encryptString($pendaftaran_lain->id)]) }}">{{ $pendaftaran_lain->nama_pendaftaran }}</a>
                 @endforeach
             @endif
         </div>
@@ -41,6 +41,7 @@
         @if(isset($pendaftaran))
             @if(!$pendaftaran->Kelas->isEmpty())
                 @foreach($pendaftaran->Kelas as $index => $kelas)
+                    @php $id_kelas = Crypt::encryptString($kelas->id) @endphp
                     <!-- Card -->
                     <div class="card z-depth-1 mr-3 mb-3" @if($kelas->isLocked)style="opacity:0.6;"@endif>
 
@@ -110,28 +111,28 @@
 
                             <div class="row">
                                 <div class="col">
-                                    Kuota : {{$kelas->DetailKelas->count().'/'.$kelas->kuota}}
+                                    Kuota : {{$kelas->detail_kelas_count.'/'.$kelas->kuota}}
                                 </div>
                             </div>
 
                             <div class="progress ml-3 mr-3 mb-3 border border-secondary">
-                                <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->DetailKelas->count()/$kelas->kuota*100).'%' }};@endif"
+                                <div class="progress-bar bg-secondary" role="progressbar" style="width:@if($kelas->kuota != 0){{ ($kelas->detail_kelas_count/$kelas->kuota*100).'%' }};@endif"
                                 >
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col">
-                                    <a href="{{ route('user.jadwal.kelas',['id_kelas' => $kelas->id]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
+                                    <a href="{{ route('user.jadwal.kelas',['id_kelas' => $id_kelas]) }}" class="btn btn-outline-secondary waves-effect @if($kelas->isLocked) disabled @endif">Jadwal</a>
                                 </div>
                                 <div class="col">
-                                    <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-{{ $kelas->id }}" style="display:none;"
+                                    <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-{{ $index }}" style="display:none;"
                                     >
                                         @csrf
                                         @method('POST')
-                                        <input name="id_kelas" type="text" value="{{$kelas->id}}">
+                                        <input name="id_kelas" type="text" value="{{$id_kelas}}">
                                     </form>
-                                    <button onclick="daftarKelas({{ $kelas->id }},'{{ $kelas->nama_kelas }}')" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</button>
+                                    <button onclick="daftarKelas('{{ $index }}','{{ $kelas->nama_kelas }}')" class="btn btn-success  @if($kelas->isLocked) disabled @endif">Ikuti</button>
                                 </div>
                             </div>
                             <!-- Button -->
@@ -240,7 +241,7 @@
         });
 
 
-        function daftarKelas(id_kelas,nama_kelas){
+        function daftarKelas(index,nama_kelas){
 
             Swal.fire({
             title: 'Yakin mengikuti kelas '+nama_kelas+' ?',
@@ -253,7 +254,7 @@
             }).then((result) => {
                 
             if (result.isConfirmed) {
-                $('#form-daftar-kelas-'+id_kelas).submit();
+                $('#form-daftar-kelas-'+index).submit();
             } else if (result.isDenied) {
             }
             })

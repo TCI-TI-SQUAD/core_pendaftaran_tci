@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
     Route::get('/test',function(){
-        return view('user-dashboard.user-kelas-saya.user-pembayaran');
-    });
+        return view('user-dashboard.user-kelas-saya.user-kelas-saya');
+    })->name('user.kelas.saya');
 // AKHIR
 
 // ABOUT PAGE
@@ -69,6 +69,20 @@ use Illuminate\Support\Facades\Route;
                     Route::get('/jadwalkelas/{id_kelas}','usercontroller\pendaftaran\JadwalKelasController@index')->name('user.jadwal.kelas');
 
                     Route::post('/daftarkelas','usercontroller\pendaftaran\DaftarKelasController@index')->name('user.daftar.kelas');
+                // AKHIR
+
+                // USER KELAS
+                    Route::get('/kelassaya/{filter?}','usercontroller\kelas\UserKelasSayaController@index')->name('user.kelas.saya');
+
+                    Route::get('/kelas/beranda/{id_detail_kelas}','usercontroller\kelas\UserKelasSayaController@kelasBeranda')->name('user.kelas.beranda');
+
+                    Route::get('/kelas/pembayaran/{id_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepPembayaran')->name('user.pembayaran.kelas');
+
+                    Route::get('/kelas/upload/{id_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepUploadBukti')->name('user.upload.kelas');
+                    
+                    Route::put('/kelas/upload','usercontroller\kelas\UserPembayaranKelasController@postBuktiPembayaran')->name('user.upload.bukti');
+
+                    Route::get('/kelas/verifikasi/{id_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepVerifikasi')->name('user.verifikasi.kelas');
                 // AKHIR
             });
         // END

@@ -13,8 +13,8 @@
 @endsection
 
 @section('content')
-    @if(isset($detail_kelas->id))
-        @php $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id)@endphp
+    @if(isset($kelas))
+        @php $encrypt_kelas_id = Crypt::encryptString($kelas->id)@endphp
     @endif
     <!-- CONTAINER -->
     <div class="container">
@@ -25,7 +25,7 @@
                     <ol class="breadcrumb bg-white">
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">Kelas Saya</a></li>
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">
-                            @if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }}@endif
+                            @if(isset($kelas)){{ $kelas->nama_kelas }}@endif
                         </a></li>
                         <li class="breadcrumb-item active"><a href="" class="text-secondary font-weight-bold">Pembayaran</a></li>
                         <li class="breadcrumb-item active">Konfirmasi</li>
@@ -37,10 +37,10 @@
                 <!-- Horizontal Steppers -->
                 <div class="row m-0 justify-content-center align-items-center">
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-1 order-lg-1">
-                        <a href="{{ route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
+                        <a href="{{ route('user.pembayaran.kelas',[$encrypt_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-3 order-lg-2">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
+                        <a href="{{ route('user.upload.kelas',[$encrypt_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
                     </div>
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12 order-xl-2  order-lg-3">
 
@@ -49,7 +49,7 @@
                             <!-- First Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-secondary f">1</span><small>KONFIRMASI</small>
+                                <span class="circle">1</span><small>KONFIRMASI</small>
                                 </a>
                             </li>
 
@@ -81,50 +81,35 @@
             </div>
         </div>
 
-        @if(isset($detail_kelas->Transaksi))
+        @if(isset($kelas->DetailKelas[0]->Transaksi))          
                 <div class="row d-flex justify-content-center p-2">
                     <div class="col-xl-8 col-md-8 col-12 jumbotron p-0 z-depth-1 d-flex flex-column justify-content-center align-items-center">
                         <div class="bg-secondary w-100" style="height:10px;"></div>
                         <div class="mt-3">
-                            <h5 class="font-weight-bold text-secondary text-center">KONFIRMASI PEMESANAN DAN PEMBAYARAN</h5>
+                            @if($kelas->DetailKelas[0]->Transkasi->status == 'dibatalkan_user')
+                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI DIBATALKAN USER</h5>
+                            @elseif($kelas->DetailKelas[0]->Transkasi->status == 'ditolak_admin')
+                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI ANDA DITOLAK ADMIN</h5>
+                            @elseif($kelas->DetailKelas[0]->Transkasi->status == 'expired_system')
+                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI ANDA TELAH EXPIRED</h5>
+                            @endif
                         </div>
                         <div class="">
-                            <p class="text-center">Bayar Sebelum <span class="text-secondary font-weight-bold">
-                                @if(isset($detail_kelas->Transaksi->tanggal_expired))
-                                    {{ Carbon\Carbon::create($detail_kelas->Transaksi->tanggal_expired)->translatedFormat('l , Y-M-d H:i:s').' WITA' }}
-                                @endif
-                            </span></p>
-                        </div>
-                        <div class="">
-                            <h4 class="text-secondary font-weight-bold text-uppercase text-center">@if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }} @else Unknown Class @endif</h4>
-                        </div>
-                        <div class="">
-                            <h5 class="text-center"><span class="text-secondary font-weight-bold">IDR @if(isset($detail_kelas->Kelas->harga)){{ number_format($detail_kelas->Kelas->harga) }} @else Unknown Class @endif</span></h5>
-                        </div>
-                        <div class="">
-                            <h5 class="text-center">Transfer pembayaran ke rekening atas nama</h5>
-                        </div>
-                        <div class="">
-                            <h5 class="text-center">Admin Sistem TCI</h5>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center mb-3 mt-3">
-                            <img src="{{ asset('storage\image_metode_pembayaran\bca.png') }}" alt="BANK BCA" style="display:block;marginL:auto;width:80px;">
-                            123123213
-                        </div>
-                        
-                        <div class="d-flex justify-content-center align-items-center mt-3">
-                            <button class="btn btn-sm btn-outline-secondary" style="width:200px;">PANDUAN PEMBAYARAN</button>
+                            @if($kelas->DetailKelas[0]->Transkasi->status == 'dibatalkan_user')
+                                <p class="">Transaksi ini telah anda batalkan, anda dapat memilih kelas pada halaman pendaftaran kembali</p>
+                            @elseif($kelas->DetailKelas[0]->Transkasi->status == 'ditolak_admin')
+                                <p class="">Transaksi ini ditolak oleh admin, transaksi dapat ditolak admin apabila proses transaksi tidak sesuai dengan arahan</p>
+                            @elseif($kelas->DetailKelas[0]->Transkasi->status == 'expired_system')
+                                <p class="">Transaksi anda telah expired karena melewati batas waktu pembayaran</p>
+                            @endif
                         </div>
 
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:200px;" form="form-upload-bukti">UPLOAD BUKTI</a>
-                        </div>
-                        
-                        @if($detail_kelas->Transaksi->status != 'lunas')
-                            <div class="d-flex justify-content-center align-items-center mb-3">
-                                <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-danger" style="width:200px;" form="form-upload-bukti">BATALKAN PEMESANAN</a>
+                        @if(isset($kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi))
+                            <div class="">
+                                <img src="{{ url('storage\image_bukti_transaksi',[$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi]) }}" alt="" style="width:200px;max-height:300px;">
                             </div>
                         @endif
+
                     </div>
                 </div>
         @endif

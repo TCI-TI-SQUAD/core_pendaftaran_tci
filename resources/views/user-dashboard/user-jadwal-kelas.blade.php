@@ -106,13 +106,13 @@
                             <div class="col-sm-12 col-md-12 col-lg-6 p-2">
                                 <a href="{{ route('user.pendaftaran') }}" class="btn btn-block btn-outline-danger waves-effect @if($kelas->isLocked) disabled @endif">Back</a>
                             </div>
-                            <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-{{ $kelas->id }}" style="display:none;">
+                            <form action="{{route('user.daftar.kelas')}}" method="POST" id="form-daftar-kelas-1" style="display:none;">
                                 @csrf
                                 @method('POST')
-                                <input name="id_kelas" type="text" value="{{$kelas->id}}">
+                                <input name="id_kelas" type="text" value="{{Crypt::encryptString($kelas->id)}}">
                             </form>
                             <div class="col-sm-12 col-md-12 col-lg-6 p-2">
-                                <button onclick="daftarKelas({{ $kelas->id }},'{{ $kelas->nama_kelas }}')" class="btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</button>
+                                <button onclick="daftarKelas(1,'{{ $kelas->nama_kelas }}')" class="btn btn-success btn-block text-nowrap  @if($kelas->isLocked) disabled @endif">Ikuti</button>
                             </div>
                         </div>
                         <!-- Button -->

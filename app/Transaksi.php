@@ -21,6 +21,7 @@ class Transaksi extends Model
         'nama_pemesan',
         'nomor_pelajar_tci',
         'tanggal_cetak_struct',
+        'tanggal_expired',
         'tanggal_mulai_kelas',
         'tanggal_selesai_kelas',
         'status',

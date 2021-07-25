@@ -4,10 +4,12 @@ namespace App\Http\Controllers\usercontroller\pendaftaran;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Crypt;
 use Validator;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-
 
 use App\Kelas;
 
@@ -16,6 +18,17 @@ class JadwalKelasController extends Controller
     public function index($id_kelas){
 
         // SECURITY
+            try{
+                $id_kelas = Crypt::decryptString($id_kelas);
+            }catch(DecryptException $err){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas tidak ditemukan',
+                    'message' => 'Pastikan anda memilih kelas yang benar',
+                ]);
+            }
+
             $validator = Validator::make(['id_kelas' => $id_kelas],[
                 'id_kelas' => 'required|numeric|exists:kelas,id',
             ]);

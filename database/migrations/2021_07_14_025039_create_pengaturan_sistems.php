@@ -14,6 +14,8 @@ class CreatePengaturanSistems extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('pengaturan_sistems');
+
         Schema::create('pengaturan_sistems', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_admin')->nullable();
@@ -37,6 +39,14 @@ class CreatePengaturanSistems extends Migration
             [
                 'nama_pengaturan' => 'open_pendaftaran',
                 'keterangan' => 'Izin untuk peserta mendaftar ke dalam kelas, Kelas akan tetap dapat dilihat apabila pengaturan ini nonaktif'
+            ],
+        ]);
+
+        PengaturanSistem::insert([
+            [
+                'nama_pengaturan' => 'batas_waktu_pembayaran',
+                'keterangan' => 'batas waktu pembayaran dalam hari',
+                'pengaturan' => 1
             ],
         ]);
     }

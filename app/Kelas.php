@@ -10,6 +10,7 @@ class Kelas extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'id',
         'id_pendaftaran',
         'id_pengajar',
         'hsk',

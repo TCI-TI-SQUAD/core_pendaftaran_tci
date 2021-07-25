@@ -13,8 +13,11 @@
 @endsection
 
 @section('content')
-    @if(isset($detail_kelas->id))
-        @php $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id)@endphp
+    @if(isset($detail_kelas))
+        @php 
+            $encrypt_kelas_id = Crypt::encryptString($detail_kelas->Kelas->id);
+            $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
+        @endphp
     @endif
     <!-- CONTAINER -->
     <div class="container">
@@ -28,7 +31,7 @@
                             @if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }}@endif
                         </a></li>
                         <li class="breadcrumb-item active"><a href="" class="text-secondary font-weight-bold">Pembayaran</a></li>
-                        <li class="breadcrumb-item active">Konfirmasi</li>
+                        <li class="breadcrumb-item active">Upload</li>
                     </ol>
                 </nav>
             </div>
@@ -40,7 +43,7 @@
                         <a href="{{ route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-3 order-lg-2">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
+                        <a href="{{ route('user.verifikasi.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
                     </div>
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12 order-xl-2  order-lg-3">
 
@@ -49,14 +52,14 @@
                             <!-- First Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-secondary f">1</span><small>KONFIRMASI</small>
+                                <span class="circle bg-secondary">1</span><small>KONFIRMASI</small>
                                 </a>
                             </li>
 
                             <!-- Second Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle">2</span><small>UPLOAD</small>
+                                <span class="circle bg-secondary">2</span><small>UPLOAD</small>
                                 </a>
                             </li>
                             <!-- Third Step -->
@@ -85,46 +88,44 @@
                 <div class="row d-flex justify-content-center p-2">
                     <div class="col-xl-8 col-md-8 col-12 jumbotron p-0 z-depth-1 d-flex flex-column justify-content-center align-items-center">
                         <div class="bg-secondary w-100" style="height:10px;"></div>
+
                         <div class="mt-3">
-                            <h5 class="font-weight-bold text-secondary text-center">KONFIRMASI PEMESANAN DAN PEMBAYARAN</h5>
+                            <h5 class="font-weight-bold text-secondary text-center">UPLOAD BUKTI PEMBAYARAN</h5>
                         </div>
-                        <div class="">
-                            <p class="text-center">Bayar Sebelum <span class="text-secondary font-weight-bold">
-                                @if(isset($detail_kelas->Transaksi->tanggal_expired))
-                                    {{ Carbon\Carbon::create($detail_kelas->Transaksi->tanggal_expired)->translatedFormat('l , Y-M-d H:i:s').' WITA' }}
-                                @endif
-                            </span></p>
+
+                        <div class="d-flex justify-content-center align-items-center m-3" data-toggle="tooltip" title="File bukti transaksi dapat diubah dengan cara upload ulang file bukti yang baru">
+                            @if($detail_kelas->Transaksi->file_bukti_transaksi == null)
+                                <img src="{{ asset('asset\image\main_asset\upload_bukti.png') }}" id="imgpreview" alt="UPLOAD IMAGE" class="w-25">
+                            @else
+                                <img src="{{ url('storage\image_bukti_transaksi',[$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi]) }}" id="imgpreview" alt="UPLOAD IMAGE" class="w-25">
+                            @endif
                         </div>
-                        <div class="">
-                            <h4 class="text-secondary font-weight-bold text-uppercase text-center">@if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }} @else Unknown Class @endif</h4>
+
+                        <div class="text-center ml-3 mr-3">
+                            <h5>Setelah melakukan transfer pada nomor rekening pada <span class="font-weight-bold">Step 1</span>, Silahkan unggah bukti pembayaran tersebut di sini.</h5>
                         </div>
-                        <div class="">
-                            <h5 class="text-center"><span class="text-secondary font-weight-bold">IDR @if(isset($detail_kelas->Kelas->harga)){{ number_format($detail_kelas->Kelas->harga) }} @else Unknown Class @endif</span></h5>
-                        </div>
-                        <div class="">
-                            <h5 class="text-center">Transfer pembayaran ke rekening atas nama</h5>
-                        </div>
-                        <div class="">
-                            <h5 class="text-center">Admin Sistem TCI</h5>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center mb-3 mt-3">
-                            <img src="{{ asset('storage\image_metode_pembayaran\bca.png') }}" alt="BANK BCA" style="display:block;marginL:auto;width:80px;">
-                            123123213
+
+                        <div class="input-group" style="width:200px;">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="imginput"
+                                aria-describedby="inputGroupFileAddon01" name="file_bukti_pembayaran" form="form-upload-bukti" required>
+                                <label class="custom-file-label" for="imginput">Choose file</label>
+                            </div>
                         </div>
                         
                         <div class="d-flex justify-content-center align-items-center mt-3">
                             <button class="btn btn-sm btn-outline-secondary" style="width:200px;">PANDUAN PEMBAYARAN</button>
                         </div>
 
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:200px;" form="form-upload-bukti">UPLOAD BUKTI</a>
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <button href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:200px;" form="form-upload-bukti">UPLOAD & VERIFIKASI</button>
                         </div>
-                        
-                        @if($detail_kelas->Transaksi->status != 'lunas')
-                            <div class="d-flex justify-content-center align-items-center mb-3">
-                                <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-danger" style="width:200px;" form="form-upload-bukti">BATALKAN PEMESANAN</a>
-                            </div>
-                        @endif
+
+                        <form action="{{ route('user.upload.bukti') }}" enctype="multipart/form-data" method="POST" id="form-upload-bukti" style="display:none;">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="id_detail_kelas" value="{{ $encrypt_detail_kelas_id }}">
+                        </form>
                     </div>
                 </div>
         @endif
@@ -144,9 +145,23 @@
             $('#navigation-button-close').click(function(){
                 $('#navigation-block').toggleClass('active');
             })
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
         });
 </script>
 <script>
+        // PREVIEW IMAGE
+            $('#imginput').on('change',function(e){
+                console.log(e.target.files[0]);
+
+                const file = e.target.files[0];
+
+                if (file) {
+                    $('#imgpreview').attr('src',URL.createObjectURL(file))
+                }
+            })
         // SWEETALERT2
         @if(Session::has('status'))
                 Swal.fire({

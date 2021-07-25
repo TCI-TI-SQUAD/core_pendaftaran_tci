@@ -5,7 +5,7 @@
     <a class="text-dark {{ isset($pendaftaran) ? 'font-weight-bold' : '' }}" href="{{ Route('user.pendaftaran') }}">Pendaftaran</a>
 </li>
 <li  class="pr-2">
-    <a class="text-dark {{ isset($kelas_saya) ? 'font-weight-bold' : '' }}" href="">Kelas Saya</a>
+    <a class="text-dark {{ isset($kelas_saya) ? 'font-weight-bold' : '' }}" href="{{ Route('user.kelas.saya') }}">Kelas Saya</a>
 </li>
 <li>
     <a class="text-dark {{ isset($profile) ? 'font-weight-bold' : '' }}" href="">Profile</a>

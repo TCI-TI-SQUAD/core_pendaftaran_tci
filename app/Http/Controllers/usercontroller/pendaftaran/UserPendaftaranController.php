@@ -8,12 +8,28 @@ use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
 use Auth;
+use Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+use DB;
 
 use App\Pendaftaran;
 
 class UserPendaftaranController extends Controller
 {
     public function index($id = null){
+        if(isset($id)){
+            try {
+                $id = Crypt::decryptString($id);
+            } catch (DecryptException $err) {
+                return Redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Tidak Ditemukan',
+                    'message' => 'Mohon untuk memilih opsi yang ada',
+                ]);
+            }
+        }
+
         $validator = Validator::make(['id' => $id],[
             'id' => 'nullable|exists:pendaftarans,id'
         ]);
@@ -34,7 +50,17 @@ class UserPendaftaranController extends Controller
             ){
                 try{
                     // AMBIL SEMUA PENDAFTARAN
-                    $semua_pendaftaran = Pendaftaran::where('status','aktif')
+                    $semua_pendaftaran = Pendaftaran::with(['Kelas' => function($query){
+                                                            $query->withCount(['DetailKelas' => function($query_2){
+                                                                $query_2->whereHas('Transaksi',function($query_3){
+                                                                    $query_3->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
+                                                                });
+                                                            }])->where('tanggal_mulai','<',date('Y-m-d'))->where('tanggal_selesai','>',date('Y-m-d'))
+                                                                ->whereHas('KelasKerjasama',function($query_4){
+                                                                    $query_4->where('status',Auth::user()->status)->where('id_instansi',Auth::user()->id_instansi);
+                                                                });
+                                                        }])->with(['PengumumanPendaftaran'])
+                                                        ->where('status','aktif')
                                                         ->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
                                                         ->get();
@@ -45,11 +71,13 @@ class UserPendaftaranController extends Controller
                     else{
                         $pendaftaran = $semua_pendaftaran->first();
                     }
+
+                    foreach($pendaftaran->Kelas as $index => $kelas){
+                        
+                    }
                     
-                    $pendaftaran->setRelation('Kelas',$pendaftaran->Kelas->filter(function($value,$key) use ($pendaftaran){
-                        if($value->KelasKerjasama()->where('status',Auth::user()->status)->where('id_instansi',Auth::user()->id_instansi)->get()->isEmpty()){
-                            return false;
-                        }else if(
+                    $pendaftaran->Kelas->filter(function($value,$key) use ($pendaftaran){
+                        if(
                             $value->kuota <= $value->DetailKelas->count() ||
                             $value->status == 'tutup'
                         ){
@@ -61,9 +89,7 @@ class UserPendaftaranController extends Controller
                             $pendaftaran->Kelas[$key]->Pengajar;
                             return true;
                         }
-                    })->sortBy('isLocked')->values());
-
-                    $pendaftaran->setRelation('PengumumanPendaftaran',$pendaftaran->PengumumanPendaftaran);
+                    })->sortBy('isLocked')->values();
                     
                     return view('user-dashboard.user-pendaftaran',compact(['pendaftaran','semua_pendaftaran']));
 
