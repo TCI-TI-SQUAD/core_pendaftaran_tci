@@ -60,23 +60,44 @@ class UserPembayaranKelasController extends Controller
                 ]);
             }
 
-            switch ($detail_kelas->Transaksi->status) {
-                case 'dibatalkan_user':
-                    return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
-                    break;
+            // MENENTUKAN APAKAH KELAS BERBAYAR ATAU TIDAK
+                if($detail_kelas->kelas->isBerbayar){
+                    switch ($detail_kelas->Transaksi->status) {
+                        case 'dibatalkan_user':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
 
-                case 'expired_system':
-                    return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
-                    break;
-                
-                case 'ditolak_admin':
-                    return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
-                    break;
+                        case 'expired_system':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
+                        
+                        case 'ditolak_admin':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
 
-                default:
-                    return view('user-dashboard.user-kelas-saya.user-pembayaran',compact(['detail_kelas']));
-                    break;
-            }
+                        default:
+                            return view('user-dashboard.user-kelas-saya.user-pembayaran',compact(['detail_kelas']));
+                            break;
+                    }
+                }else{
+                    switch ($detail_kelas->Transaksi->status) {
+                        case 'dibatalkan_user':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
+
+                        case 'expired_system':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
+                        
+                        case 'ditolak_admin':
+                            return view('user-dashboard.user-kelas-saya.user-fail-pembayaran',compact(['detail_kelas']));
+                            break;
+
+                        default:
+                            return view('user-dashboard.user-kelas-saya.user-gratis-verifikasi',compact(['detail_kelas']));
+                            break;
+                    }
+                }
 
         // END
     }

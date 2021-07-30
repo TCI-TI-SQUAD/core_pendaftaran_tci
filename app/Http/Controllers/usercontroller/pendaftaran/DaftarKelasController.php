@@ -61,31 +61,6 @@ class DaftarKelasController extends Controller
                 ]);
             }
         // END
-
-        // CHECK APAKAH USER SUDAH MENDAFTAR
-            $jmlh_kelas_aktif_user = User::withCount([
-                'DetailKelas' => function($query){
-                    $query->whereHas('Kelas',function($query_2){
-                        $query_2->whereHas('Pendaftaran',function($query_4){
-                            $query_4->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
-                                    ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
-                                    ->where('status','aktif');
-                        })
-                        ->whereDate('tanggal_selesai','>',date('Y-m-d'))->where('status','buka');
-                    })->whereHas('Transaksi', function($query_3){
-                        $query_3->where('status','memilih_metode_pembayaran')->orWhere('status','menunggu_pembayaran')->orWhere('status','menunggu_konfirmasi')->orWhere('status','lunas');
-                    });
-            }])->find(Auth::user()->id);
-
-            if($jmlh_kelas_aktif_user->detail_kelas_count > 0){
-                return redirect()->back()->with([
-                    'status' => 'fail',
-                    'icon' => 'error',
-                    'title' => 'Anda Telah Mendaftar',
-                    'message' => 'Saat ini anda telah mendaftar di salah satu course TCI Universitas Udayana, lebih lengkap cek pada halaman KELAS SAYA',
-                ]);
-            }
-        // END
             
         // SECURITY
             try{
@@ -110,6 +85,31 @@ class DaftarKelasController extends Controller
                     'icon' => 'error',
                     'title' => 'Kelas tidak ditemukan',
                     'message' => 'Pastikan anda memilih kelas yang benar',
+                ]);
+            }
+        // END
+
+        // CHECK APAKAH USER SUDAH MENDAFTAR
+            $jmlh_kelas_aktif_user = User::withCount([
+                'DetailKelas' => function($query) use ($request){
+                    $query->whereHas('Kelas',function($query_2) use ($request){
+                        $query_2->whereHas('Pendaftaran',function($query_4){
+                            $query_4->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
+                                    ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
+                                    ->where('status','aktif');
+                                }
+                            )->whereDate('tanggal_selesai','>',date('Y-m-d'))->where('status','buka')->where('id',$request->id_kelas);
+                    })->whereHas('Transaksi', function($query_3){
+                        $query_3->where('status','memilih_metode_pembayaran')->orWhere('status','menunggu_pembayaran')->orWhere('status','menunggu_konfirmasi')->orWhere('status','lunas');
+                    });
+            }])->find(Auth::user()->id);
+
+            if($jmlh_kelas_aktif_user->detail_kelas_count > 0){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Anda Telah Mendaftar',
+                    'message' => 'Anda telah mendaftar di kelas tersebut, lebih lengkap dapat dilihat pada menu Kelas Saya',
                 ]);
             }
         // END

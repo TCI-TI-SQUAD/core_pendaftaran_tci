@@ -52,27 +52,14 @@
                             <!-- First Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-secondary">1</span><small>KONFIRMASI</small>
+                                <span class="circle bg-secondary">1</span><small>VERIFIKASI</small>
                                 </a>
                             </li>
 
                             <!-- Second Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-secondary">2</span><small>UPLOAD</small>
-                                </a>
-                            </li>
-                            <!-- Third Step -->
-                            <li class="step-actions">
-                                <a href="#!">
-                                <span class="circle bg-secondary">3</span><small>VERIFIKASI</small>
-                                </a>
-                            </li>
-
-                            <!-- Third Step -->
-                            <li class="step-actions">
-                                <a href="#!">
-                                <span class="circle">4</span><small>SELESAI</small>
+                                <span class="circle bg-secondary">2</span><small>SELESAI</small>
                                 </a>
                             </li>
                         </ul>
@@ -91,14 +78,8 @@
                         <div class="mt-3">
                             <h5 class="font-weight-bold text-secondary text-center">MENUNGGU KONFIRMASI ADMIN</h5>
                         </div>
-                        <div class="mt-2">
-                            <img src="{{ url('storage/image_bukti_transaksi',[$detail_kelas->Transaksi->file_bukti_transaksi]) }}" alt="" style="width:200px;max-height:300px;">
-                        </div>
                         <div class="pl-5 mt-3 pr-5 text-center">
-                            <h4>Berhasil menggunggah bukti pembayaran ! Mohon tunggu konfirmasi dari admin</h4>
-                        </div>
-                        <div class="mt-2 text-center">
-                            <p>Saat ini admin sedang mereview bukti pembayaran anda, anda dapat mengganti image pembayaran kembali pada <span class="font-weight-bold">step 2</span></p>
+                            <h4>Saat ini admin akan mereview akun anda</h4>
                         </div>
                     </div>
                 </div>
