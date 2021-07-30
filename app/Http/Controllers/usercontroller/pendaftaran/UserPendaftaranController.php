@@ -71,10 +71,6 @@ class UserPendaftaranController extends Controller
                     else{
                         $pendaftaran = $semua_pendaftaran->first();
                     }
-
-                    foreach($pendaftaran->Kelas as $index => $kelas){
-                        
-                    }
                     
                     $pendaftaran->Kelas->filter(function($value,$key) use ($pendaftaran){
                         if(
