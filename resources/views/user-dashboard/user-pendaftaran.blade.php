@@ -16,7 +16,7 @@
 @section('content')
     <!-- CONTAINER -->
     <div class="container-fluid">
-        <div class="row mt-3">
+        <div class="row mt-3 animated slideInLeft">
             <!-- DROPDOWN -->
             <div class="col-12">
                 <div class="btn-group dropright">
@@ -55,7 +55,7 @@
             <!-- END PENGUMUMAN -->
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-3 animated slideInRight">
             <!-- KELAS -->
             <div class="col-12 col-lg-8 overflow-hidden">
                 <div class="swiper-container mySwiper w-100">
@@ -93,9 +93,9 @@
 
                                                 <p class="card-text p-0 text-center">
                                                     @if(isset($kelas->harga) && $kelas->isBerbayar)
-                                                        <span class="rounded p-2 bg-primary z-depth-2 text-white">IDR {{ number_format($kelas->harga) }}</span>
+                                                        <span class="rounded p-2 bg-primary z-depth-1 text-white">IDR {{ number_format($kelas->harga) }}</span>
                                                     @else
-                                                        <span class="rounded p-2 bg-primary z-depth-2 text-white">GRATIS</span>
+                                                        <span class="rounded p-2 bg-success z-depth-1 text-white">GRATIS</span>
                                                     @endif
                                                 </p>
                                                 
