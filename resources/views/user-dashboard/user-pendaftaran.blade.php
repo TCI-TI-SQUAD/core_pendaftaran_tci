@@ -16,7 +16,7 @@
 @section('content')
     <!-- CONTAINER -->
     <div class="container-fluid">
-        <div class="row mt-3 animated slideInLeft">
+        <div class="row mt-3 animated slideInLeft position-relative" style="z-index:1000;">
             <!-- DROPDOWN -->
             <div class="col-12">
                 <div class="btn-group dropright">
@@ -58,14 +58,19 @@
         <div class="row mb-3 animated slideInRight">
             <!-- KELAS -->
             <div class="col-12 col-lg-8 overflow-hidden">
-                <div class="swiper-container mySwiper w-100">
+                <div class="swiper-container mySwiper w-100 h-100">
+                    <div class="swiper-pagination"></div>
                     <div class="swiper-wrapper">
                         @if(isset($pendaftaran->Kelas))
                             @if($pendaftaran->Kelas->count() > 0)
                                 @foreach($pendaftaran->Kelas as $index => $kelas)
                                     <div class="swiper-slide mb-5 mt-3">
                                         <!-- Card -->
-                                        <div class="card">
+                                        <div class="card"
+                                            @if($kelas->isLocked)
+                                                style="opacity:.5;"
+                                            @endif
+                                        >
 
                                             <!-- Card image -->
                                             @if($kelas->logo_kelas != null)
@@ -92,10 +97,14 @@
                                                 </p>
 
                                                 <p class="card-text p-0 text-center">
+                                                    @if($kelas->isLocked)
+                                                        <span class="rounded p-2 bg-danger z-depth-1 text-white">CLOSED</span>
+                                                    @else
                                                     @if(isset($kelas->harga) && $kelas->isBerbayar)
                                                         <span class="rounded p-2 bg-primary z-depth-1 text-white">IDR {{ number_format($kelas->harga) }}</span>
                                                     @else
                                                         <span class="rounded p-2 bg-success z-depth-1 text-white">GRATIS</span>
+                                                    @endif
                                                     @endif
                                                 </p>
                                                 
@@ -109,8 +118,8 @@
                                                 <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ $persen }}%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
-                                                <div class="row p-0">
-                                                    <div class="col-12 col-xl-6 m-xl-0 m-1">
+                                                <div class="row m-0 p-0">
+                                                    <div class="col-12 col-xl-6 m-xl-0 p-1">
                                                         <a href="{{ Route('user.jadwal.kelas',[$encrypt_kelas_id]) }}" class="btn-sm btn-block btn-secondary">JADWAL</a>
                                                     </div>
                                                     <form action="{{ Route('user.daftar.kelas') }}" method="POST" id="form-daftar-kelas-{{ $index }}">
@@ -118,7 +127,7 @@
                                                         @method('POST')
                                                         <input type="hidden" name="id_kelas" value="{{ $encrypt_kelas_id }}">
                                                     </form>
-                                                    <div class="col-12 col-xl-6 m-xl-0 m-1">
+                                                    <div class="col-12 col-xl-6 m-xl-0 p-1">
                                                         <a class="btn-sm btn-block btn-primary text-white" onclick="daftarKelas({{ $index }},'{{ $kelas->nama_kelas }}')">DAFTAR</a>
                                                     </div>
                                                 </div>
@@ -131,11 +140,28 @@
                                     </div>
                                 @endforeach
                             @else
-                                BELUM ADA KELAS
+                                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                    <div>
+                                        <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                    </div>
+
+                                    <div>
+                                        <h5 class="mt-5 text-center w-100">TIDAK ADA KELAS</h5>
+                                    </div>
+                                </div>
                             @endif
+                        @else
+                            <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                <div>
+                                    <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                </div>
+
+                                <div>
+                                    <h5 class="mt-5 text-center w-100">TIDAK ADA KELAS</h5>
+                                </div>
+                            </div>
                         @endif
                     </div>
-                    <div class="swiper-pagination"></div>
                 </div>
 
             </div>
@@ -157,7 +183,27 @@
                                         {!! $pengumuman->pengumuman !!}
                                     </div>
                                     @endforeach
+                                @else
+                                    <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                        <div>
+                                            <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:100px;">
+                                        </div>
+
+                                        <div>
+                                            <h5 class="mt-5 text-center w-100">TIDAK ADA PENGUMUMAN</h5>
+                                        </div>
+                                    </div>
                                 @endif
+                            @else
+                                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                    <div>
+                                        <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:100px;">
+                                    </div>
+
+                                    <div>
+                                        <h5 class="mt-5 text-center w-100">TIDAK ADA PENGUMUMAN</h5>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -184,8 +230,7 @@
                 $('#navigation-block').toggleClass('active');
             })
         });
-    </script>
-<script>
+    
         var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 10,
@@ -239,7 +284,7 @@
         }
 
         // SWEETALERT2
-        @if(Session::has('status'))
+            @if(Session::has('status'))
                 Swal.fire({
                     icon:  @if(Session::has('icon')){!! '"'.Session::get('icon').'"' !!} @else 'question' @endif,
                     title: @if(Session::has('title')){!! '"'.Session::get('title').'"' !!} @else 'Oppss...'@endif,

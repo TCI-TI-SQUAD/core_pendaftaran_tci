@@ -85,7 +85,7 @@ class UserPendaftaranController extends Controller
                             $pendaftaran->Kelas[$key]->Pengajar;
                             return true;
                         }
-                    })->sortBy('isLocked')->values();
+                    })->values();
                     
                     return view('user-dashboard.user-pendaftaran',compact(['pendaftaran','semua_pendaftaran']));
 
