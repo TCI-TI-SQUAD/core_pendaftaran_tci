@@ -103,6 +103,7 @@
                                                 <h4>{{ $kelas->detail_kelas_count.'/'.$kelas->kuota }}</h4>
                                                 @php
                                                     $persen = $kelas->detail_kelas_count/$kelas->kuota * 100;
+                                                    $encrypt_kelas_id = Crypt::encryptString($kelas->id);
                                                 @endphp
                                                 <div class="progress border border-secondary mb-3" style="height:30px;">
                                                 <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ $persen }}%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -110,10 +111,15 @@
 
                                                 <div class="row p-0">
                                                     <div class="col-12 col-xl-6 m-xl-0 m-1">
-                                                        <a href="#" class="btn-sm btn-block btn-secondary">JADWAL</a>
+                                                        <a href="{{ Route('user.jadwal.kelas',[$encrypt_kelas_id]) }}" class="btn-sm btn-block btn-secondary">JADWAL</a>
                                                     </div>
+                                                    <form action="{{ Route('user.daftar.kelas') }}" method="POST" id="form-daftar-kelas-{{ $index }}">
+                                                        @csrf
+                                                        @method('POST')
+                                                        <input type="hidden" name="id_kelas" value="{{ $encrypt_kelas_id }}">
+                                                    </form>
                                                     <div class="col-12 col-xl-6 m-xl-0 m-1">
-                                                        <a href="#" class="btn-sm btn-block btn-primary">Button</a>
+                                                        <a class="btn-sm btn-block btn-primary text-white" onclick="daftarKelas({{ $index }},'{{ $kelas->nama_kelas }}')">DAFTAR</a>
                                                     </div>
                                                 </div>
                                                 

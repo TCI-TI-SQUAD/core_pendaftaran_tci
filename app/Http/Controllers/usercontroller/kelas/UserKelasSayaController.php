@@ -116,10 +116,10 @@ class UserKelasSayaController extends Controller
             
     }
 
-    public function kelasBeranda(String $id_detail_kelas = null){
+    public function kelasBeranda(String $kelas_id = null){
         // ENCRYPT
             try {
-                $id_detail_kelas = Crypt::decryptString($id_detail_kelas);
+                $encrypt_kelas_id = Crypt::decryptString($kelas_id);
             } catch (DecryptException $err) {
                 return redirect()->back()->with([
                     'status'  => 'fail',
@@ -131,8 +131,8 @@ class UserKelasSayaController extends Controller
         // END
         
         // SECURITY
-            $validator = Validator::make(['id_detail_kelas' => $id_detail_kelas],[
-                'id_detail_kelas' => 'required|exists:detail_kelas,id',
+            $validator = Validator::make(['encrypt_kelas_id' => $encrypt_kelas_id],[
+                'encrypt_kelas_id' => 'required|exists:detail_kelas,id',
             ]);
 
             if($validator->fails()){
@@ -150,7 +150,7 @@ class UserKelasSayaController extends Controller
                 $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])
                                         ->whereHas('Kelas')->whereHas('Transaksi')
                                             ->where('id_user',Auth::user()->id)
-                                                ->findOrFail($id_detail_kelas);
+                                                ->findOrFail($encrypt_kelas_id);
 
             }catch(ModelNotFoundException $err){
                 return redirect()->back()->with([
@@ -161,45 +161,7 @@ class UserKelasSayaController extends Controller
                 ]);
             }
             
-            if($detail_kelas->Kelas->isBerbayar){
-                switch ($detail_kelas->Transaksi->status) {
-                    case 'lunas':
-                        dd("lunas");
-                        break;
-                    
-                    case 'menunggu_pembayaran':
-                        return redirect()->route('user.upload.kelas',[Crypt::encryptString($detail_kelas->id)])
-                            ->with([
-                                'status' => 'fail',
-                                'icon' => 'info',
-                                'title' => 'Mohon Upload Bukti Pembayaran',
-                                'message' => 'Mohon untuk mengunggah bukti pembayaran'
-                            ]);
-                        break;
-                    
-                    case 'menunggu_konfirmasi':
-                        return redirect()->route('user.verifikasi.kelas',[Crypt::encryptString($detail_kelas->id)])
-                            ->with([
-                                'status' => 'fail',
-                                'icon' => 'info',
-                                'title' => 'Mohon tunggu ',
-                                'message' => 'Admin akan segera memverivikasi bukti pembayaran anda'
-                            ]);
-                        break;
-    
-                    default:
-                        return redirect()->route('user.pembayaran.kelas',[Crypt::encryptString($detail_kelas->id)])
-                            ->with([
-                                'status' => 'fail',
-                                'icon' => 'info',
-                                'title' => 'Selesaikan Administrasi Kelas !',
-                                'message' => 'Untuk dapat masuk ke dalam kelas anda harus menyelesaikan administrasi kelas terlebih dahulu'
-                            ]);
-                        break;
-                }
-            }else{
-                dd("kelas gratis");
-            }
+            return redirect()->route('user.pembayaran.kelas',[$kelas_id]);
             
         // NED
     }
