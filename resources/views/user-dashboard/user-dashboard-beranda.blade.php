@@ -3,7 +3,6 @@
 @push('css')
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 <link href="{{ asset('asset\vendor\flipdown-master\dist\flipdown.min.css') }}" rel="stylesheet">
-<link href="{{ asset('asset\css\layout-css\layout-css.css') }}" rel="stylesheet">
 <link href="{{ asset('asset\css\layout-css\user-dashboard-layout.css') }}" rel="stylesheet">
 @endpush
 
@@ -131,72 +130,36 @@
     <!-- END COUNTDOWN -->
 
     <!-- PENGUMUMAN -->
-    <div class="pengumuman p-2 animated slideInUp" style="white-space: nowrap;">
+    <div class="pengumuman animated slideInUp">
 
-        <div class="card card-pengumuman"  style="white-space: normal;">
-            <!-- Card image -->
-            <div class="view overlay">
-                <img class="card-img-top" src="{{ asset('asset\image\main_asset\barong.png') }}"
-                alt="Card image cap">
-                <a href="#!">
-                <div class="mask rgba-white-slight"></div>
-                </a>
-            </div>
+        <div class="swiper-container mySwiper2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="card card-pengumuman">
+                        <!-- Card image -->
+                        <div class="view overlay">
+                            <img class="card-img-top" src="{{ asset('asset\image\main_asset\barong.png') }}"
+                            alt="Card image cap">
+                            <a href="#!">
+                            <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
 
-            <!-- Card content -->
-            <div class="card-body">
+                        <!-- Card content -->
+                        <div class="card-body">
 
-                <!-- Title -->
-                <h4 class="card-title">Card title</h4>
-                <!-- Text -->
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, illum earum. Autem voluptatem alias culpa fugiat vitae quasi quibusdam voluptates explicabo dicta quaerat quam incidunt odio sint deleniti, mollitia facilis.</p>
-                <!-- Button -->
+                            <!-- Title -->
+                            <h4 class="card-title">Card title</h4>
+                            <!-- Text -->
+                            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, illum earum. Autem voluptatem alias culpa fugiat vitae quasi quibusdam voluptates explicabo dicta quaerat quam incidunt odio sint deleniti, mollitia facilis.</p>
+                            <!-- Button -->
 
-            </div>
-        </div>
-
-        <div class="card card-pengumuman"  style="white-space: normal;">
-            <!-- Card image -->
-            <div class="view overlay">
-                <img class="card-img-top" src="{{ asset('asset\image\main_asset\barong.png') }}"
-                alt="Card image cap">
-                <a href="#!">
-                <div class="mask rgba-white-slight"></div>
-                </a>
-            </div>
-
-            <!-- Card content -->
-            <div class="card-body">
-
-                <!-- Title -->
-                <h4 class="card-title">Card title</h4>
-                <!-- Text -->
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, illum earum. Autem voluptatem alias culpa fugiat vitae quasi quibusdam voluptates explicabo dicta quaerat quam incidunt odio sint deleniti, mollitia facilis.</p>
-                <!-- Button -->
+                        </div>
+                    </div>
+                </div>
 
             </div>
-        </div>
-
-        <div class="card card-pengumuman"  style="white-space: normal;">
-            <!-- Card image -->
-            <div class="view overlay">
-                <img class="card-img-top" src="{{ asset('asset\image\main_asset\barong.png') }}"
-                alt="Card image cap">
-                <a href="#!">
-                <div class="mask rgba-white-slight"></div>
-                </a>
-            </div>
-
-            <!-- Card content -->
-            <div class="card-body">
-
-                <!-- Title -->
-                <h4 class="card-title">Card title</h4>
-                <!-- Text -->
-                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, illum earum. Autem voluptatem alias culpa fugiat vitae quasi quibusdam voluptates explicabo dicta quaerat quam incidunt odio sint deleniti, mollitia facilis.</p>
-                <!-- Button -->
-
-            </div>
+            <div class="swiper-pagination2 text-center"></div>
         </div>
         
     </div>
@@ -246,6 +209,20 @@
         },
         pagination: {
           el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+
+      var swiper2 = new Swiper(".mySwiper2", {
+        slidesPerView: 2,
+        spaceBetween: 10,
+        centeredSlides: false,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination2",
           clickable: true,
         },
       });
