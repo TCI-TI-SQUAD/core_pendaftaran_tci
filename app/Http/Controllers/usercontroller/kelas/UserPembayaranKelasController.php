@@ -29,7 +29,7 @@ class UserPembayaranKelasController extends Controller
                     'message' => 'Kelas tidak ditemukan di dalam sistem'
                 ]);
             }
-
+            
             $validator = Validator::make(['id_detail_kelas' => $id_detail_kelas],[
                 'id_detail_kelas' => 'required|exists:detail_kelas,id'
             ]);
@@ -38,7 +38,7 @@ class UserPembayaranKelasController extends Controller
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
-                    'title' => 'Kelas Tidak Ditemukan 1',
+                    'title' => 'Kelas Tidak Ditemukan 1 a',
                     'message' => 'Kelas tidak ditemukan di dalam sistem'
                 ]);
             }

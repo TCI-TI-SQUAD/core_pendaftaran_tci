@@ -15,155 +15,118 @@
 @endsection
 
 @section('content')
-
-    <!-- PROFILE -->
-    <div class="profile-wrapper p-2 animated slideInLeft">
-        <!-- Card -->
-        <div class="card z-depth-1" style="height:100%;">
-
-        <!-- Card content -->
-        <div class="card-body">
-
-        <div class="container">
-            <div class="row">
-                <div class="col-5 d-flex justify-content-center align-items-center">
-                    <img class="rounded-circle z-depth-1" src="{{ asset('asset\image\main_asset\no_pic_user.png') }}" alt="" style="width:100px; height:100px;">
-                </div>
-
-                <div class="col text-left mt-3">
-                    <h5 style="font-size:18px;"><b>
-                    @if(isset($jam))
-                        @if($jam >= 0 && $jam < 10)
-                            Selamat Pagi !
-                        @elseif($jam >= 10 && $jam < 15)
-                            Selamat Siang !
-                        @elseif($jam >= 15 && $jam < 18)
-                            Selamat Sore !
-                        @elseif($jam >= 18 && $jam < 24)
-                            Selamat Malam !
-                        @else
-                            Selamat Datang
-                        @endif
-                    @endif
-                    </b></h5>
-                    <h5 style="font-size:14px;">{{ strtoupper(Auth::user()->username) }}</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col">
-                    <!-- Default input -->
-                    <label for="exampleForm1">No Pelajar TCI</label>
-                    <input type="text" id="exampleForm1" class="form-control" value="{{ Auth::user()->nomor_pelajar_tci }}" readonly>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col mt-3">
-                    <!-- Default input -->
-                    <label for="exampleForm2">Nama Pelajar</label>
-                    <input type="text" id="exampleForm2" class="form-control" value="{{ Auth::user()->name }}" readonly>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col mt-3">
-                    <!-- Default input -->
-                    <label for="exampleForm3">Email</label>
-                    <input type="text" id="exampleForm3" class="form-control" value="{{ Auth::user()->email }}" readonly>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col mt-3">
-                    <!-- Default input -->
-                    <label for="exampleForm4">No HP.</label>
-                    <input type="text" id="exampleForm4" class="form-control" value="{{ Auth::user()->phone_number }}" readonly>
-                </div>
-            </div>
-        </div>
-
-        </div>
-
-        </div>
-        <!-- Card -->
-    </div>
-    <!-- END PROFILE -->
-
-    <!-- COUNTDOWN -->
-    <div class="countdown animated slideInRight">
-            <!-- Swiper -->
-            <div class="swiper-container mySwiper pb-4 card m-2 z-depth-1">
-
-                <div class="swiper-wrapper">
-                    @if(isset($pendaftarans))
-                        @if(count($pendaftarans) > 0)
-                            @foreach($pendaftarans as $index => $pendaftaran)
-                                <div class="swiper-slide d-flex justify-content-center align-items-center">
-                                        <div class="m-3">
-                                            <h5 class="text-center m-3">{{ $pendaftaran->nama_pendaftaran }}</h5>
-                                            <div id="{{ 'flipdown'.$index }}" class="flipdown"></div>
-                                        </div>
-                                </div>
-                            @endforeach
-                        @else
-                                <div class="swiper-slide d-flex justify-content-center align-items-center">
-                                        <div class="m-3">
-                                            <h5 class="text-center m-3">Belum ada pendaftaran course</h5>
-                                            <div id="flipdown" class="flipdown"></div>
-                                        </div>
-                                </div>
-                        @endif
-                    @else
-                                <div class="swiper-slide d-flex justify-content-center align-items-center">
-                                        <div class="m-3">
-                                            <h5 class="text-center m-3">Belum ada pendaftaran course</h5>
-                                            <div id="flipdown" class="flipdown"></div>
-                                        </div>
-                                </div>
-                    @endif
-                </div>
-                
-                <div class="swiper-pagination"></div>
-
-            </div>
-    </div>
-    <!-- END COUNTDOWN -->
-
-    <!-- PENGUMUMAN -->
-    <div class="pengumuman animated slideInUp">
-
-        <div class="swiper-container mySwiper2">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="card card-pengumuman">
-                        <!-- Card image -->
-                        <div class="view overlay">
-                            <img class="card-img-top" src="{{ asset('asset\image\main_asset\barong.png') }}"
-                            alt="Card image cap">
-                            <a href="#!">
-                            <div class="mask rgba-white-slight"></div>
-                            </a>
+    <!-- CONTAINER -->
+    <div class="container-fluid h-100">
+        <div class="row">
+            <div class="col-12 col-lg-6 p-2 m-0">
+                <div class="jumbotron p-0 m-0">
+                    <div class="row">
+                        <div class="col-12 col-md-3 p-3 text-center">
+                            <img src="{{ asset('storage\image_users\no_pic_user.png') }}" class="img-thumbnail rounded-circle" alt="IMAGE USERS" style="width:100px;display:block;margin:auto;object-fit:cover;">
                         </div>
-
-                        <!-- Card content -->
-                        <div class="card-body">
-
-                            <!-- Title -->
-                            <h4 class="card-title">Card title</h4>
-                            <!-- Text -->
-                            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, illum earum. Autem voluptatem alias culpa fugiat vitae quasi quibusdam voluptates explicabo dicta quaerat quam incidunt odio sint deleniti, mollitia facilis.</p>
-                            <!-- Button -->
-
+                        <div class="col-12 m-md-0 col-md-7 p-3">
+                            <div class="row">
+                                <div class="col-12 text-center text-md-left" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                    @if(isset($jam))
+                                        @if($jam >= 0 && $jam < 10)
+                                            <span class="font-weight-bold">SELAMAT PAGI</span>
+                                        @elseif($jam >= 10 && $jam < 14)
+                                            <span class="font-weight-bold">SELAMAT SIANG</span>
+                                        @elseif($jam >= 14 && $jam < 18)
+                                            <span class="font-weight-bold">SELAMAT SORE</span>
+                                        @elseif($jam >= 18 && $jam <= 24)
+                                            <span class="font-weight-bold">SELAMAT MALAM</span>
+                                        @else
+                                            <span class="font-weight-bold">SELAMAT DATANG</span>
+                                        @endif
+                                    @endif
+                                </div>
+                                <div class="col-12 text-center text-md-left" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                    {{ strtoupper(Auth::user()->name) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 pl-4 pr-4">
+                            <label class="p-0 m-0">Nama</label>
+                            <input type="text" class="form-control m-0" value="{{ Auth::user()->name }}" readonly>
+                        </div>
+                        <div class="col-12 pl-4 pr-4 mt-3">
+                            <label class="p-0 m-0">Nomor Pelajar TCI</label>
+                            <input type="text" class="form-control m-0" value="{{ Auth::user()->nomor_pelajar_tci }}" readonly>
+                        </div>
+                        <div class="col-12 pl-4 pr-4 mt-3">
+                            <label class="p-0 m-0">Status</label>
+                            <input type="text" class="form-control m-0" value="{{ strtoupper(Auth::user()->status) }}" readonly>
+                        </div>
+                        <div class="col-12 pl-4 pr-4 mt-3">
+                            <label class="p-0 m-0">Instansi / Universitas</label>
+                            <input type="text" class="form-control m-0" value="{{ strtoupper(Auth::user()->getInstansiName()) }}" readonly>
+                        </div>
+                        <div class="col-12 pl-4 pr-4 mt-3">
+                            <label class="p-0 m-0">E-mail</label>
+                            <input type="text" class="form-control m-0" value="{{ Auth::user()->email }}" readonly>
+                        </div>
+                        <div class="col-12 pl-4 pr-4 mt-3 mb-4">
+                            <label class="p-0 m-0">No Hp</label>
+                            <input type="text" class="form-control m-0" value="{{ Auth::user()->phone_number }}" readonly>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="swiper-pagination2 text-center"></div>
+
+            <div class="col-12 col-lg-6 p-0 d-flex flex-column justify-content-center align-items-center">
+                
+                    <div class="col p-0 m-0" id="countdown">
+                        <div class="swiper-container mySwiper h-100 p-0">
+                            <div class="swiper-wrapper p-0 m-0" style="position: absolute;left: 0;top: 0;right:0;bottom:0;">
+                                @if(isset($pendaftarans))
+                                    @if($pendaftarans->count() > 0)
+                                        @foreach($pendaftarans as $index => $pendaftaran)
+                                            <div class="swiper-slide d-flex flex-column justify-content-center">
+                                                <div>
+                                                <h5 class="text-center"><b>{{ $pendaftaran->nama_pendaftaran }}</b></h5>
+                                                <div id="flipdown{{ $index }}" class="flipdown m-auto"></div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                    <div class="col position-relative p-0 m-0" style="left:0;right:0;bottomn:0;top:0;" id="pengumuman">
+                        <div class="swiper-container mySwiper h-100 p-0">
+                            <div class="swiper-wrapper p-0 m-0" style="position: absolute;left: 0;top: 0;right:0;bottom:0;z-index:19999;">
+                                <div class="swiper-slide d-flex flex-column p-3">
+                                    @if(isset($pengumuman_global))
+                                        @if($pengumuman_global->count())
+                                            @foreach($pengumuman_global as $index => $pengumuman)
+                                                <h5 class="text-center font-weight-bold text-white" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">PENGUMUMAN SISTEM {{ $index+1 }}</h5>
+                                                <div class="card overflow-auto p-2">
+                                                    {!! $pengumuman->pengumuman !!}
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="card overflow-auto p-2">
+                                                TIDAK ADA PENGUMUMAN
+                                            </div>
+                                        @endif
+                                    @else
+                                        <div class="card overflow-auto p-2">
+                                            TIDAK ADA PENGUMUMAN
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
         </div>
-        
     </div>
-    <!-- END PENGUMUMAN -->
+    <!-- END CONTAINER -->
 
 @endsection
 
@@ -206,24 +169,6 @@
         autoplay: {
           delay: 3000,
           disableOnInteraction: false,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-      });
-
-      var swiper2 = new Swiper(".mySwiper2", {
-        slidesPerView: 2,
-        spaceBetween: 10,
-        centeredSlides: false,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: ".swiper-pagination2",
-          clickable: true,
         },
       });
         // SWEETALERT2

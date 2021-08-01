@@ -40,25 +40,25 @@ class CreateTransaksi extends Migration
             $table->softDeletes('deleted_at',0);
         });
 
-        Transaksi::insert([
-            [
-            'id_detail_kelas' => 1,
-            'nama_kelas' => 'Kelas Mandarin For Children',
-            'nama_pendaftaran' => 'TCI International Class Batch A',
-            'nomor_transaksi_struct' => 0001,
-            'total_pembayaran' => 120000,
-            'file_bukti_transaksi' => 'TCI-UDAYANA-1',
-            'file_struct_pembayaran' => 'invoice',
-            'nama_pemesan' => 'I Putu Alin Winata Gotama',
-            'nomor_pelajar_tci' => 202171800001,
-            'tanggal_cetak_struct' => date('Y-m-d'),
-            'tanggal_expired' => '2021-07-25',
-            'tanggal_mulai_kelas' => '2021-01-01',
-            'tanggal_selesai_kelas' => '2021-01-07',
-            'status' => 'menunggu_pembayaran',
-            'keterangan_pembayaran_user' => 'halo',
-            ]
-        ]);
+        // Transaksi::insert([
+        //     [
+        //     'id_detail_kelas' => 1,
+        //     'nama_kelas' => 'Kelas Mandarin For Children',
+        //     'nama_pendaftaran' => 'TCI International Class Batch A',
+        //     'nomor_transaksi_struct' => 0001,
+        //     'total_pembayaran' => 120000,
+        //     'file_bukti_transaksi' => 'TCI-UDAYANA-1',
+        //     'file_struct_pembayaran' => 'invoice',
+        //     'nama_pemesan' => 'I Putu Alin Winata Gotama',
+        //     'nomor_pelajar_tci' => 202171800001,
+        //     'tanggal_cetak_struct' => date('Y-m-d'),
+        //     'tanggal_expired' => '2021-07-25',
+        //     'tanggal_mulai_kelas' => '2021-01-01',
+        //     'tanggal_selesai_kelas' => '2021-01-07',
+        //     'status' => 'menunggu_pembayaran',
+        //     'keterangan_pembayaran_user' => 'halo',
+        //     ]
+        // ]);
     }
 
     /**

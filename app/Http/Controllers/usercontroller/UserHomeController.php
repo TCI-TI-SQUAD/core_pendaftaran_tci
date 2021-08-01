@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Pendaftaran;
+use App\PengumumanGlobal;
 
 class UserHomeController extends Controller
 {
@@ -18,9 +19,12 @@ class UserHomeController extends Controller
                                     ->where('tanggal_selesai_pendaftaran','>',date("Y-m-d H:i:s"))
                                     ->get();
         
+        // GET ALL PENGUMUMAN GLOBAL
+        $pengumuman_global = PengumumanGlobal::all();
+        
         // JAM
         $jam = date('H');
 
-        return view('user-dashboard.user-dashboard-beranda',compact(['pendaftarans','jam']));
+        return view('user-dashboard.user-dashboard-beranda',compact(['pendaftarans','jam','pengumuman_global']));
     }
 }

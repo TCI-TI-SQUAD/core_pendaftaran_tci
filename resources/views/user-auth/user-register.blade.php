@@ -64,6 +64,32 @@
                         <input name="alamat" value="{{ old('alamat') }}" type="text" placeholder="Alamat tempat tinggal lengkap" class="form-control mt-1" minlength="5" maxlength="50" required>
                     @endif
 
+                    <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="HSK (Hànyǔ Shuǐpíng Kǎoshì), merupakan tingkatan kemampuan Bahasa Mandarin pendaftar saat ini">HSK <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
+                    @if($errors->has('hsk'))
+                        <select name="hsk" placeholder="Pilih hsk" class="browser-default custom-select border border-danger" required>
+                            <option value="">Pilih hsk</option>
+                            <option value="pemula" @if(old("hsk") == "pemula") selected @endif>PEMULA</option>
+                            <option value="hsk 1" @if(old("hsk") == "hsk 1") selected @endif>HSK 1</option>
+                            <option value="hsk 2" @if(old("hsk") == "hsk 2") selected @endif>HSK 2</option>
+                            <option value="hsk 3" @if(old("hsk") == "hsk 3") selected @endif>HSK 3</option>
+                            <option value="hsk 4" @if(old("hsk") == "hsk 4") selected @endif>HSK 4</option>
+                            <option value="hsk 5" @if(old("hsk") == "hsk 5") selected @endif>HSK 5</option>
+                            <option value="hsk 6" @if(old("hsk") == "hsk 6") selected @endif>HSK 6</option>
+                        </select>
+                        <p class="text-danger animated slideInUp"><small>{{ $errors->first('hsk') }}</small></p>
+                    @else
+                        <select name="hsk" placeholder="Pilih hsk" class="browser-default custom-select" required>
+                            <option value="">Pilih hsk</option>
+                            <option value="pemula" @if(old("hsk") == "pemula") selected @endif>PEMULA</option>
+                            <option value="hsk 1" @if(old("hsk") == "hsk 1") selected @endif>HSK 1</option>
+                            <option value="hsk 2" @if(old("hsk") == "hsk 2") selected @endif>HSK 2</option>
+                            <option value="hsk 3" @if(old("hsk") == "hsk 3") selected @endif>HSK 3</option>
+                            <option value="hsk 4" @if(old("hsk") == "hsk 4") selected @endif>HSK 4</option>
+                            <option value="hsk 5" @if(old("hsk") == "hsk 5") selected @endif>HSK 5</option>
+                            <option value="hsk 6" @if(old("hsk") == "hsk 6") selected @endif>HSK 6</option>
+                        </select>
+                    @endif
+
                     <hr style="height:1px;background:red;">
 
                     <label for="exampleForm2" class="mt-1" data-toggle="tooltip" title="Masukkan password anda pada field ini">Password <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>

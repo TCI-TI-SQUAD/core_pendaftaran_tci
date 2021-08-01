@@ -5,13 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Instansi extends Model
+class PengumumanGlobal extends Model
 {
-    use SoftDeletes;
-    
     protected $fillable = [
-        'id',
-        'nama_instansi',
-        'keterangan'
+        'id_admin',
+        'pengumuman',
+        'tanggal',
     ];
 }

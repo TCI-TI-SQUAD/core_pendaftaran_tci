@@ -41,4 +41,20 @@ class User extends Authenticatable
     public function DetailKelas(){
         return $this->hasMany('App\DetailKelas','id_user','id');
     }
+
+    public function getInstansiName(){
+        switch($this->status){
+            case 'mahasiswa':
+                $instansi = $this->belongsTo('App\Prodi','id_instansi','id')->first()->nama_prodi;
+                $instansi .= ", ".$this->belongsTo('App\Prodi','id_instansi','id')->first()->Fakultas->nama_fakultas;
+                $instansi .= ", ".$this->belongsTo('App\Prodi','id_instansi','id')->first()->Fakultas->Universitas->nama_universitas;
+                return $instansi;
+            case 'siswa':
+                return $this->belongsTo('App\Sekolah','id_instansi','id')->first()->nama_sekolah;
+            case 'instansi':
+                return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
+            case 'umum':
+                return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
+        }
+    }
 }

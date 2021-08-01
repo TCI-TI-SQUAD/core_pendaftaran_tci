@@ -59,7 +59,7 @@
                             <!-- Second Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-secondary">2</span><small>SELESAI</small>
+                                <span class="circle">2</span><small>SELESAI</small>
                                 </a>
                             </li>
                         </ul>

@@ -73,7 +73,7 @@ class DaftarKelasController extends Controller
                     'message' => 'Pastikan anda memilih kelas yang benar',
                 ]);
             }
-
+            
             $validator = Validator::make($request->all(),
             [
                 'id_kelas' => 'required|exists:kelas,id',
@@ -183,9 +183,9 @@ class DaftarKelasController extends Controller
                             'status' => 'memilih_metode_pembayaran',
                         ]);
                         
-                        $encrypt_kelas_id = Crypt::encryptString($kelas->id);
+                        $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
 
-                        return redirect()->route('user.pembayaran.kelas',[$encrypt_kelas_id]);
+                        return redirect()->route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]);
 
                     }else{
                         // TRANSAKSI
@@ -203,9 +203,9 @@ class DaftarKelasController extends Controller
                             'status' => 'menunggu_konfirmasi',
                         ]);
                         
-                        $encrypt_kelas_id = Crypt::encryptString($kelas->id);
+                        $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
 
-                        return redirect()->route('user.pembayaran.kelas',[$encrypt_kelas_id]);
+                        return redirect()->route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]);
                     }
             }catch(ModelNotFoundException $err){
                 return redirect()->back()->with([
