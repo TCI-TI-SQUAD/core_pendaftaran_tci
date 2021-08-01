@@ -136,9 +136,8 @@ class DaftarKelasController extends Controller
                         });
                     }])
 
-                    ->where('status','buka')->where('id',$request->id_kelas)->whereDate('tanggal_mulai','<=',date('Y-m-d')
-                        )->whereDate('tanggal_selesai','>',date('Y-m-d'))
-                        ->first();
+                    ->where('status','buka')->where('id',$request->id_kelas)->whereDate('tanggal_mulai','>',date('Y-m-d')
+                        )->first();
                 // AKHIR
                     
                 // CHECK KUOTA KELAS
