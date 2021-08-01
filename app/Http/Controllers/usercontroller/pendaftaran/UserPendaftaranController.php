@@ -55,7 +55,7 @@ class UserPendaftaranController extends Controller
                                                                 $query_2->whereHas('Transaksi',function($query_3){
                                                                     $query_3->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
                                                                 });
-                                                            }])->where('tanggal_mulai','<',date('Y-m-d'))->where('tanggal_selesai','>',date('Y-m-d'))
+                                                            }])->where('tanggal_mulai','>',date('Y-m-d'))
                                                                 ->whereHas('KelasKerjasama',function($query_4){
                                                                     $query_4->where('status',Auth::user()->status)->where('id_instansi',Auth::user()->id_instansi);
                                                                 });
