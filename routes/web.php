@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
     Route::get('/test',function(){
-        return view('user-dashboard.user-kelas-saya.user-kelas-saya');
+        return view('user-dashboard.user-kelas-saya.user-kelas-beranda');
     })->name('user.kelas.saya');
 // AKHIR
 

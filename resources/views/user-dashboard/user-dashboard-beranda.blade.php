@@ -103,7 +103,7 @@
                                     @if(isset($pengumuman_global))
                                         @if($pengumuman_global->count())
                                             @foreach($pengumuman_global as $index => $pengumuman)
-                                                <h5 class="text-center font-weight-bold text-white" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">PENGUMUMAN SISTEM {{ $index+1 }}</h5>
+                                                <h5 class="text-center text-lg-left p-2 font-weight-bold text-white" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">PENGUMUMAN SISTEM {{ $index+1 }}</h5>
                                                 <div class="card overflow-auto p-2">
                                                     {!! $pengumuman->pengumuman !!}
                                                 </div>

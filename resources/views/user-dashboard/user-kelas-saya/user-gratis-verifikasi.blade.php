@@ -40,10 +40,10 @@
                 <!-- Horizontal Steppers -->
                 <div class="row m-0 justify-content-center align-items-center">
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-1 order-lg-1">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
+                        <a href="{{ route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-outline-secondary">BACK</a>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-3 order-lg-2">
-                        <a href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
+                        <a href="{{ route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary">NEXT</a>
                     </div>
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12 order-xl-2  order-lg-3">
 

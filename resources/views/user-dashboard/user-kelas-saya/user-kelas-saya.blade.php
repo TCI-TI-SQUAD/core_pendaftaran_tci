@@ -248,13 +248,25 @@
                                                 @endif
                                             @endforeach
                                         @else
-                                            <div class="text-center w-100 d-flex justify-content-center align-items-center">
-                                                <h5>TIDAK ADA KELAS</h5>
+                                            <div class="text-center w-100 mt-5 mb-5 d-flex justify-content-center align-items-center">
+                                                <div>
+                                                    <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                                </div>
+
+                                                <div>
+                                                    <h5>TIDAK ADA DATA</h5>
+                                                </div>
                                             </div>
                                         @endif
                                     @else
-                                            <div class="text-center w-100 d-flex justify-content-center align-items-center">
-                                                <h5>TIDAK ADA KELAS</h5>
+                                            <div class="text-center w-100 mt-5 mb-5 d-flex justify-content-center align-items-center">
+                                                <div>
+                                                    <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                                </div>
+
+                                                <div>
+                                                    <h5>TIDAK ADA DATA</h5>
+                                                </div>
                                             </div>
                                     @endif
                                 </div>

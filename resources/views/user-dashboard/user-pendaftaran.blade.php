@@ -142,7 +142,7 @@
                             @else
                                 <div class="d-flex flex-column justify-content-center align-items-center w-100">
                                     <div>
-                                        <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                        <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
                                     </div>
 
                                     <div>
@@ -153,7 +153,7 @@
                         @else
                             <div class="d-flex flex-column justify-content-center align-items-center w-100">
                                 <div>
-                                    <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
+                                    <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
                                 </div>
 
                                 <div>
@@ -170,8 +170,8 @@
             <div class="col-12 col-lg-4">
                 <div class="jumbotron overflow-hidden h-100 p-0">
 
-                    <div class="text-center text-white p-2" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">
-                        PENGUMUMAN
+                    <div class="text-center text-lg-left text-white font-weight-bold p-2" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">
+                        PENGUMUMAN PENDAFTARAN
                     </div>
                     
                     <div class="swiper-container mySwiper2 h-100" id="pengumuman-responsive">
