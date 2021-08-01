@@ -79,7 +79,7 @@
                             <h5 class="font-weight-bold text-secondary text-center">MENUNGGU KONFIRMASI ADMIN</h5>
                         </div>
                         <div class="pl-5 mt-3 pr-5 text-center">
-                            <h4>Saat ini admin akan mereview akun anda</h4>
+                            <h4>Saat ini admin akan mereview akun anda, apabila disetujui maka anda akan resmi menjadi anggota kelas</h4>
                         </div>
                     </div>
                 </div>
