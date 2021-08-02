@@ -140,11 +140,12 @@
                             <!-- Swiper -->
                             <div class="swiper-container mySwiper p-0">
                                 <div class="swiper-wrapper p-0">
+                                    
                                     @if(isset($detail_kelas))
-                                        @if(!$detail_kelas->isEmpty())
+                                        @if(count($detail_kelas) > 0)
                                             @foreach($detail_kelas as $detail)
                                                 @if(isset($detail->Kelas) && isset($detail->Transaksi))
-                                                    @php 
+                                                    @php
                                                         $encrypt_kelas_id = Crypt::encryptString($detail->Kelas->id);
                                                         $encrypt_detail_kelas_id = Crypt::encryptString($detail->id);
                                                     @endphp
@@ -153,7 +154,7 @@
                                                         <div class="card z-depth-1 mb-5 m-1">
 
                                                         <!-- Card image -->
-                                                        @if(isset($detail->kelas->logo_kelas))
+                                                        @if(isset($detail->Kelas->logo_kelas))
                                                             <img class="card-img-top" src="{{ url('storage\image_kelas',[$detail->Kelas->logo_kelas]) }}" alt="Card image cap" style="height:200px;object-fit:cover;">
                                                         @else
                                                             <img class="card-img-top" src="{{ asset('storage\image_kelas\default.jpg') }}" alt="Card image cap" style="height:200px;object-fit:cover;">

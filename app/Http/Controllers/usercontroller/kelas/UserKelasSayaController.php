@@ -35,61 +35,72 @@ class UserKelasSayaController extends Controller
                 switch ($filter) {
                     case 'semua':
                         $detail_kelas = DetailKelas::with([
-                            'Kelas' =>function($query){
-                                $query->with('Pengajar');
-                            },'transaksi'])->where('id_user',Auth::user()->id)->get();
+
+                            'Kelas' => function($query){
+                                $query->withTrashed()->with(['Pengajar' => function($query_pengajar){
+                                    $query_pengajar->withTrashed();
+                                }]);
+                            },'Transaksi' => function($query_transaksi){
+                                $query_transaksi->withTrashed();
+                            }])->where('id_user',Auth::user()->id)->withTrashed()->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
 
                     case 'menunggu':
                         $detail_kelas = DetailKelas::with([
-                            'Kelas' =>function($query){
-                                $query->with('Pengajar');
+                            'Kelas' => function($query){
+                                $query->with(['Pengajar' => function($query_pengajar){
+                                    $query_pengajar->withTrashed();
+                                }])->withTrashed();
                             },
                             'transaksi' => function($query_2){
                                 $query_2->where('status','menunggu_pembayaran')
                                         ->orWhere('status','memilih_metode_pembayaran')
-                                            ->orWhere('status','menunggu_konfirmasi');
+                                            ->orWhere('status','menunggu_konfirmasi')->withTrashed();
                             }
                             ])->whereHas('Transaksi',function($query_3){
                                 $query_3->where('status','menunggu_pembayaran')
                                             ->orWhere('status','memilih_metode_pembayaran')
-                                                ->orWhere('status','menunggu_konfirmasi');;
+                                                ->orWhere('status','menunggu_konfirmasi')->withTrashed();;
                             })
-                            ->where('id_user',Auth::user()->id)->get();
+                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
                     
                     case 'selesai':
                         $detail_kelas = DetailKelas::with([
-                            'Kelas',
+                            'Kelas' => function($query_kelas){
+                                $query_kelas->withTrashed();
+                            },
                             'transaksi' => function($query){
-                                $query->where('status','lunas');
+                                $query->where('status','lunas')->withTrashed();
                             }
                             ])->whereHas('Transaksi',function($query_2){
-                                $query_2->where('status','lunas');
+                                $query_2->where('status','lunas')->withTrashed();
                             })
-                            ->where('id_user',Auth::user()->id)->get();
+                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
                     
                     case 'dibatalkan':
                         $detail_kelas = DetailKelas::with([
-                            'Kelas',
+                            'Kelas' => function($query_kelas){
+                                $query_kelas->withTrashed();
+                            },
                             'transaksi' => function($query){
                                 $query->where('status','dibatalkan_user')
                                         ->orWhere('status','ditolak_admin')
-                                            ->orWhere('status','expired_system');
+                                            ->orWhere('status','expired_system')->withTrashed();
                             }
                             ])->whereHas('Transaksi',function($query_2){
                                 $query_2->where('status','dibatalkan_user')
                                             ->orWhere('status','ditolak_admin')
-                                                ->orWhere('status','expired_system');
+                                                ->orWhere('status','expired_system')->withTrashed();
                             })
-                            ->where('id_user',Auth::user()->id)->get();
+                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
@@ -116,10 +127,10 @@ class UserKelasSayaController extends Controller
             
     }
 
-    public function kelasBeranda(String $kelas_id = null){
+    public function kelasBeranda(String $detail_kelas_id = null){
         // ENCRYPT
             try {
-                $encrypt_kelas_id = Crypt::decryptString($kelas_id);
+                $encrypt_detail_kelas_id = Crypt::decryptString($detail_kelas_id);
             } catch (DecryptException $err) {
                 return redirect()->back()->with([
                     'status'  => 'fail',
@@ -131,8 +142,8 @@ class UserKelasSayaController extends Controller
         // END
         
         // SECURITY
-            $validator = Validator::make(['encrypt_kelas_id' => $encrypt_kelas_id],[
-                'encrypt_kelas_id' => 'required|exists:detail_kelas,id',
+            $validator = Validator::make(['encrypt_detail_kelas_id' => $encrypt_detail_kelas_id],[
+                'encrypt_detail_kelas_id' => 'required|exists:detail_kelas,id',
             ]);
 
             if($validator->fails()){
@@ -150,7 +161,7 @@ class UserKelasSayaController extends Controller
                 $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])
                                         ->whereHas('Kelas')->whereHas('Transaksi')
                                             ->where('id_user',Auth::user()->id)
-                                                ->findOrFail($encrypt_kelas_id);
+                                                ->findOrFail($encrypt_detail_kelas_id);
 
             }catch(ModelNotFoundException $err){
                 return redirect()->back()->with([
@@ -161,8 +172,110 @@ class UserKelasSayaController extends Controller
                 ]);
             }
             
-            return redirect()->route('user.pembayaran.kelas',[$kelas_id]);
+            // LIHAT STATUS TRANSAKSI KELAS
+                if($detail_kelas->Kelas->isBerbayar){
+                    switch ($detail_kelas->Transaksi->status) {
+                        case 'dibatalkan_user':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+
+                        case 'expired_system':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+                        
+                        case 'ditolak_admin':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+
+                        case 'memilih_metode_pembayaran' :
+                            return redirect()->route('user.pembayaran.kelas',[$detail_kelas_id]);
+                            break;
+                        
+                        case 'menunggu_pembayaran' :
+                            return redirect()->route('user.upload.kelas',[$detail_kelas_id]);
+                            break;
+
+                        case 'menunggu_konfirmasi' :
+                            return redirect()->route('user.verifikasi.kelas',[$detail_kelas_id]);
+                            break;
+                        
+                        case 'lunas' :
+                            return "berhasil";
+                            break;
+
+                        default:
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Kelas Tidak Ditemukan',
+                                'message' => 'Kelas tidak ditemukan mohon untuk memilih kelas yang ada',
+                            ]);
+                            break;
+                    }
+                }else{
+                    switch ($detail_kelas->Transaksi->status) {
+                        case 'dibatalkan_user':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+
+                        case 'expired_system':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+                        
+                        case 'ditolak_admin':
+                            return redirect()->route('user.fail.kelas',[$detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'info',
+                                'title' => 'Transaksi Gagal',
+                                'message' => 'Transaksi ini telah gagal'
+                            ]);
+                            break;
+
+                        case 'menunggu_konfirmasi' :
+                            return redirect()->route('user.verifikasi.kelas',[$detail_kelas_id]);
+                            break;
+                        
+                        case 'lunas' :
+                            return "berhasil";
+                            break;
+
+                        default:
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Kelas Tidak Ditemukan',
+                                'message' => 'Kelas tidak ditemukan mohon untuk memilih kelas yang ada',
+                            ]);
+                            break;
+                    }
+                }
             
-        // NED
+        // END
     }
+    
 }

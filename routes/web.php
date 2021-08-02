@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
     Route::get('/test',function(){
-        return view('user-dashboard.user-kelas-saya.user-kelas-beranda');
+        return view('user-dashboard.user-kelas-saya.user-selesai-pembayaran');
     })->name('user.kelas.saya');
 // AKHIR
 
@@ -83,6 +83,8 @@ use Illuminate\Support\Facades\Route;
                     Route::put('/kelas/upload','usercontroller\kelas\UserPembayaranKelasController@postBuktiPembayaran')->name('user.upload.bukti');
 
                     Route::get('/kelas/verifikasi/{id_detail_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepVerifikasi')->name('user.verifikasi.kelas');
+
+                    Route::get('/kelas/fail/{id_detail_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepFail')->name('user.fail.kelas');
                 // AKHIR
             });
         // END

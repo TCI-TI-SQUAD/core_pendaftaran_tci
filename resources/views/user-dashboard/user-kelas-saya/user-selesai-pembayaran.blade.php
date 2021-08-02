@@ -22,10 +22,10 @@
                     <ol class="breadcrumb bg-white">
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">Kelas Saya</a></li>
                         <li class="breadcrumb-item"><a href="#" class="text-secondary font-weight-bold">
-                            @if(isset($detail_kelas->Kelas->nama_kelas)){{ $detail_kelas->Kelas->nama_kelas }}@endif
+                            NAMA KELAS
                         </a></li>
                         <li class="breadcrumb-item active"><a href="" class="text-secondary font-weight-bold">Pembayaran</a></li>
-                        <li class="breadcrumb-item active">Gagal</li>
+                        <li class="breadcrumb-item active">Selesai</li>
                     </ol>
                 </nav>
             </div>
@@ -34,10 +34,10 @@
                 <!-- Horizontal Steppers -->
                 <div class="row m-0 justify-content-center align-items-center">
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-1 order-lg-1">
-                        <a href="{{ url()->previous() }}" class="btn btn-sm btn-outline-secondary">BACK</a>
+                        <a href="" class="btn btn-sm btn-outline-secondary">BACK</a>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-center order-xl-3 order-lg-2">
-                        <a class="btn btn-sm btn-secondary disabled">NEXT</a>
+                        <a href="" class="btn btn-sm btn-secondary">NEXT</a>
                     </div>
                     <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-xs-12 order-xl-2  order-lg-3">
 
@@ -46,27 +46,27 @@
                             <!-- First Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-danger">1</span><small>KONFIRMASI</small>
+                                <span class="circle bg-secondary">1</span><small>KONFIRMASI</small>
                                 </a>
                             </li>
 
                             <!-- Second Step -->
                             <li class="step">
                                 <a href="#!">
-                                <span class="circle bg-danger">2</span><small>UPLOAD</small>
+                                <span class="circle bg-secondary">2</span><small>UPLOAD</small>
                                 </a>
                             </li>
                             <!-- Third Step -->
                             <li class="step-actions">
                                 <a href="#!">
-                                <span class="circle bg-danger">3</span><small>VERIFIKASI</small>
+                                <span class="circle bg-secondary">3</span><small>VERIFIKASI</small>
                                 </a>
                             </li>
 
                             <!-- Third Step -->
                             <li class="step-actions">
                                 <a href="#!">
-                                <span class="circle bg-danger">4</span><small>SELESAI</small>
+                                <span class="circle bg-secondary">4</span><small>SELESAI</small>
                                 </a>
                             </li>
                         </ul>
@@ -78,46 +78,34 @@
             </div>
         </div>
 
-        @if(isset($detail_kelas->Transaksi))  
+        
                 <div class="row d-flex justify-content-center p-2">
                     <div class="col-xl-8 col-md-8 col-12 jumbotron p-0 z-depth-1 d-flex flex-column justify-content-center align-items-center">
                         <div class="bg-secondary w-100" style="height:10px;"></div>
+                        
                         <div class="mt-3">
-                            @if($detail_kelas->Transaksi->status == 'dibatalkan_user')
-                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI DIBATALKAN USER</h5>
-                            @elseif($detail_kelas->Transaksi->status == 'ditolak_admin')
-                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI ANDA DITOLAK ADMIN</h5>
-                            @elseif($detail_kelas->Transaksi->status == 'expired_system')
-                                <h5 class="font-weight-bold text-secondary text-center">TRANSAKSI ANDA TELAH EXPIRED</h5>
-                            @endif
-                        </div>
-                        <div class="text-center">
-                            @if($detail_kelas->Transaksi->status == 'dibatalkan_user')
-                                <p class="">Transaksi ini telah anda batalkan, anda dapat memilih kelas pada halaman pendaftaran kembali</p>
-                            @elseif($detail_kelas->Transaksi->status == 'ditolak_admin')
-                                <p class="">Transaksi ini ditolak oleh admin, transaksi dapat ditolak admin apabila proses transaksi tidak sesuai dengan arahan</p>
-                                <p class="text-info">CATATAN ADMIN :</p>
-                                <p>
-                                    @if(isset($kelas->Transaksi->keterangan_tambahan_out_struct))
-                                        {{ $kelas->Transaksi->keterangan_tambahan_out_struct }}
-                                    @else
-                                        -
-                                    @endif
-                                </p>
-                            @elseif($detail_kelas->Transaksi->status == 'expired_system')
-                                <p class="">Transaksi anda telah expired karena melewati batas waktu pembayaran</p>
-                            @endif
+                            <h5 class="font-weight-bold text-secondary text-center">PEMBAYARAN SELESAI</h5>
                         </div>
 
-                        @if(isset($detail_kelas->Transaksi->file_bukti_transaksi))
-                            <div class="">
-                                <img src="{{ url('storage\image_bukti_transaksi',[$kelas->DetailKelas[0]->Transaksi->file_bukti_transaksi]) }}" alt="" style="width:200px;max-height:300px;">
-                            </div>
-                        @endif
+                        <div class="mt-3">
+                            <img src="{{ asset('asset\image\main_asset\selesai.png') }}" alt="" style="width:200px;">
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <H5>Selamat pembayaran anda telah berhasil, anda telah resmi menjadi peserta dalam kelas ini</H5>
+                        </div>
+                        
+                        <div class="mt-3 text-center">
+                            <a href="#" class="btn btn-success" style="width:200px;">LIHAT STRUCT</a>
+                        </div>
 
+                        <div class="my-3 text-center">
+                            <a href="#" class="btn btn-secondary" style="width:200px;">MASUK KE KELAS</a>
+                        </div>
+                        
                     </div>
                 </div>
-        @endif
+        
 
     </div>
     <!-- END COINTAINER -->

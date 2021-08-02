@@ -94,40 +94,173 @@
                     </li>
                 </ul>
                 <div class="tab-content jumbotron p-3 z-depth-1 border-secondary" style="border-left:10px solid;" id="myTabContent">
+                    
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="container">
                             <div class="row">
-                                <div class="col">
-                                    a
+                                <div class="col-12 col-lg-6 rounded order-2 order-lg-1">
+                                    <h4 class="font-weight-bold m-0 px-2 text-center text-lg-left">KELAS MANDARIN A</h4>
+                                    <p class=" m-0 px-2 text-center text-lg-left">HSK 1</p>
+                                        <div class="table-responsive text-nowrap mt-3 p-1">
+                                            <table class="table z-depth-1 table-striped rounded">
+                                            <tbody>
+                                                <tr>
+                                                <th scope="row"><b>Tanggal Mulai :</b></th>
+                                                <td>2021-08-01</td>
+                                                </tr>
+                                                <tr >
+                                                <th scope="row"><b>Tanggal Selesai :</b></th>
+                                                <td>2021-08-01</td>
+                                                </tr>
+                                                <tr >
+                                                <th scope="row"><b>Kuota Kelas :</b></th>
+                                                <td>50 Peserta</td>
+                                                </tr>
+                                                <tr >
+                                                <th scope="row"><b>Banyak Peserta Saat ini :</b></th>
+                                                <td>30 Peserta</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+
+                                        </div>
+
                                 </div>
-                                <div class="col">
-                                    b
+                                <div class="col-12 col-lg-6 order-1 order-lg-2 d-flex align-items-center mb-5 mb-lg-0">
+                                    <img src="{{ asset('storage\image_kelas\default.jpg') }}" style="object-fit:cover;width:60%;" class="d-block m-auto rounded z-depth-2">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Food truck fixie
-                        locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit,
-                        blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
-                        Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum
-                        PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
-                        salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
-                        sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-                        stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</div>
-                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">Etsy mixtape
-                        wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack
-                        lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
-                        locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify
-                        squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie
-                        etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog
-                        stumptown. Pitchfork sustainable tofu synth chambray yr.</div>
-                    <div class="tab-pane fade" id="pembayaran" role="tabpanel" aria-labelledby="pembayaran-tab">PEMBAYARAN Etsy mixtape
-                        wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack
-                        lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
-                        locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify
-                        squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie
-                        etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog
-                        stumptown. Pitchfork sustainable tofu synth chambray yr.</div>
+
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="table-responsive text-nowrap mt-3 p-1">
+                                        <table class="mt-3">
+                                            <tr>
+                                                <th class="pr-2 font-weight-bold">
+                                                    Tanggal Mulai
+                                                </th>
+                                                <td>
+                                                    : 2021-02-02
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-2 font-weight-bold">
+                                                    Tanggal Selesai
+                                                </th>
+                                                <td>
+                                                    : 2021-02-02
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="table-responsive text-nowrap mt-3 p-1">
+                                        <table class="table z-depth-1 table-striped rounded">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="row">
+                                                        No.
+                                                    </th>
+                                                    <th>
+                                                        Tanggal
+                                                    </th>
+                                                    <th>
+                                                        Waktu Mulai
+                                                    </th>
+                                                    <th>
+                                                        Waktu Selesai
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                <th scope="row"><b>1</b></th>
+                                                <td>2021-08-01</td>
+                                                <td>JAM</td>
+                                                <td>JAM</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="container">
+                            <div class="table-responsive mt-3 p-1">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Icon</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Link</th>
+                                        <th scope="col">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <th scope="row">1</th>
+                                        <td><i class="fab fa-whatsapp"></i></td>
+                                        <td>LINK WA KELAS</td>
+                                        <td><a href="#" class="text-info">Https:\\asdasdnadsljkdas.com</a></td>
+                                        <td>Semua peserta kelas wajib untuk mengikuti group WA dengan menggunakan link yang sudah disediakan</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pembayaran" role="tabpanel" aria-labelledby="pembayaran-tab">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    <div class="card rounded">
+                                        <div class="card-title text-center bg-secondary text-white p-2">
+                                            STATUS
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h3 class="font-weight-bold">LUNAS</h3>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-block btn-primary rounded mt-3 font-weight-bold">LIHAT PEMBAYARAN</button>
+                                </div>
+                                <div class="col-12 col-lg-6 p-3">
+                                    <div class="table-responsive text-nowrap">
+                                    <table>
+                                        <tr>
+                                            <th><b>NAMA PEMESAN</b></th>
+                                            <td>: JAMAL</td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>NAMA PENDAFTARAN</b></th>
+                                            <td>: Tourism Confucius Class A</td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>NAMA KELAS</b></th>
+                                            <td>: 123812938</td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>NOMOR TRANSAKSI</b></th>
+                                            <td>: 123812938</td>
+                                        </tr>
+                                        <tr>
+                                            <th><b>STRUCT</b></th>
+                                            <td><a href="#">: LIHAT STRUCT ANDA</a></td>
+                                        </tr>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
