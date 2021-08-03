@@ -118,7 +118,7 @@
                         </div>
 
                         <div class="d-flex justify-content-center align-items-center mb-3">
-                            <button href="{{ route('user.upload.kelas',[$encrypt_detail_kelas_id]) }}" class="btn btn-sm btn-secondary" style="width:180px;" form="form-upload-bukti">UPLOAD & VERIFIKASI</button>
+                            <button class="btn btn-sm btn-secondary" style="width:180px;" form="form-upload-bukti">UPLOAD & VERIFIKASI</button>
                         </div>
 
                         <form action="{{ route('user.upload.bukti') }}" enctype="multipart/form-data" method="POST" id="form-upload-bukti" style="display:none;">

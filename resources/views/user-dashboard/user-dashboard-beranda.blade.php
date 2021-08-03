@@ -85,6 +85,7 @@
                                             <div class="swiper-slide d-flex flex-column justify-content-center">
                                                 <div>
                                                 <h5 class="text-center"><b>{{ $pendaftaran->nama_pendaftaran }}</b></h5>
+                                                <p class="text-center"><small>COUNTDOWN PENDAFTARAN</small></p>
                                                 <div id="flipdown{{ $index }}" class="flipdown m-auto"></div>
                                                 </div>
                                             </div>

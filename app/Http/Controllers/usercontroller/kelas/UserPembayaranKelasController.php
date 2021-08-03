@@ -26,7 +26,7 @@ class UserPembayaranKelasController extends Controller
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
-                    'title' => 'Kelas Tidak Ditemukan 13',
+                    'title' => 'Kelas Tidak Ditemukan',
                     'message' => 'Kelas tidak ditemukan di dalam sistem'
                 ]);
             }
@@ -39,7 +39,7 @@ class UserPembayaranKelasController extends Controller
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
-                    'title' => 'Kelas Tidak Ditemukan 1 a',
+                    'title' => 'Kelas Tidak Ditemukan',
                     'message' => 'Kelas tidak ditemukan di dalam sistem'
                 ]);
             }
@@ -54,7 +54,7 @@ class UserPembayaranKelasController extends Controller
                     'Transaksi' => function($query_transaksi){
                         $query_transaksi->withTrashed();
                     },
-                ])->whereHas('Kelas')->whereHas('Transaksi')->where('id_user',Auth::user()->id)->withTrashed()->findOrFail($id_detail_kelas);
+                ])->whereHas('Kelas')->whereHas('Transaksi')->where('id_user',Auth::user()->id)->findOrFail($id_detail_kelas);
                 
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
@@ -129,7 +129,12 @@ class UserPembayaranKelasController extends Controller
                             break;
 
                         default:
-                            return redirect()->route('user.verifikasi.kelas',[$encrypt_detail_kelas_id]);
+                            return redirect()->route('user.verifikasi.kelas',[$encrypt_detail_kelas_id])->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Selesaikan sesuai tahapan',
+                                'message' => 'Mohon selesaikan sesuai tahapan'
+                            ]);
                             break;
                     }
                 }
@@ -168,9 +173,18 @@ class UserPembayaranKelasController extends Controller
 
         // AMBIL KELAS
             try{
-                $detail_kelas = DetailKelas::with('Kelas','Transaksi')
-                                                ->whereHas('Kelas')->whereHas('Transaksi')
+                $filter_kelas = function($query_kelas){
+                    $query_kelas->withTrashed();
+                };
+
+                $filter_transaksi = function($query_transaksi){
+                    $query_transaksi->withTrashed();
+                };
+
+                $detail_kelas = DetailKelas::with(['Kelas' => $filter_kelas,'Transaksi' => $filter_transaksi])
+                                                ->whereHas('Kelas',$filter_kelas)->whereHas('Transaksi',$filter_transaksi)
                                                     ->where('id_user',Auth::user()->id)->findOrFail($id_detail_kelas);
+                                                    
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
@@ -266,8 +280,9 @@ class UserPembayaranKelasController extends Controller
         // END
 
         // SECURITY
+            
             $validator = Validator::make($request->all(),[
-                'id_detail_kelas' => 'required|exists:kelas,id',
+                'id_detail_kelas' => 'required|exists:detail_kelas,id',
                 'file_bukti_pembayaran' => 'required|mimes:jpg,png,jtiff,bmp,jpeg,gif|max:2000'
             ]);
             
@@ -415,10 +430,9 @@ class UserPembayaranKelasController extends Controller
                 ]);
             }
         // END
-
         // SECURITY
             $validator = Validator::make(['id_detail_kelas' => $id_detail_kelas],[
-                'id_detail_kelas' => 'required|exists:kelas,id',
+                'id_detail_kelas' => 'required|exists:detail_kelas,id',
             ]);
 
             if($validator->fails()){
@@ -430,7 +444,7 @@ class UserPembayaranKelasController extends Controller
                 ]);
             }
         // END
-            
+
         // MAIN LOGIC
             try{
                 

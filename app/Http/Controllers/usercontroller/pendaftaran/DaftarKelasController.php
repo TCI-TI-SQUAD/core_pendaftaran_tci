@@ -93,14 +93,14 @@ class DaftarKelasController extends Controller
             $jmlh_kelas_aktif_user = User::withCount([
                 'DetailKelas' => function($query) use ($request){
                     $query->whereHas('Kelas',function($query_2) use ($request){
-                        $query_2->whereHas('Pendaftaran',function($query_4){
-                            $query_4->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
+                        $query_2->withTrashed()->whereHas('Pendaftaran',function($query_4){
+                            $query_4->withTrashed()->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                     ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
                                     ->where('status','aktif');
                                 }
                             )->whereDate('tanggal_selesai','>',date('Y-m-d'))->where('status','buka')->where('id',$request->id_kelas);
                     })->whereHas('Transaksi', function($query_3){
-                        $query_3->where('status','memilih_metode_pembayaran')->orWhere('status','menunggu_pembayaran')->orWhere('status','menunggu_konfirmasi')->orWhere('status','lunas');
+                        $query_3->withTrashed()->where('status','memilih_metode_pembayaran')->orWhere('status','menunggu_pembayaran')->orWhere('status','menunggu_konfirmasi')->orWhere('status','lunas');
                     });
             }])->find(Auth::user()->id);
 
@@ -203,8 +203,9 @@ class DaftarKelasController extends Controller
                         ]);
                         
                         $encrypt_detail_kelas_id = Crypt::encryptString($detail_kelas->id);
-
-                        return redirect()->route('user.pembayaran.kelas',[$encrypt_detail_kelas_id]);
+                        
+                        return redirect()->route('user.verifikasi.kelas',[$encrypt_detail_kelas_id]);
+                        
                     }
             }catch(ModelNotFoundException $err){
                 return redirect()->back()->with([

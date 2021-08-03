@@ -34,15 +34,17 @@ class UserKelasSayaController extends Controller
             try{
                 switch ($filter) {
                     case 'semua':
-                        $detail_kelas = DetailKelas::with([
+                        $kelas_filter = function($query_kelas){
+                            $query_kelas->withTrashed()->with(['Pengajar' => function($query_pengajar){
+                            $query_pengajar->withTrashed();
+                            }]);
+                        };
 
-                            'Kelas' => function($query){
-                                $query->withTrashed()->with(['Pengajar' => function($query_pengajar){
-                                    $query_pengajar->withTrashed();
-                                }]);
-                            },'Transaksi' => function($query_transaksi){
+                        $detail_kelas = DetailKelas::with([
+                            'Kelas' => $kelas_filter
+                            ,'Transaksi' => function($query_transaksi){
                                 $query_transaksi->withTrashed();
-                            }])->where('id_user',Auth::user()->id)->withTrashed()->get();
+                            }])->where('id_user',Auth::user()->id)->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
@@ -64,7 +66,7 @@ class UserKelasSayaController extends Controller
                                             ->orWhere('status','memilih_metode_pembayaran')
                                                 ->orWhere('status','menunggu_konfirmasi')->withTrashed();;
                             })
-                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
+                            ->where('id_user',Auth::user()->id)->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
@@ -80,7 +82,7 @@ class UserKelasSayaController extends Controller
                             ])->whereHas('Transaksi',function($query_2){
                                 $query_2->where('status','lunas')->withTrashed();
                             })
-                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
+                            ->where('id_user',Auth::user()->id)->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
@@ -100,7 +102,7 @@ class UserKelasSayaController extends Controller
                                             ->orWhere('status','ditolak_admin')
                                                 ->orWhere('status','expired_system')->withTrashed();
                             })
-                            ->where('id_user',Auth::user()->id)->withTrashed()->get();
+                            ->where('id_user',Auth::user()->id)->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
