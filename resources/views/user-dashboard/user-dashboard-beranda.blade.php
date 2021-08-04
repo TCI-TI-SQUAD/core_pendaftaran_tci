@@ -22,7 +22,7 @@
                 <div class="jumbotron p-0 m-0">
                     <div class="row">
                         <div class="col-12 col-md-3 p-3 text-center">
-                            <img src="{{ asset('storage\image_users\no_pic_user.png') }}" class="img-thumbnail rounded-circle" alt="IMAGE USERS" style="width:100px;display:block;margin:auto;object-fit:cover;">
+                            <img src="{{ asset('storage\image_users').'/'.Auth::user()->user_profile_pict }}" class="img-thumbnail rounded-circle" alt="IMAGE USERS" style="width:100px;display:block;margin:auto;object-fit:cover;">
                         </div>
                         <div class="col-12 m-md-0 col-md-7 p-3">
                             <div class="row">

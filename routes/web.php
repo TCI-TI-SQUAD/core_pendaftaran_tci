@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
     Route::get('/test',function(){
-        return view('admin.admin-dashboard');
+        return view('admin.admin-layout.admin-layout');
     })->name('user.kelas.saya');
 // AKHIR
 
@@ -86,6 +86,14 @@ use Illuminate\Support\Facades\Route;
 
                     Route::get('/kelas/fail/{id_detail_kelas}','usercontroller\kelas\UserPembayaranKelasController@stepFail')->name('user.fail.kelas');
                 // AKHIR
+
+                // USER PROFILE
+                    Route::get('/profile','usercontroller\profile\UserProfileController@index')->name('user.profile.index');
+
+                    Route::get('/profile/edit','usercontroller\profile\UserProfileController@edit')->name('user.profile.edit');
+
+                    Route::put('/profile/store','usercontroller\profile\UserProfileController@store')->name('user.profile.store');
+                // END
             });
         // END
     });

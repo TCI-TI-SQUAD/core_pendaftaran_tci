@@ -8,7 +8,7 @@
     <a class="text-dark {{ isset($kelas_saya) ? 'font-weight-bold' : '' }}" href="{{ Route('user.kelas.saya') }}">Kelas Saya</a>
 </li>
 <li>
-    <a class="text-dark {{ isset($profile) ? 'font-weight-bold' : '' }}" href="">Profile</a>
+    <a class="text-dark {{ isset($profile) ? 'font-weight-bold' : '' }}" href="{{ Route('user.profile.index') }}">Profile</a>
 </li>
 
 <form action="{{ Route('user.post.logout') }}" method="post" id="form-logout-wide" style="display:none;">

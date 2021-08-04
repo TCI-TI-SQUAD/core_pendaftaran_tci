@@ -16,7 +16,7 @@
 @section('content')
     <!-- CONTAINER -->
     <div class="container-fluid">
-        <div class="row mt-3 animated slideInLeft position-relative" style="z-index:1000;">
+        <div class="row mt-3 animated slideInLeft position-relative" style="z-index:10;">
             <!-- DROPDOWN -->
             <div class="col-12">
                 <div class="btn-group dropright">

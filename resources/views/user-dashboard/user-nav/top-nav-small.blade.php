@@ -19,7 +19,7 @@
 </div>
 </a>
 
-<a href="" style="text-decoration:none;" class="text-dark">
+<a href="{{ Route('user.profile.index') }}" style="text-decoration:none;" class="text-dark">
     <div class="navigation-block-child mt-3">
             <div class="text-center" style="margin:10px;width:50px;"><i class="fas fa-sign-in-alt"></i></div>
             <div style="flex-grow:2;margin:10px;"  class="{{ isset($profile) ? 'font-weight-bold' : '' }}">Profile</div>
