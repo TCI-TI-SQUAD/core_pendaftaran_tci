@@ -20,9 +20,9 @@
         <div class="row">
             <div class="col-12 col-lg-6 p-2 m-0">
                 <div class="jumbotron p-0 m-0">
-                    <div class="row">
+                    <div class="row p-0 m-0">
                         <div class="col-12 col-md-3 p-3 text-center">
-                            <img src="{{ asset('storage\image_users').'/'.Auth::user()->user_profile_pict }}" class="img-thumbnail rounded-circle" alt="IMAGE USERS" style="width:100px;display:block;margin:auto;object-fit:cover;">
+                            <img src="{{ asset('storage\image_users').'/'.Auth::user()->user_profile_pict }}" class="img-thumbnail rounded-circle" alt="IMAGE USERS" style="width:100px;height:100px;display:block;margin:auto;object-fit:cover;">
                         </div>
                         <div class="col-12 m-md-0 col-md-7 p-3">
                             <div class="row">
@@ -43,6 +43,27 @@
                                 </div>
                                 <div class="col-12 text-center text-md-left" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                                     {{ strtoupper(Auth::user()->name) }}
+                                </div>
+                                <div class="col-12">
+                                <p class="mt-2 text-center text-md-left">
+                                            @if(Auth::user()->hsk == 'pemula')
+                                                <small class="blue-grey lighten-3 p-2 rounded font-weight-bold">PEMULA</small>
+                                            @elseif(Auth::user()->hsk == 'hsk 1')
+                                                <small class="yellow lighten-1 p-2 rounded font-weight-bold">HSK 1</small>  
+                                            @elseif(Auth::user()->hsk == 'hsk 2')
+                                                <small class="yellow darken-5 darken-2 p-2 rounded font-weight-bold">HSK 2</small>  
+                                            @elseif(Auth::user()->hsk == 'hsk 3')
+                                                <small class="yellow darken-4 darken-2 p-2 rounded font-weight-bold">HSK 3</small>
+                                            @elseif(Auth::user()->hsk == 'hsk 4')
+                                                <small class="aqua-gradient p-2 rounded font-weight-bold">HSK 4</small>  
+                                            @elseif(Auth::user()->hsk == 'hsk 5')
+                                                <small class="blue-gradient p-2 rounded font-weight-bold">HSK 5</small>  
+                                            @elseif(Auth::user()->hsk == 'hsk 6')
+                                                <small class="peach-gradient p-2 rounded font-weight-bold">HSK 6</small>  
+                                            @else
+                                                <small class="peach-gradient p-2 rounded font-weight-bold">PEMULA</small>  
+                                            @endif
+                                        </p>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +111,21 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                    @else
+                                        <div class="swiper-slide d-flex flex-column justify-content-center">
+                                            <div>
+                                            <h5 class="text-center"><b>TIDAK ADA PENDAFTARAN</b></h5>
+                                            <div id="flipdown" class="flipdown m-auto"></div>
+                                            </div>
+                                        </div>
                                     @endif
+                                @else
+                                    <div class="swiper-slide d-flex flex-column justify-content-center">
+                                        <div>
+                                        <h5 class="text-center"><b>TIDAK ADA PENDAFTARAN</b></h5>
+                                        <div id="flipdown" class="flipdown m-auto"></div>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -110,13 +145,17 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <div class="card overflow-auto p-2">
-                                                TIDAK ADA PENGUMUMAN
+                                            <div class="d-flex justify-content-center card overflow-auto m-2 p-2 text-center text-secondary font-weight-bold position-absolute" style="top:0;bottom:0;left:0;right:0;">
+                                                <div>TIDAK ADA PENGUMUMAN SISTEM</div>
+                                                
+                                                <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="" class="w-25 d-md-block d-none m-auto">
+                                                <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="" class="w-50 d-md-none d-block m-auto">
+                                                
                                             </div>
                                         @endif
                                     @else
-                                        <div class="card overflow-auto p-2">
-                                            TIDAK ADA PENGUMUMAN
+                                        <div class="card overflow-auto p-2 text-center text-secondary font-weight-bold">
+                                            TIDAK ADA PENGUMUMAN SISTEM
                                         </div>
                                     @endif
                                 </div>

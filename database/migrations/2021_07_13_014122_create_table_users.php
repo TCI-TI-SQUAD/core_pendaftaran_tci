@@ -29,8 +29,10 @@ class CreateTableUsers extends Migration
             $table->string('phone_number',15)->unique();
             $table->string('line',50)->unique();
             $table->string('wa',15)->unique();
+            $table->string('alamat',100);
             $table->string('user_profile_pict',200)->nullable()->default('default.jpg');
             $table->string('kartu_identitas',200);
+            $table->enum('jenis_kartu_identitas',['ktp','nisn','ktm','passport']);
             $table->timestamp('email_verified_at')->nullable();
             $table->enum('hak_akses',['aktif','ban'])->default('aktif');
             $table->enum('favorite',['tidak','iya'])->default('tidak');
@@ -51,7 +53,9 @@ class CreateTableUsers extends Migration
             'phone_number' => '081246082357',
             'line' => 'alsan4154',
             'wa' => '081246082357',
+            'alamat' => 'jln.banteng, br.Celuk, ds.Buruan, kec.Blahbatuh, kab.Gianyar, Bali',
             'kartu_identitas' => 'halo',
+            'jenis_kartu_identitas' => 'ktp'
         ]);
     }
 

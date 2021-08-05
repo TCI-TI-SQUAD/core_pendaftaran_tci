@@ -15,7 +15,7 @@
 @section('content')
     <!-- CONTAINER -->
     <div class="container-fluid">
-        <div class="row bg-danger" style="height:45vh; overflow:hidden;">
+        <div class="row z-depth-3" style="height:45vh; overflow:hidden;">
             <div class="col-12 p-0 m-0">
                 <img src="{{ asset('asset\image\main_asset\profile-decoration.jpg') }}" id="image_background" alt="">
             </div>
@@ -29,7 +29,9 @@
                             <div class="row position-relative">
                                 @if(isset($user))
                                     <div class="col-12 text-center position-absolute animated slideInDown" id="image_profile">
-                                        <img class="img-thumbnail z-depth-2 rounded-circle" src="{{ asset('storage\image_users').'/'.$user->user_profile_pict }}" alt="" style="object-fit:cover;width:170px;height:170px;">
+                                        <a href="{{ asset('storage\image_users').'/'.$user->user_profile_pict }}" target="__blank">
+                                            <img class="img-thumbnail z-depth-2 rounded-circle" src="{{ asset('storage\image_users').'/'.$user->user_profile_pict }}" alt="" style="object-fit:cover;width:170px;height:170px;">
+                                        </a>
                                     </div>
                                     <div class="col-12 mt-5">
                                         <h5 class="text-center mt-3">{{ $user->name }}</h5>
@@ -68,8 +70,8 @@
                                         <input type="text" class="form-control" value="{{ $user->wa }}" readonly>
                                         <label class="mt-2"><i class="fab fa-line"></i> Kartu Identitas</label>
                                         <div class="text-center">
-                                        <a href="" class="btn btn-sm m-auto w-50 d-none d-lg-block btn-block btn-primary"><i class="far fa-eye"></i> LIHAT KARTU IDENTITAS</a>
-                                        <a href="" class="btn btn-sm m-auto w-100 d-block d-lg-none btn-block btn-primary"><i class="far fa-eye"></i> LIHAT KARTU IDENTITAS</a>
+                                        <a href="{{ asset('storage/kartu_identitas').'/'.$user->kartu_identitas }}" target="__blank" class="btn btn-sm m-auto w-50 d-none d-lg-block btn-block btn-primary"><i class="far fa-eye"></i> LIHAT KARTU IDENTITAS</a>
+                                        <a href="{{ asset('storage/kartu_identitas').'/'.$user->kartu_identitas }}" target="__blank" class="btn btn-sm m-auto w-100 d-block d-lg-none btn-block btn-primary"><i class="far fa-eye"></i> LIHAT KARTU IDENTITAS</a>
                                         <a href="{{ route('user.profile.edit') }}" class="btn btn-sm my-4 mx-auto d-block btn-outline-secondary rounded d-lg-none"><i class="fas fa-edit"></i> EDIT PROFILE</a>
                                         </div>
                                     </div>

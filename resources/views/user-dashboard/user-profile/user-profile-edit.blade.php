@@ -15,7 +15,7 @@
 @section('content')
     <!-- CONTAINER -->
     <div class="container-fluid">
-        <div class="row bg-danger" style="height:45vh; overflow:hidden;">
+        <div class="row z-depth-3" style="height:45vh; overflow:hidden;">
             <div class="col-12 p-0 m-0">
                 <img src="{{ asset('asset\image\main_asset\profile-decoration.jpg') }}" id="image_background" alt="">
             </div>
@@ -28,10 +28,10 @@
                             FORM EDIT PROFILE ANGGOTA
                         </div>
                     </div>
-                    <form action="{{ route('user.profile.store') }}" id="form-edit" enctype="multipart/form-data" method="POST">
+                    <form action="{{ route('user.profile.store') }}" id="form-edit" enctype="multipart/form-data" method="POST"  onsubmit="myButton.disabled = true; return true;">
                         @csrf
                         @method('PUT')
-                        <div class="row">
+                        <div class="row p-0 m-0">
                             <div class="col-12 col-lg-4 mx-auto m-lg-0 text-center p-4">
                                 <div class="col-12">
                                     <a href="{{ asset('storage\image_users').'/'.$user->user_profile_pict }}" target="__blank">
@@ -43,19 +43,26 @@
                                     <label for="input_image_user" href="" class="btn btn-sm btn-outline-secondary">GANTI FOTO</label>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-8 p-4">
+                            <div class="col-12 col-lg-8 py-4 px-4 px-lg-0 pr-lg-4">
                                     <label class="mt-2"><i class="fas  fa-id-card-alt"></i> Nama Lengkap</label>
-                                    <input name="name" type="text" class="form-control" value="{{ $user->name }}">
+                                    <input name="name" type="text" class="form-control @if($errors->has('name')) border border-danger @endif" value="{{ $user->name }}" minlength="3" maxlength="50">
+                                    @if($errors->has('name')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('name') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas  fa-id-card-alt"></i> Username</label>
-                                    <input name="username" type="text" class="form-control" value="{{ $user->username }}">
+                                    <input name="username" type="text" class="form-control @if($errors->has('username')) border border-danger @endif" value="{{ $user->username }}" minlength="3" maxlength="15">
+                                    @if($errors->has('username')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('username') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas fa-medal"></i> Level HSK</label>
-                                    <select name="hsk" class="browser-default custom-select">
-                                        <option value="1">PEMULA</option>
-                                        <option value="2">HSK 1</option>
-                                        <option value="3">HSK 2</option>
+                                    <select name="hsk" class="browser-default custom-select @if($errors->has('hsk')) border border-danger @endif">
+                                        <option value="pemula" @if($user->hsk == 'pemula') selected @endif</option>PEMULA</option>
+                                        <option value="hsk 1" @if($user->hsk == 'hsk 1') selected @endif>HSK 1</option>
+                                        <option value="hsk 2" @if($user->hsk == 'hsk 2') selected @endif>HSK 2</option>
+                                        <option value="hsk 3" @if($user->hsk == 'hsk 3') selected @endif>HSK 3</option>
+                                        <option value="hsk 4" @if($user->hsk == 'hsk 4') selected @endif>HSK 4</option>
+                                        <option value="hsk 5" @if($user->hsk == 'hsk 5') selected @endif>HSK 5</option>
+                                        <option value="hsk 6" @if($user->hsk == 'hsk 6') selected @endif>HSK 6</option>
                                     </select>
+                                    @if($errors->has('hsk')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('hsk') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas  fa-id-card-alt"></i> Nomor Pelajar TCI</label>
                                     <input type="text" class="form-control" value="{{ $user->nomor_pelajar_tci }}" readonly>
@@ -63,21 +70,29 @@
                                     <input type="text" class="form-control" value="{{ $user->getInstansiName() }}" readonly>
 
                                     <label class="mt-2"><i class="fas  fa-envelope-square"></i> E-mail</label>
-                                    <input name="email" type="text" class="form-control" value="{{ $user->email }}">
+                                    <input name="email" type="email" class="form-control @if($errors->has('email')) border border-danger @endif" value="{{ $user->email }}" minlength="3" maxlength="50">
+                                    @if($errors->has('email')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('email') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas  fa-phone-square-alt"></i> Phone Number</label>
-                                    <input name="phone_number" type="text" class="form-control" value="{{ $user->phone_number }}">
+                                    <input name="phone_number" type="number" class="form-control @if($errors->has('phone_number')) border border-danger @endif" value="{{ $user->phone_number }}" pattern="\d*" minlength="7" maxlength="15">
+                                    @if($errors->has('phone_number')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('phone_number') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fab fa-line"></i> Line</label>
-                                    <input name="line" type="text" class="form-control" value="{{ $user->line }}">
+                                    <input name="line" type="text" class="form-control @if($errors->has('line')) border border-danger @endif" value="{{ $user->line }}" minlength="3" maxlength="50">
+                                    @if($errors->has('line')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('line') }}</small></p> @endif
 
                                     <label class="mt-2"> <i class="fab fa-whatsapp-square"></i> WA</label>
-                                    <input name="wa" type="text" class="form-control" value="{{ $user->wa }}">
+                                    <input name="wa" type="number" class="form-control @if($errors->has('wa')) border border-danger @endif" value="{{ $user->wa }}" pattern="\d*" minlength="7" maxlength="15">
+                                    @if($errors->has('wa')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('wa') }}</small></p> @endif
+
+                                    <label class="mt-2"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
+                                    <input name="alamat" type="text" class="form-control @if($errors->has('alamat')) border border-danger @endif" value="{{ $user->alamat }}" minlength="5" maxlength="50">
+                                    @if($errors->has('alamat')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('alamat') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fab fa-line"></i> Kartu Identitas</label><br>
                                     <a href="{{ asset('storage/kartu_identitas').'/'.$user->kartu_identitas }}" class="btn-sm btn-info my-2">Lihat Kartu Identitas Saat ini</a>
-                                    <div class="input-group mt-3">
-                                        <div class="input-group-prepend">
+                                    <div class="input-group mt-3 ">
+                                        <div class="input-group-prepend @if($errors->has('kartu_identitas')) border border-danger @endif">
                                             <span class="input-group-text" id="inputGroupFileAddon01">Upload Kartu Baru</span>
                                         </div>
                                         <div class="custom-file">
@@ -86,11 +101,37 @@
                                             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                         </div>
                                     </div>
+                                    @if($errors->has('kartu_identitas')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('kartu_identitas') }}</small></p> @endif
+
+                                     <!-- Group of default radios - option 1 -->
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="jenis_kartu_identitas" value="ktp" @if($user->jenis_kartu_identitas == 'ktp') checked @endif required>
+                                        <label class="custom-control-label" for="defaultGroupExample1">KTP</label>
+                                    </div>
+
+                                    <!-- Group of default radios - option 2 -->
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample2" name="jenis_kartu_identitas" value="nisn" @if($user->jenis_kartu_identitas == 'nisn') checked @endif required>
+                                        <label class="custom-control-label" for="defaultGroupExample2">NISN</label>
+                                    </div>
+
+                                    <!-- Group of default radios - option 2 -->
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="jenis_kartu_identitas" value="ktm" @if($user->jenis_kartu_identitas == 'ktm') checked @endif required>
+                                        <label class="custom-control-label" for="defaultGroupExample3">KTM (Kartu Tanda Mahasiswa)</label>
+                                    </div>
+
+                                    <!-- Group of default radios - option 3 -->
+                                    <div class="custom-control custom-radio mt-2">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample4" name="jenis_kartu_identitas" value="passport" @if($user->jenis_kartu_identitas == 'passport') checked @endif required>
+                                        <label class="custom-control-label" for="defaultGroupExample4">PASSPORT</label>
+                                    </div>
+                                    @if($errors->has('jenis_kartu_identitas')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('jenis_kartu_identitas') }}</small></p> @endif
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 px-4 px-lg-5 py-2">
-                                <button type="submit" class="btn btn-block btn-outline-secondary">SIMPAN</button>
+                                <button type="button" onclick="submitProfile()" class="btn btn-block btn-outline-secondary" id="myButton">SIMPAN</button>
                             </div>
                             <div class="col-12 px-4 px-lg-5 py-2 mb-3">
                                 <a href="{{ route('user.profile.index') }}" class="btn btn-block btn-danger">BACK</a>
@@ -133,15 +174,36 @@
                 $('#img').attr('src', '/assets/no_preview.png');
             }
         }
-        // SWEETALERT2
-            @if(Session::has('status'))
-                Swal.fire({
-                    icon:  @if(Session::has('icon')){!! '"'.Session::get('icon').'"' !!} @else 'question' @endif,
-                    title: @if(Session::has('title')){!! '"'.Session::get('title').'"' !!} @else 'Oppss...'@endif,
-                    text: @if(Session::has('message')){!! '"'.Session::get('message').'"' !!} @else 'Oppss...'@endif,
-                });
-            @endif
-        // END
+
+        function submitProfile(){
+
+            Swal.fire({
+            title: 'Konfirmasi Perubahan ?',
+            html: 'Dengan menekan tombol Simpan,maka saya <span class="text-secondary font-weight-bold">{{ $user->name }}</span> menyatakan bahwa data dan informasi yang diinputkan pada form bersifat <span class="text-secondary font-weight-bold">BENAR</span> dan <span class="text-secondary font-weight-bold">FAKTA</span>',
+            icon:'warning',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Simpan`,
+            denyButtonText: `Batal`,
+            }).then((result) => {
+                
+            if (result.isConfirmed) {
+                $('#form-edit').submit();
+            } else if (result.isDenied) {
+
+            }
+            })
+
+        }
+    // SWEETALERT2
+        @if(Session::has('status'))
+            Swal.fire({
+                icon:  @if(Session::has('icon')){!! '"'.Session::get('icon').'"' !!} @else 'question' @endif,
+                title: @if(Session::has('title')){!! '"'.Session::get('title').'"' !!} @else 'Oppss...'@endif,
+                text: @if(Session::has('message')){!! '"'.Session::get('message').'"' !!} @else 'Oppss...'@endif,
+            });
+        @endif
+    // END
 </script>
 
 @endpush

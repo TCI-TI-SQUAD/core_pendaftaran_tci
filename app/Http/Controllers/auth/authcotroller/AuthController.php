@@ -123,7 +123,7 @@ class AuthController extends Controller
                 'line' => 'required|min:3|unique:users,line|max:50',
                 'wa' => 'required|numeric|unique:users,wa|digits_between:7,15',
                 'alamat' => 'required|string|min:5|max:50',
-                'hsk' => 'required|in:pemula,hsk 1, hsk 2, hsk 3, hsk 4, hsk 5, hsk 6,',
+                'hsk' => 'required|in:pemula,hsk 1,hsk 2,hsk 3,hsk 4,hsk 5,hsk 6,',
                 'password' => 'required|same:password_confirmation|min:8|max:100',
                 'password_confirmation' => 'required|min:8|max:100',
                 'status' => 'required|in:umum,siswa,mahasiswa,instansi',
@@ -182,8 +182,10 @@ class AuthController extends Controller
                         'email' => $request->email,
                         'phone_number' => $request->phone_number,
                         'kartu_identitas' => $nama_file,
+                        'jenis_kartu_identitas' => $request->jenis_kartu_identitas,
                         'line' => $request->line,
                         'wa' => $request->wa,
+                        'alamat' => $request->alamat,
                     ]);
                 }catch(QueryException $err){
                     return redirect()
