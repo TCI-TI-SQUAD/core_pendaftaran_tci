@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
-    Route::get('/test',function(){
+    Route::get('/admin',function(){
         return view('admin.admin-layout.admin-layout');
-    })->name('user.kelas.saya');
+    });
 // AKHIR
 
 // ABOUT PAGE
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Route;
         // AKHIR
 
         // AUTH MIDDLEWARE
-            Route::middleware('auth')->group(function(){
+            Route::middleware(['auth','user.middleware'])->group(function(){
                 // USER DASHBOARD
                     Route::get('/beranda','usercontroller\UserHomeController@index')->name('user.dashboard');
                 // AKHIR
@@ -93,6 +93,39 @@ use Illuminate\Support\Facades\Route;
                     Route::get('/profile/edit','usercontroller\profile\UserProfileController@edit')->name('user.profile.edit');
 
                     Route::put('/profile/store','usercontroller\profile\UserProfileController@store')->name('user.profile.store');
+                // END
+            });
+        // END
+    });
+// AKHIR
+
+// ADMIN
+    Route::prefix('admin')->group(function(){
+        // ADMIN AUTH
+            Route::get('login','admin\auth\AdminAuthController@LoginIndex')->name('admin.auth.login');
+            Route::post('login','admin\auth\AdminAuthController@postLogin')->name('admin.auth.login.post');
+        // END
+
+        // ADMIN MIDDLEWARE
+            Route::middleware('admin.middleware')->group(function(){
+                Route::get('dashboard','admin\dashboard\AdminDashboardController@index')->name('admin.dashboard');
+                
+                // SISWA
+                    Route::get('siswa','admin\siswa\AdminSiswaController@index')->name('admin.siswa');
+                    Route::get('detail/siswa/{id?}','admin\siswa\AdminSiswaController@detailSiswa')->name('admin.detail.siswa');
+                    
+                    Route::get('edit/siswa/{id?}','admin\siswa\AdminSiswaController@editSiswa')->name('admin.edit.siswa');
+                    Route::put('edit/siswa/{id?}','admin\siswa\AdminSiswaController@storeSiswa')->name('admin.store.siswa');
+                    
+                    Route::delete('delete/siswa','admin\siswa\AdminSiswaController@deleteSiswa')->name('admin.delete.siswa');
+                    
+                    // AJAX SISWA
+                        Route::post('siswadata','admin\siswa\AdminSiswaController@ajaxDataSiswa')->name('admin.ajax.siswa');
+                // END
+                
+
+                // LOGOUT ADMIN
+                    Route::post('logout','admin\auth\AdminAuthController@postLogout')->name('admin.logout');
                 // END
             });
         // END

@@ -30,6 +30,12 @@
                 <input name="password" type="password" id="exampleForm2" class="form-control mt-1 @if($errors->has('email')){{ 'border border-danger' }}@endif" minlength="5" maxlength="100">
                 @if($errors->has('password'))<small class="text-danger">{{ $errors->first('password') }}</small>@endif
 
+                <div class="my-4">
+                    {!! NoCaptcha::display() !!}
+                    {!! NoCaptcha::renderJs() !!}
+                    @error('g-recaptcha-response') <p class="text-danger"><small>Mohon Input Captcha !</small></p>@enderror
+                </div>
+
                 <div class="row mt-3">
                     <div class="col m-2">
                         <div class="custom-control custom-checkbox">

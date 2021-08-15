@@ -44,7 +44,7 @@ class UserKelasSayaController extends Controller
                             'Kelas' => $kelas_filter
                             ,'Transaksi' => function($query_transaksi){
                                 $query_transaksi->withTrashed();
-                            }])->where('id_user',Auth::user()->id)->get();
+                            }])->whereHas('User')->where('id_user',Auth::user()->id)->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
                         break;
@@ -65,7 +65,7 @@ class UserKelasSayaController extends Controller
                                 $query_3->where('status','menunggu_pembayaran')
                                             ->orWhere('status','memilih_metode_pembayaran')
                                                 ->orWhere('status','menunggu_konfirmasi')->withTrashed();;
-                            })
+                            })->whereHas('User')
                             ->where('id_user',Auth::user()->id)->get();
                         
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
@@ -81,7 +81,7 @@ class UserKelasSayaController extends Controller
                             }
                             ])->whereHas('Transaksi',function($query_2){
                                 $query_2->where('status','lunas')->withTrashed();
-                            })
+                            })->whereHas('User')
                             ->where('id_user',Auth::user()->id)->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
@@ -96,12 +96,12 @@ class UserKelasSayaController extends Controller
                                 $query->where('status','dibatalkan_user')
                                         ->orWhere('status','ditolak_admin')
                                             ->orWhere('status','expired_system')->withTrashed();
-                            }
+                            },
                             ])->whereHas('Transaksi',function($query_2){
                                 $query_2->where('status','dibatalkan_user')
                                             ->orWhere('status','ditolak_admin')
                                                 ->orWhere('status','expired_system')->withTrashed();
-                            })
+                            })->whereHas('User')
                             ->where('id_user',Auth::user()->id)->get();
                             
                         return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
@@ -162,7 +162,7 @@ class UserKelasSayaController extends Controller
             try{
                 $detail_kelas = DetailKelas::with(['Kelas','Transaksi'])
                                         ->whereHas('Kelas')->whereHas('Transaksi')
-                                            ->where('id_user',Auth::user()->id)
+                                            ->where('id_user',Auth::user()->id)->whereHas('User')
                                                 ->findOrFail($encrypt_detail_kelas_id);
 
             }catch(ModelNotFoundException $err){

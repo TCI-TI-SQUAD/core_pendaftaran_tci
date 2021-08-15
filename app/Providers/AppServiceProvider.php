@@ -29,13 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        config(['app.locale' => 'id']);
         Carbon::setLocale('id');
 
         // $social_medias = PengaturanSocialMedia::all();
         // View::share('social_medias',$social_medias);
-
-
 
         Schema::defaultStringLength(191);
     }

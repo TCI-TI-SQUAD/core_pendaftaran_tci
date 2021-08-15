@@ -26,6 +26,15 @@
     </div>
 </a>
 
+<a href="{{ Route('user.profile.index') }}" style="text-decoration:none;" class="text-dark">
+    <div class="navigation-block-child mt-3">
+            <div class="text-center" style="margin:10px;width:50px;"><i class="fas fa-sign-in-alt"></i></div>
+            <div style="flex-grow:2;margin:10px;"  class="{{ isset($profile) ? 'font-weight-bold' : '' }}">
+                Notification <div class="badge badge-pill badge-danger">2</div>
+            </div>
+    </div>
+</a>
+
 <form action="{{ Route('user.post.logout') }}" method="post" id="form-logout" style="display:none;">
     {{ csrf_field() }}
     {{ method_field('POST') }}

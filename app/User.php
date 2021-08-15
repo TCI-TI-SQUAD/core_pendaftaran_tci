@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -56,5 +57,9 @@ class User extends Authenticatable
             case 'umum':
                 return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
         }
+    }
+
+    public function notifications(){
+        return $this->morphMany(UserNotification::class, 'notifiable' )->orderBy('created_at', 'desc');
     }
 }

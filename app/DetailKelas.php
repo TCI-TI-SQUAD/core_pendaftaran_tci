@@ -23,4 +23,8 @@ class DetailKelas extends Model
     public function Transaksi(){
         return $this->hasOne('App\Transaksi','id_detail_kelas','id');
     }
+
+    public function User(){
+        return $this->belongsTo('App\User','id_user','id');
+    }
 }

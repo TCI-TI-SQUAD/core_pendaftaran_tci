@@ -1,7 +1,7 @@
 @extends('layout.main-layout.main-layout')
 
 @push('css')
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="{{ asset('plugins\swiper\swiper-bundle.min.css') }}">
 <link href="{{ asset('asset\vendor\flipdown-master\dist\flipdown.min.css') }}" rel="stylesheet">
 <link href="{{ asset('asset\css\layout-css\user-dashboard-layout.css') }}" rel="stylesheet">
 @endpush
@@ -171,9 +171,8 @@
 @endsection
 
 @push('js')
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script type="text/javascript" src="{{ asset('plugins\swiper\swiper-bundle.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('asset\vendor\flipdown-master\dist\flipdown.min.js') }}"></script>
-
 <script>
     $(document).ready(function(){
 

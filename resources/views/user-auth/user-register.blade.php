@@ -34,10 +34,10 @@
                     
                     <label class="mt-2">Phone Number <span class="text-danger">*</span></label>
                     @if($errors->has('phone_number'))
-                        <input name="phone_number" value="{{ old('phone_number') }}" type="number" placeholder="Ex. +62999999999 " class="form-control mt-1 border border-danger" pattern="\d*" minlength="7" maxlength="15" required>
+                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1 border border-danger" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
                         <p class="text-danger animated slideInUp"><small>{{ $errors->first('phone_number') }}</small></p>
                     @else
-                        <input name="phone_number" value="{{ old('phone_number') }}" type="number" placeholder="Ex. +62999999999 " class="form-control mt-1" pattern="\d*" minlength="7" maxlength="15" required>
+                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
                     @endif 
 
                     <label for="exampleForm2" class="mt-2">Line ID <span class="text-danger">*</span></label>
@@ -50,18 +50,18 @@
                     
                     <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="Nomor WA yang terintegrasi dengan account WA">WA Number <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
                     @if($errors->has('wa'))
-                        <input name="wa" value="{{ old('wa') }}" type="number" placeholder="Nomor HP terhubung WA" class="form-control mt-1 border border-danger" pattern="\d*" minlength="7" maxlength="15" required>
+                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1 border border-danger" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
                         <p class="text-danger animated slideInUp"><small>{{ $errors->first('wa') }}</small></p>
                     @else
-                        <input name="wa" value="{{ old('wa') }}" type="number" placeholder="Nomor HP terhubung WA" class="form-control mt-1" pattern="\d*" minlength="7" maxlength="15" required>
+                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
                     @endif
 
                     <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="Alamat tempat tinggal pendaftar">Alamat <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
                     @if($errors->has('alamat'))
-                        <input name="alamat" value="{{ old('alamat') }}" type="text" placeholder="Alamat tempat tinggal lengkap" class="form-control mt-1 border border-danger" minlength="5" maxlength="50" required>
+                        <input name="alamat" value="{{ old('alamat') }}" type="text" placeholder="Alamat tempat tinggal lengkap" class="form-control mt-1 border border-danger" minlength="5" maxlength="100" required>
                         <p class="text-danger animated slideInUp"><small>{{ $errors->first('alamat') }}</small></p>
                     @else
-                        <input name="alamat" value="{{ old('alamat') }}" type="text" placeholder="Alamat tempat tinggal lengkap" class="form-control mt-1" minlength="5" maxlength="50" required>
+                        <input name="alamat" value="{{ old('alamat') }}" type="text" placeholder="Alamat tempat tinggal lengkap" class="form-control mt-1" minlength="5" maxlength="100" required>
                     @endif
 
                     <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="HSK (Hànyǔ Shuǐpíng Kǎoshì), merupakan tingkatan kemampuan Bahasa Mandarin pendaftar saat ini">HSK <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
@@ -134,7 +134,7 @@
                             <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="Instansi asal pendaftar apabila tidak berasal dari instansi yang ada silahkan pilih opsi UMUM">Instansi <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
                             
                             @if($errors->has('instansi'))
-                                <select name="instansi" id="#instansi_input" onchange="" type="text" placeholder="Pilih instansi" class="browser-default custom-select border border-danger" required>
+                                <select name="instansi" id="#instansi_input" onchange="" type="text" placeholder="Pilih instansi" class="browser-default custom-select border border-danger" disabled required>
                                         <option value="">Pilih Instansi</option>
                                     @foreach($instansis as $instansi)
                                         <option value="{{$instansi->id}}">{{ $instansi->nama_instansi }}</option>
@@ -142,7 +142,7 @@
                                 </select>
                                 <p class="text-danger animated slideInUp"><small>{{ $errors->first('instansi') }}</small></p>
                             @else
-                                <select name="instansi" id="#instansi_input" onchange="" type="text" placeholder="Pilih sekolah" class="browser-default custom-select" required>
+                                <select name="instansi" id="#instansi_input" onchange="" type="text" placeholder="Pilih sekolah" class="browser-default custom-select" disabled required>
                                     <option value="">Pilih Instansi</option>
                                     @foreach($instansis as $instansi)
                                         <option value="{{$instansi->id}}">{{ $instansi->nama_instansi }}</option>
@@ -189,7 +189,7 @@
                     <div id="universitas_wrapper" style="display:none;">
                         <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="universitas asal pendaftar apabila tidak berasal dari universitas yang ada silahkan pilih opsi UMUM">Universitas <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
                         @if($errors->has('universitas'))
-                            <select name="universitas" id="universitas_input" onchange="ajaxGetFakultas(this.value)" type="text" placeholder="Pilih universitas" class="browser-default custom-select border border-danger" required>
+                            <select name="universitas" id="universitas_input" onchange="ajaxGetFakultas(this.value)" type="text" placeholder="Pilih universitas" class="browser-default custom-select border border-danger" disabled required>
                                 <option value="">Pilih Universitas</option>
                                 @foreach($universitas as $univ)
                                     <option value="{{ $univ->id }}">{{ $univ->nama_universitas }}</option>
@@ -197,7 +197,7 @@
                             </select>
                             <p class="text-danger animated slideInUp"><small>{{ $errors->first('universitas') }}</small></p>
                         @else
-                            <select name="universitas" id="universitas_input" onchange="ajaxGetFakultas(this.value)" type="text" placeholder="Pilih universitas" class="browser-default custom-select" required>
+                            <select name="universitas" id="universitas_input" onchange="ajaxGetFakultas(this.value)" type="text" placeholder="Pilih universitas" class="browser-default custom-select" disabled required>
                                 <option value="">Pilih Universitas </option>
                                 @foreach($universitas as $univ)
                                     <option value="{{ $univ->id }}">{{ $univ->nama_universitas }}</option>
@@ -270,6 +270,12 @@
                     <div class="custom-control custom-radio mt-2">
                         <input type="radio" class="custom-control-input" id="defaultGroupExample4" name="jenis_kartu_identitas" value="passport" required>
                         <label class="custom-control-label" for="defaultGroupExample4">PASSPORT</label>
+                    </div>
+
+                    <div class="my-4">
+                    {!! NoCaptcha::display() !!}
+                    {!! NoCaptcha::renderJs() !!}
+                    @error('g-recaptcha-response') <p class="text-danger"><small>Mohon Input Captcha !</small></p>@enderror
                     </div>
 
                     <button name="myButton" class="btn btn-block btn-success mt-5" type="submit">REGISTER</button>

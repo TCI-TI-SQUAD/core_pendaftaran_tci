@@ -70,6 +70,7 @@ class AuthController extends Controller
                 'email' => 'required|email|min:5|max:50',
                 'password' => 'required|min:5|max:100',
                 'remember_me' => 'nullable|boolean',
+                'g-recaptcha-response' => 'required|captcha',
             ]);
         // END
 
@@ -119,16 +120,17 @@ class AuthController extends Controller
                 'name' => 'required|unique:users,name|min:5|max:50',
                 'username' => 'required|unique:users,username|min:5|max:20',
                 'email' => 'required|email|unique:users,email|min:5|max:50',
-                'phone_number' => 'required|numeric|unique:users,phone_number|digits_between:7,15',
+                'phone_number' => 'required|regex:/(\+62)[0-9]*$/|unique:users,phone_number|min:7,max:15',
                 'line' => 'required|min:3|unique:users,line|max:50',
-                'wa' => 'required|numeric|unique:users,wa|digits_between:7,15',
-                'alamat' => 'required|string|min:5|max:50',
+                'wa' => 'required|regex:/(\+62)[0-9]*$/unique:users,wa|min:7,max:15',
+                'alamat' => 'required|string|min:5|max:100',
                 'hsk' => 'required|in:pemula,hsk 1,hsk 2,hsk 3,hsk 4,hsk 5,hsk 6,',
                 'password' => 'required|same:password_confirmation|min:8|max:100',
                 'password_confirmation' => 'required|min:8|max:100',
                 'status' => 'required|in:umum,siswa,mahasiswa,instansi',
                 'kartu_identitas' => 'required|mimes:png,jpg,jpeg,gif',
-                'jenis_kartu_identitas' => 'required|in:ktp,nisn,ktm,passport'
+                'jenis_kartu_identitas' => 'required|in:ktp,nisn,ktm,passport',
+                'g-recaptcha-response' => 'required|captcha',
             ]);
 
             // VALIDATOR LANJUTAN

@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
+
+use App\Admin;
 
 class CreateTableAdmin extends Migration
 {
@@ -27,6 +30,17 @@ class CreateTableAdmin extends Migration
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
+
+        Admin::create([
+            'nama_admin' => 'Wisma',
+            'username' => 'komo jr',
+            'password' => Hash::make('admin2021'),
+            'email' => 'wisma@gmail.com',
+            'phone_number' => '0812365232334',
+            'line' => 'wismajr',
+            'wa' => '092834734324',
+            'status' => 'aktif',
+        ]);
     }
 
     /**

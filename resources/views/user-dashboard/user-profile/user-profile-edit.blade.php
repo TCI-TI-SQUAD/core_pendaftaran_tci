@@ -74,7 +74,7 @@
                                     @if($errors->has('email')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('email') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas  fa-phone-square-alt"></i> Phone Number</label>
-                                    <input name="phone_number" type="number" class="form-control @if($errors->has('phone_number')) border border-danger @endif" value="{{ $user->phone_number }}" pattern="\d*" minlength="7" maxlength="15">
+                                    <input name="phone_number" type="tel" class="form-control @if($errors->has('phone_number')) border border-danger @endif" value="{{ $user->phone_number }}" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" >
                                     @if($errors->has('phone_number')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('phone_number') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fab fa-line"></i> Line</label>
@@ -82,12 +82,20 @@
                                     @if($errors->has('line')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('line') }}</small></p> @endif
 
                                     <label class="mt-2"> <i class="fab fa-whatsapp-square"></i> WA</label>
-                                    <input name="wa" type="number" class="form-control @if($errors->has('wa')) border border-danger @endif" value="{{ $user->wa }}" pattern="\d*" minlength="7" maxlength="15">
+                                    <input name="wa" type="tel" class="form-control @if($errors->has('wa')) border border-danger @endif" value="{{ $user->wa }}" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15">
                                     @if($errors->has('wa')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('wa') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>
                                     <input name="alamat" type="text" class="form-control @if($errors->has('alamat')) border border-danger @endif" value="{{ $user->alamat }}" minlength="5" maxlength="50">
                                     @if($errors->has('alamat')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('alamat') }}</small></p> @endif
+
+                                    <label class="mt-2"><i class="fas fa-key"></i> Password</label>
+                                    <input name="password" placeholder="Isi apabila ingin mengganti password" type="password" class="form-control @if($errors->has('password')) border border-danger @endif" minlength="5" maxlength="100">
+                                    @if($errors->has('password')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('password') }}</small></p> @endif
+
+                                    <label class="mt-2"><i class="fas fa-key"></i> Password Confirmation</label>
+                                    <input name="password_confirmation" placeholder="Isi apabila ingin mengganti password" type="password" class="form-control @if($errors->has('password_confirmation')) border border-danger @endif"  minlength="5" maxlength="100">
+                                    @if($errors->has('password_confirmation')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('password_confirmation') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fab fa-line"></i> Kartu Identitas</label><br>
                                     <a href="{{ asset('storage/kartu_identitas').'/'.$user->kartu_identitas }}" class="btn-sm btn-info my-2">Lihat Kartu Identitas Saat ini</a>

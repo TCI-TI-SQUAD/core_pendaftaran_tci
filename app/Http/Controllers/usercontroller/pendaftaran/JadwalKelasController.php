@@ -46,11 +46,15 @@ class JadwalKelasController extends Controller
         // MAIN LOGIC
             try{
 
-                $kelas = Kelas::with('JadwalKelas')->whereHas('Pendaftaran',function($query){
+                $kelas = Kelas::with('JadwalKelas')
+                                ->withCount(['DetailKelas' => function($querydetailkelas){
+                                    $querydetailkelas->whereHas('User');
+                                }])
+                                ->whereHas('Pendaftaran',function($query){
                                     $query->where('status','aktif')->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'));
                                 })->where('status','buka')->findOrFail($id_kelas);
-
+                dd($kelas);
                 $periods = CarbonPeriod::create($kelas->tanggal_mulai,$kelas->tanggal_selesai);
 
                 if($kelas->JadwalKelas->count() <= 0){

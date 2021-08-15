@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Storage;
+use Carbon\Carbon;
 use Hash;
+
+use App\Notifications\UserSistemNotification;
 
 class UserProfileController extends Controller
 {
@@ -33,14 +36,14 @@ class UserProfileController extends Controller
                 'username' => 'required|min:3|max:15',
                 'hsk' => 'required|in:pemula,hsk 1,hsk 2,hsk 3,hsk 4,hsk 5,hsk 6,',
                 'email' => 'required|email|unique:users,email,'.Auth::user()->id.'|min:5|max:50',
-                'phone_number' => 'required|numeric|unique:users,phone_number,'.Auth::user()->id.'|digits_between:7,15',
+                'phone_number' => 'required|regex:/(\+62)[0-9]*$/|unique:users,phone_number,'.Auth::user()->id.'|min:7,max:15',
                 'line' => 'required|min:3|unique:users,line,'.Auth::user()->id.'|max:50',
-                'wa' => 'required|numeric|unique:users,wa,'.Auth::user()->id.'|digits_between:7,15',
+                'wa' => 'required|regex:/(\+62)[0-9]*$/|unique:users,wa,'.Auth::user()->id.'|min:7,max:15',
                 'alamat' => 'required|string|min:5|max:100',
                 'kartu_identitas' => 'required|mimes:png,jpg,jpeg,gif',
                 'jenis_kartu_identitas' => 'required|in:ktp,nisn,ktm,passport',
                 'password' => 'nullable|same:password_confirmation|min:8|max:100',
-                'password_confirmation' => 'required_with:password|min:8|max:100',
+                'password_confirmation' => 'nullable|same:password|min:8|max:100',
                 'kartu_identitas' => 'nullable|mimes:png,jpg,jpeg,gif|max:2000',
                 'jenis_kartu_identitas' => 'required_with:kartu_identitas|in:ktp,nisn,ktm,passport',
                 'image_user' => 'nullable|mimes:png,jpg,jpeg,gif|max:2000',
@@ -101,6 +104,16 @@ class UserProfileController extends Controller
                     'alamat' => $request->alamat,
                 ]);
             // END
+
+            $data = [
+                'title' => 'Profile Anda Diperbaharui',
+                'message' => 'Profile anda telah berhasil diperbaharui',
+                'datetime' => Carbon::now()->translatedFormat('l, F-d-Y H:i:s')." WITA",
+                'color' => 'bg-info',
+                'font-awesome-icon' => '<i class="far fa-id-badge"></i>',
+            ];
+
+            $user->notify(new UserSistemNotification($data));
 
             return redirect()->route('user.profile.index')->with([
                 'status' => 'success',
