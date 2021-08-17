@@ -110,7 +110,7 @@ class UserProfileController extends Controller
                 'message' => 'Profile anda telah berhasil diperbaharui',
                 'datetime' => Carbon::now()->translatedFormat('l, F-d-Y H:i:s')." WITA",
                 'color' => 'bg-info',
-                'font-awesome-icon' => '<i class="far fa-id-badge"></i>',
+                'icon' => '<i class="far fa-id-badge"></i>',
             ];
 
             $user->notify(new UserSistemNotification($data));

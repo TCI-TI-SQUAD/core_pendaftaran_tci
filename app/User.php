@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -55,8 +56,18 @@ class User extends Authenticatable
             case 'instansi':
                 return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
             case 'umum':
-                return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
+                return "umum";
         }
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::create($date)->translatedFormat('l, Y-F-d H:i:s');
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon::create($date)->translatedFormat('l, Y-F-d H:i:s');
     }
 
     public function notifications(){

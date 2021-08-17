@@ -18,7 +18,7 @@ use App\TipeSekolah;
 class AdminSiswaController extends Controller
 {
     public function index(){
-        return view('admin.admin.admin-siswa');
+        return view('admin.admin.siswa.admin-siswa');
     }
 
     public function detailSiswa(Request $request){
@@ -51,7 +51,7 @@ class AdminSiswaController extends Controller
         // END
 
         // RETURN
-            return view('admin.admin.admin-detail-siswa',compact(['user']));
+            return view('admin.admin.siswa.admin-detail-siswa',compact(['user']));
         // END
     }
 
@@ -95,7 +95,7 @@ class AdminSiswaController extends Controller
         // END
 
         // RETURN
-            return view('admin.admin.admin-edit-siswa',compact(['user','instansis','universitas','tipe_sekolahs']));
+            return view('admin.admin.siswa.admin-edit-siswa',compact(['user','instansis','universitas','tipe_sekolahs']));
         // END
     }
 
@@ -276,9 +276,9 @@ class AdminSiswaController extends Controller
         // END
     }
 
-    public function ajaxDataSiswa(Request $request){
+    public function ajaxDataSiswa(){
 
-        $users = User::get(['name','hsk','id','email','nomor_pelajar_tci']);
+        $users = User::get(['id','status','hsk','name','nomor_pelajar_tci','username','email','phone_number','line','wa','alamat','user_profile_pict','hak_akses','created_at','updated_at']);
         
         $users = $users->map(function ($item, $index) {
             $item['number'] =  $index + 1;
@@ -289,4 +289,5 @@ class AdminSiswaController extends Controller
         
         return \json_encode($data);
     }
+
 }

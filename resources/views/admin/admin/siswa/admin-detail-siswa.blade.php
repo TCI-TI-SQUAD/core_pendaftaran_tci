@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-12 mb-4">
         <a href="{{ route('admin.edit.siswa').'/'.$user->id }}" class="btn btn-sm btn-info"><i class="far fa-edit"></i> EDIT SISWA</a>
-        <button class="btn btn-sm btn-warning"><i class="far fa-eye"></i> KIRIM NOTIFIKASI PERINGATAN</button>  
+        <a href="{{ route('admin.notifikasi.siswa.index',[$user->id]) }}" class="btn btn-sm btn-warning"><i class="far fa-eye"></i> NOTIFIKASI PERINGATAN</a>  
         <button onclick="deleteSiswa({{ $user->id }})" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i> DELETE SISWA</button>
         <form action="{{ route('admin.delete.siswa') }}" method="POST" style="display:none;" id="delete-siswa-{{ $user->id }}">
             @csrf

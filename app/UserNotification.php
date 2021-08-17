@@ -5,13 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class UserNotification extends Model
-{
+{   
     protected $table = 'notifications';
     protected $guarded = [];
 
-    public function setFullDataAttribute($value)
+    public function getFullDataAttribute()
     {
-        $this->attributes['full_data'] = json_decode($value);
+        return $this->attributes['full_data'] = json_decode($this->data);
     }
-
 }

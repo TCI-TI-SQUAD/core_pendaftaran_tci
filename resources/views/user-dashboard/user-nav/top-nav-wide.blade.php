@@ -12,7 +12,7 @@
 </li>
 
 <li class="position-relative">
-    <a class="text-dark {{ isset($notification) ? 'font-weight-bold' : '' }}" href="{{ Route('user.profile.index') }}"><i class="far fa-bell"></i><div class="badge badge-pill badge-danger position-absolute" style="right:-10px;top:-10px;">2</div></a>
+    <a class="text-dark" href="{{ Route('user.notification.index') }}">{!! isset($notification) ? '<i class="fas fa-bell"></i>' : '<i class="far fa-bell"></i>' !!}<div class="badge badge-pill badge-danger position-absolute" style="right:-7px;top:-10px;">@if(isset($notifications)) {{ $notifications }} @endif</div></a>
 </li>
 
 <form action="{{ Route('user.post.logout') }}" method="post" id="form-logout-wide" style="display:none;">

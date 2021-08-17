@@ -25,10 +25,6 @@ class CreateInstansisTable extends Migration
 
         Instansi::insert([
             [
-                'nama_instansi' => 'UMUM',
-                'keterangan' => 'Masyarakat Umum'
-            ],
-            [
                 'nama_instansi' => 'Yayasan taman indah',
                 'keterangan' => 'Yayasan anak - anak'
             ]

@@ -2,28 +2,38 @@
 
 @section('siswa','active')
 
-@section('page-name-header','Siswa')
+@section('page-name-header','Notifikasi Peringatan')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-<li class="breadcrumb-item active">Siswa</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.siswa') }}">Siswa</a></li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.detail.siswa',[$user->id]) }}">Detail Siswa</a></li>
+<li class="breadcrumb-item active">Notifikasi Peringatan</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="" class="btn btn-sm btn-info"><i class="far fa-trash-alt"></i> LIHAT TRASHED SISWA</a>
-        <a href="" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT SISWA BARU</a>
+        <a href="" class="btn btn-sm btn-success"><i class="far fa-edit"></i> NOTIFIKASI BARU</a>
+    </div>
+    <div class="col-12 mb-3">
+        <table>
+            <tr>
+                <th>Nama Siswa :</th>
+                <td>{{ $user->name }}</td>
+            </tr>
+        </table>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive nowrap" width="100%" id="table_id">
         <thead>
             <tr>
             <th scope="col">#</th>
-            <th scope="col">Nama</th>
-            <th scope="col">HSK</th>
-            <th scope="col">Nomor Pelajar TCI</th>
-            <th scope="col">email</th>
+            <th scope="col">Judul Notifikasi</th>
+            <th scope="col">Pesan</th>
+            <th scope="col">tanggal</th>
+            <th scope="col">icon</th>
+            <th scope="col">warna</th>
             <th scope="col">Action</th>
             </tr>
         </thead>
@@ -61,40 +71,43 @@
         $('#table_id').DataTable({
             responsive: true,
             "ajax": {
-                "url": "{{ Route('admin.ajax.siswa') }}",
+                "url": "{{ Route('admin.ajax.notifikasi.siswa') }}",
                 "type": "POST",
                 "data":{
-                    "_token": "{{ csrf_token() }}"
+                    "_token": "{{ csrf_token() }}",
+                    "id" : "{{ $user->id }}"
                 }
             },
             "columns": [
                 { "data": "number" },
-                { "data": "name" },
-                { "data": "hsk" },
-                { "data": "nomor_pelajar_tci" },
-                { "data": "email" },
+                { "data": "title" },
+                { "data": "message" },
+                { "data": "datetime" },
+                { "data": "icon" },
+                {
+                    data: "color",title:"warna",
+                    render: function ( data, type, row ) {
+                        return '<div class="rounded text-center '+data+' ">'+data+'</div>';
+                    }
+                },
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row ) {
-                        return '<a href="{{ route("admin.detail.siswa") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteSiswa('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.delete.siswa") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                        return '<a href="{{ route("admin.detail.siswa") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteNotifikasi('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.notifikasi.siswa.delete") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
                     }
                 }
             ]
         });
     } );
 
-    function deleteSiswa(index){
+    function deleteNotifikasi(index){
             Swal.fire({
-            title: 'Hapus siswa ini ?',
+            title: 'Hapus Notifikasi Siswa ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus user</p>'+
+            '<p>Berikut merupakan effect apabila admin menghapus notifikasi</p>'+
             '<ul class="text-left">'+
-            '<li>User tidak akan bisa login</li>'+
-            '<li>User tidak akan terlihat di semua kelas yang telah diikuti</li>'+
-            '<li>Jumlah anggota kelas akan berkurang</li>'+
-            '<li>User masih dapat dipulihkan dengan halaman <span class="text-info">TRASHED</span></li>'+
-            '<li>User akan hilang dari semua report</li>'+
-            '<li>Saat dipulihkan user akan kembali seperti semula</li>'+
+            '<li>User tidak akan bisa melihat notifikasi yang telah dihapus</li>'+
+            '<li>Tidak seperti data krusial lainnya, notifikasi apabila dihapus maka tidak akan bisa <span class="text-danger">DIPULIHKAN</span> </li>'+
             '</ul>'
             ,
             icon:'warning',

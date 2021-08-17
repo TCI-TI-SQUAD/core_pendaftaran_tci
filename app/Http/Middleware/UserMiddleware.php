@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Middleware;
+use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Auth;
 
 use Closure;
@@ -24,6 +26,16 @@ class UserMiddleware
                 'message' => 'Saat ini anda tidak akan bisa mengakses sistem, mohon hubungi admin apabila diperlukan'
             ]);
         }
+
+        try{
+            $notifications = Auth::user()->unreadNotifications->count() > 99 ? +99 : Auth::user()->unreadNotifications->count();
+            $notifications = $notifications <= 0 ? null : $notifications;
+            View::share('notifications',$notifications);
+
+        }catch(ModelNotFoundException $err){
+            View::share('notifications',null);
+        }
+
         return $next($request);
     }
 }
