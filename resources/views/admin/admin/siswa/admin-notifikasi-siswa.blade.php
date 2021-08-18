@@ -14,7 +14,7 @@
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="" class="btn btn-sm btn-success"><i class="far fa-edit"></i> NOTIFIKASI BARU</a>
+        <a href="{{ route('admin.notifikasi.siswa.create',[$user->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> NOTIFIKASI BARU</a>
     </div>
     <div class="col-12 mb-3">
         <table>

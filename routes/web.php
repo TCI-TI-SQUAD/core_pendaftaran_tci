@@ -121,14 +121,23 @@ use Illuminate\Support\Facades\Route;
                     Route::get('edit/siswa/{id?}','admin\siswa\AdminSiswaController@editSiswa')->name('admin.edit.siswa');
                     Route::put('edit/siswa/{id?}','admin\siswa\AdminSiswaController@storeSiswa')->name('admin.store.siswa');
                     
-                    Route::get('notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@index')->name('admin.notifikasi.siswa.index');
-                    Route::delete('delete/notifikasisiswa','admin\siswa\AdminSiswaNotifikasiController@deleteNotifikasiSiswa')->name('admin.notifikasi.siswa.delete');
+                    // NOTIFIKASI
+                        Route::get('notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@index')->name('admin.notifikasi.siswa.index');
+                        Route::get('create/notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@createNotifikasiSiswa')->name('admin.notifikasi.siswa.create');
+                        
+                        Route::post('store/notifikasi/siswa','admin\siswa\AdminSiswaNotifikasiController@storeNotifikasiSiswa')->name('admin.notifikasi.siswa.store');
+
+                        Route::delete('delete/notifikasisiswa','admin\siswa\AdminSiswaNotifikasiController@deleteNotifikasiSiswa')->name('admin.notifikasi.siswa.delete');
+
+                        // AJAX NOTIFIKASI SISWA
+                            Route::post('siswanotifikasidata','admin\siswa\AdminSiswaNotifikasiController@ajaxDataNotifikasiSiswa')->name('admin.ajax.notifikasi.siswa');
+                        // END
+                    // END
 
                     Route::delete('delete/siswa','admin\siswa\AdminSiswaController@deleteSiswa')->name('admin.delete.siswa');
                     
                     // AJAX SISWA
                         Route::post('siswadata','admin\siswa\AdminSiswaController@ajaxDataSiswa')->name('admin.ajax.siswa');
-                        Route::post('siswanotifikasi','admin\siswa\AdminSiswaNotifikasiController@ajaxDataNotifikasiSiswa')->name('admin.ajax.notifikasi.siswa');
                     // END
                 // END
                 

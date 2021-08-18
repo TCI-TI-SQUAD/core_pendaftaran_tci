@@ -35,7 +35,7 @@
                         @php $full_data = $user_notification->getFullDataAttribute() @endphp
                         <div class="@if(isset($full_data->color)) {!! $full_data->color !!} @endif rounded z-depth-1 my-3">
                             <div class="toast-header">
-                                <p class="h1 m-2">@if(isset($full_data->icon)) {!! $full_data->icon !!} @endif</p>
+                                <p class="h1 m-2">@if(isset($full_data->icon))<i class="fa {!! $full_data->icon !!}"></i> @endif</p>
                                 <strong class="mr-auto ml-3 font-weight-bold">@if(isset($full_data->title)) {{ strtoupper($full_data->title) }} @endif</strong>
                                 <small>@if(isset($full_data->datetime)) {{ $full_data->datetime }} @endif</small>
                                 </button>

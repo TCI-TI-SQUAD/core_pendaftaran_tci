@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+  <link href="{{ asset('asset\vendor\fontawesome\css\all.min.css') }}" rel="stylesheet">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
@@ -24,10 +24,13 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
+  <!-- BOOTSTRAP SELECT -->
+  <link rel="stylesheet" href="{{ asset('asset\vendor\bootstrap-select\dist\css\bootstrap-select.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!--  APP CSS LAYOUT -->
   <link href="{{ asset('css\app.css') }}" rel="stylesheet">
+  
   @livewireStyles
   @stack('css')
 </head>
@@ -186,6 +189,10 @@
 <script src="{{ asset('dist/js/pages/da') }}shboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('dist/js/demo.js') }}"></script>
+<!-- BOOTSTRAP SELECT -->
+<script src="{{ asset('asset\vendor\bootstrap-select\dist\js\bootstrap-select.min.js') }}"></script>
+<!-- FONT AWESOME -->
+<script src="{{ asset('asset\vendor\fontawesome\js\fontawesome.min.js') }}"></script>
 <!-- APP LAYOUT -->
 <script type="text/javascript" src="{{ asset('js\app.js') }}"></script>
 @livewireScripts

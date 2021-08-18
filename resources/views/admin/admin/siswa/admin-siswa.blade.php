@@ -76,13 +76,21 @@
                 extend: 'copyHtml5',
                 exportOptions: {
                     columns: ':visible',
-                    search : 'applied'
+                    search : 'applied',
+                    modifer: {
+                        page: 'all',
+                    }
                 }
             },
             {
                 extend: 'excelHtml5',
-                exportOptions: {columns: ':visible',
-                search : 'applied'},
+                exportOptions: {
+                    columns: ':visible',
+                    search : 'applied',
+                    modifer: {
+                        page: 'all',
+                    }
+                },
                 action: function(e, dt, button, config) {
                                      responsiveToggle(dt);
                                      $.fn.DataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
@@ -96,13 +104,19 @@
                 exportOptions: {
                     columns: ':visible',
                     search : 'applied',
+                    modifer: {
+                        page: 'all',
+                    }
                 },
             },
             {
                 extend: 'print',
                 exportOptions: {
                     columns: ':visible',
-                    search : 'applied'
+                    search : 'applied',
+                    modifer: {
+                        page: 'all',
+                    }
                 },
             },
             {
