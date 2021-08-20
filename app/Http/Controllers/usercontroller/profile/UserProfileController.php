@@ -29,7 +29,6 @@ class UserProfileController extends Controller
     }
 
     public function store(Request $request){
-
         // SECURITY
             $validator = Validator::make($request->all(),[
                 'name' => 'required|min:3|max:50',

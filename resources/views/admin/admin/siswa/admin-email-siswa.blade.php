@@ -2,39 +2,29 @@
 
 @section('siswa','active')
 
-@section('page-name-header','Notifikasi Peringatan')
+@section('page-name-header','E-Mail Siswa')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.siswa') }}">Siswa</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.detail.siswa',[$user->id]) }}">Detail Siswa</a></li>
-<li class="breadcrumb-item active">Notifikasi Peringatan</li>
+<li class="breadcrumb-item">E-Mail Siswa</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="{{ route('admin.notifikasi.siswa.create',[$user->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> NOTIFIKASI BARU</a>
-    </div>
-    <div class="col-12 mb-3">
-        <table>
-            <tr>
-                <th>Nama Siswa :</th>
-                <td>{{ $user->name }}</td>
-            </tr>
-        </table>
+        <a href="{{ Route('admin.email.siswa.create',[$user->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT E-MAIL BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive nowrap" width="100%" id="table_id">
         <thead>
             <tr>
             <th scope="col">#</th>
-            <th scope="col">Judul Notifikasi</th>
-            <th scope="col">Pesan</th>
-            <th scope="col">tanggal</th>
-            <th scope="col">icon</th>
-            <th scope="col">warna</th>
-            <th scope="col">Status</th>
+            <th scope="col">Title</th>
+            <th scope="col">Message</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -68,6 +58,7 @@
 
 <script>
     $(document).ready( function () {
+
         $('#table_id').DataTable({
             responsive: true,
             dom: 'Bfrtip',
@@ -126,7 +117,7 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.notifikasi.siswa') }}",
+                "url": "{{ Route('admin.ajax.email.siswa') }}",
                 "type": "POST",
                 "data":{
                     "_token": "{{ csrf_token() }}",
@@ -137,38 +128,31 @@
                 { "data": "number" },
                 { "data": "title" },
                 { "data": "message" },
-                { "data": "datetime" },
-                { "data": "icon" },
-                {
-                    data: "color",title:"warna",
-                    render: function ( data, type, row ) {
-                        return '<div class="rounded text-center '+data+' ">'+data+'</div>';
-                    }
-                },
+                { "data": "subject"},
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row ) {
-                        return '<a href="{{ route("admin.detail.siswa") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.notifikasi.siswa.store.update") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteNotifikasi('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.notifikasi.siswa.delete") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                        return '<a href="{{ route("admin.detail.siswa") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteEmailSiswa('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-email-siswa-'+data+'" action="{{ route("admin.delete.siswa") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
                     }
                 }
             ],
             columnDefs: [{
                             render: function (data, type, full, meta) {
-                                return "<div id='dvNotes' style='white-space: normal;width: 350px;'>" + data + "</div>";
+                                return "<div id='dvNotes' style='white-space: normal;width: 250px;'>" + data + "</div>";
                             },
                             targets: 2
                         }]
         });
     } );
 
-    function deleteNotifikasi(index){
+    function deleteEmailSiswa(index){
             Swal.fire({
-            title: 'Hapus Notifikasi Siswa ini ?',
+            title: 'Hapus siswa ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus notifikasi</p>'+
+            '<p>Berikut merupakan effect apabila admin menghapus e-mail user</p>'+
             '<ul class="text-left">'+
-            '<li>User tidak akan bisa melihat notifikasi yang telah dihapus</li>'+
-            '<li>Tidak seperti data krusial lainnya, notifikasi apabila dihapus maka tidak akan bisa <span class="text-danger">DIPULIHKAN</span> </li>'+
+            '<li>E-mail yang sudah sampai ke E-mail user <span class="text-danger">TIDAK AKAN</span> ikut terhapus </li>'+
+            '<li>catatan e-mail yang telah dihapus tidak akan dapat dipulihkan kembali</li>'+
             '</ul>'
             ,
             icon:'warning',

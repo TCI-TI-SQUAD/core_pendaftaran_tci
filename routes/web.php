@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // LANDING PAGE
     Route::get('/','landingpage\LandingPageController@index')->name('user.landing-page');
     Route::get('/admin',function(){
-        return view('admin.admin-layout.admin-layout');
+        return view('admin.email.email_user.email-user');
     });
 // AKHIR
 
@@ -118,15 +118,23 @@ use Illuminate\Support\Facades\Route;
                     Route::get('siswa','admin\siswa\AdminSiswaController@index')->name('admin.siswa');
                     Route::get('detail/siswa/{id?}','admin\siswa\AdminSiswaController@detailSiswa')->name('admin.detail.siswa');
                     
+                    Route::get('create/siswa','admin\siswa\AdminSiswaController@createSiswa')->name('admin.create.siswa');
+                    Route::post('create/siswa','admin\siswa\AdminSiswaController@storeCreateSiswa')->name('admin.store.create.siswa');
+                    
                     Route::get('edit/siswa/{id?}','admin\siswa\AdminSiswaController@editSiswa')->name('admin.edit.siswa');
                     Route::put('edit/siswa/{id?}','admin\siswa\AdminSiswaController@storeSiswa')->name('admin.store.siswa');
                     
+                    Route::delete('delete/siswa','admin\siswa\AdminSiswaController@deleteSiswa')->name('admin.delete.siswa');
+
                     // NOTIFIKASI
                         Route::get('notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@index')->name('admin.notifikasi.siswa.index');
-                        Route::get('create/notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@createNotifikasiSiswa')->name('admin.notifikasi.siswa.create');
                         
+                        Route::get('create/notifikasi/siswa/{id}','admin\siswa\AdminSiswaNotifikasiController@createNotifikasiSiswa')->name('admin.notifikasi.siswa.create');
                         Route::post('store/notifikasi/siswa','admin\siswa\AdminSiswaNotifikasiController@storeNotifikasiSiswa')->name('admin.notifikasi.siswa.store');
-
+                        
+                        Route::get('update/notifikasi/siswa/{id_notifikasi}','admin\siswa\AdminSiswaNotifikasiController@updateNotifikasiSiswa')->name('admin.notifikasi.siswa.update');
+                        Route::put('update/notifikasi/siswa','admin\siswa\AdminSiswaNotifikasiController@storeUpdateNotifikasiSiswa')->name('admin.notifikasi.siswa.store.update');
+                        
                         Route::delete('delete/notifikasisiswa','admin\siswa\AdminSiswaNotifikasiController@deleteNotifikasiSiswa')->name('admin.notifikasi.siswa.delete');
 
                         // AJAX NOTIFIKASI SISWA
@@ -134,8 +142,18 @@ use Illuminate\Support\Facades\Route;
                         // END
                     // END
 
-                    Route::delete('delete/siswa','admin\siswa\AdminSiswaController@deleteSiswa')->name('admin.delete.siswa');
-                    
+                    // EMAIL
+                        Route::get('email/siswa/{id}','admin\siswa\AdminSiswaEmailController@index')->name('admin.email.siswa.index');
+
+                        Route::get('create/email/siswa/{id}','admin\siswa\AdminSiswaEmailController@createEmailSiswa')->name('admin.email.siswa.create');
+                        Route::post('store/email/siswa','admin\siswa\AdminSiswaEmailController@storeEmailSiswa')->name('admin.email.siswa.store');
+                        
+                        // AJAX EMAIL
+                            Route::post('siswaemaildata','admin\siswa\AdminSiswaEmailController@ajaxSiswaEmailData')->name('admin.ajax.email.siswa');
+                        // END
+                    // END
+
+
                     // AJAX SISWA
                         Route::post('siswadata','admin\siswa\AdminSiswaController@ajaxDataSiswa')->name('admin.ajax.siswa');
                     // END

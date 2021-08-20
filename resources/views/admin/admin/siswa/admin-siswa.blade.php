@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-12 mb-4">
         <a href="" class="btn btn-sm btn-info"><i class="far fa-trash-alt"></i> LIHAT TRASHED SISWA</a>
-        <a href="" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT SISWA BARU</a>
+        <a href="{{ route('admin.create.siswa') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT SISWA BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive nowrap" width="100%" id="table_id">
@@ -72,6 +72,7 @@
             responsive: true,
             dom: 'Bfrtip',
             buttons: [
+                'pageLength',
                 {
                 extend: 'copyHtml5',
                 exportOptions: {

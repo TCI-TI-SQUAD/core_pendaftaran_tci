@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Storage;
-
+use DB;
 
 use App\User;
 use App\Universitas;
@@ -19,6 +19,130 @@ class AdminSiswaController extends Controller
 {
     public function index(){
         return view('admin.admin.siswa.admin-siswa');
+    }
+
+    public function createSiswa(){
+        // AMBIL SEMUA UNIVERSITAS
+        $universitas = Universitas::all();
+
+        // AMBIL SEMUA JENJANG SEKOLAH
+        $tipe_sekolahs = TipeSekolah::all();
+
+        // AMBIL SEMUA INSTANSI
+        $instansis = Instansi::all();
+
+        return view('admin.admin.siswa.admin-create-siswa',compact(['universitas','tipe_sekolahs','instansis']));
+    }
+
+    public function storeCreateSiswa(Request $request){
+        // VALIDATOR
+            $validator = Validator::make($request->all(),[
+                'name' => 'required|unique:users,name|min:5|max:50',
+                'username' => 'required|unique:users,username|min:5|max:20',
+                'email' => 'required|email|unique:users,email|min:5|max:50',
+                'phone_number' => 'required|regex:/(\+62)[0-9]*$/|unique:users,phone_number|min:7,max:15',
+                'line' => 'required|min:3|unique:users,line|max:50',
+                'wa' => 'required|regex:/(\+62)[0-9]*$/|unique:users,wa|min:7,max:15',
+                'alamat' => 'required|string|min:5|max:100',
+                'hsk' => 'required|in:pemula,hsk 1,hsk 2,hsk 3,hsk 4,hsk 5,hsk 6,',
+                'password' => 'required|min:8|max:100',
+                'password_confirmation' => 'required|same:password|min:8|max:100',
+                'hak_akses' => 'required|in:aktif,ban',
+                'status' => 'required|in:umum,siswa,mahasiswa,instansi',
+                'user_profile_pict' => 'nullable|mimes:png,jpg,jpeg,gif|max:2000',
+                'kartu_identitas' => 'required|mimes:png,jpg,jpeg,gif|max:2000',
+                'jenis_kartu_identitas' => 'required|in:ktp,nisn,ktm,passport',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Validasi gagal 1',
+                    'message' => 'Mohon untuk melakukan input sesuai dengan aturan'
+                ])->withInput($request->all())->withErrors($validator->errors());
+            }
+
+            // VALIDATOR LANJUTAN
+                if($request->status != null){
+                    if($request->status == 'siswa'){
+                        $request->validate([
+                            'tipe_sekolah' => 'required|numeric|exists:tipe_sekolahs,id',
+                            'sekolah' => 'required|numeric|exists:sekolahs,id'
+                        ]);
+                        
+                        $id_instansi = $request->sekolah;
+                    }else if ($request->status == 'mahasiswa'){
+                        $request->validate([
+                            'universitas' => 'required|numeric|exists:universitas,id',
+                            'fakultas' => 'required|numeric|exists:fakultas,id',
+                            'prodi' => 'required|numeric|exists:prodis,id'
+                        ]);
+        
+                        $id_instansi = $request->prodi;
+                    }else if($request->status == 'instansi'){
+                        $request->validate([
+                            'instansi' => 'required|numeric|exists:instansis,id'
+                        ]);
+        
+                        $id_instansi = $request->instansi;
+                    }else if($request->status == 'umum'){
+                        $id_instansi = 0;
+                    }
+                }
+            // END
+
+            // MAIN LOGIC
+                // GENERATE NOMOR PELAJAR TCI
+                    $id_users_baru = DB::select("SHOW TABLE STATUS LIKE 'users'")[0]->Auto_increment;
+                    $generate_nomor_pelajar_tci = date("Ymd").sprintf("%05d",$id_users_baru);
+                // END
+
+                // IMAGE PROCESSOR
+                    // USER PROFILE PICT
+                        if($request->hasFile('user_profile_pict')){
+                            $nama_image_user = basename($request->file('user_profile_pict')->store('public\image_users'));
+                        }else{
+                            $nama_image_user = "default.jpg";
+                        }
+                    // END
+
+                    // USER KARTU IDENTITAS
+                        if($request->hasFile("kartu_identitas")){
+                            $nama_kartu_identitas = basename($request->file('kartu_identitas')->store('public\kartu_identitas'));
+                        }
+                    // END
+                // END
+
+                // CREATE USER
+                    $user = User::create([
+                        'id_instansi' => $id_instansi,
+                        'status' => $request->status,
+                        'name' => $request->name,
+                        'hsk' => $request->hsk,
+                        'user_profile_pict' => $nama_image_user,
+                        'kartu_identitas' => $nama_kartu_identitas,
+                        'jenis_kartu_identitas' => $request->jenis_kartu_identitas,
+                        'nomor_pelajar_tci' => $generate_nomor_pelajar_tci,
+                        'username' => $request->username,
+                        'password' => Hash::make($request->password),
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'line' => $request->line,
+                        'wa' => $request->wa,
+                        'alamat' => $request->alamat,
+                    ]);
+                // END
+        // END
+
+        // RETURN
+            return redirect()->route("admin.siswa")->with([
+                'status' => 'success',
+                'icon' => 'success',
+                'title' => 'Berhasil Create Siswa !',
+                'message' => 'Berhasil membuat siswa baru !'
+            ]);
+        // END
     }
 
     public function detailSiswa(Request $request){

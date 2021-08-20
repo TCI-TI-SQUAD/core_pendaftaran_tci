@@ -2,14 +2,14 @@
 
 @section('siswa','active')
 
-@section('page-name-header','Create Notifikasi Peringatan')
+@section('page-name-header','Edit Notifikasi Peringatan')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.siswa') }}">Siswa</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.detail.siswa',[$user->id]) }}">Detail Siswa</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.notifikasi.siswa.index',[$user->id]) }}">Notifikasi Peringatan</a></li>
-<li class="breadcrumb-item active">Create Notifikasi Peringatan</li>
+<li class="breadcrumb-item active">Edit Notifikasi Peringatan</li>
 @endsection
 
 @section('content')
@@ -29,13 +29,13 @@
 
     <div class="col-12 jumbotron shadow p-2 mt-2">
         <div class="container-fluid">
-            <form action="{{ route('admin.notifikasi.siswa.store') }}" method="POST" onsubmit="myButton.disabled = true; return true;">
+            <form action="{{ route('admin.notifikasi.siswa.store.update') }}" method="POST" onsubmit="myButton.disabled = true; return true;">
                 @csrf
-                @method('POST')
-                <input type="hidden" name="id" value="{{ $user->id }}">
+                @method('PUT')
+                <input type="hidden" name="id_notifikasi" value="{{ $notification->id }}">
                 <div class="row">
                     <div class="col-12 text-center text-lg-left">
-                        <h5>FORM CREATE NOTIFIKASI PERINGATAN</h5>
+                        <h5>EDIT CREATE NOTIFIKASI PERINGATAN</h5>
                     </div>
 
                     <div class="col-12 col-lg-6">
@@ -43,13 +43,13 @@
                                 <div class="col-12">
                                     <!-- Default input -->
                                     <label for="exampleForm1">JUDUL</label>
-                                    <input name="title" type="text" id="exampleForm1" class="form-control" placeholder="Judul Notifikasi" minlength="3" maxlength="20" required>
+                                    <input name="title" type="text" id="exampleForm1" class="form-control" value="{{ $notification->full_data->title }}" placeholder="Judul Notifikasi" minlength="3" maxlength="20" required>
                                 </div>
 
                                 <div class="col-12">
                                     <label for="exampleForm2">WARNA</label>
-                                    <select name="color" class="selectpicker w-100" required>
-                                        <option value="bg-info">BIRU INFO</option>
+                                    <select name="color" class="selectpicker w-100">
+                                        <option value="bg-info" selected>BIRU INFO</option>
                                         <option value="bg-primary">BIRU PEKAT</option>
                                         <option value="bg-danger">MERAH PEKAT</option>
                                         <option value="bg-warning">KUNING PERINGATAN</option>
@@ -58,10 +58,11 @@
 
                                 <div class="col-12">
                                     <label>ICON</label>
-                                    <select name="icon" class="selectpicker w-100" required>
+                                    <select name="icon" class="selectpicker w-100">
+                                        <option data-icon="fa fa-exclamation-triangle" value="fa-exclamation-triangle" selected>fa-exclamation-triangle</option>
                                         @if(isset($icons))
                                             @foreach($icons as $icon)
-                                                <option data-icon="{{ $icon }}">{{ $icon }}</option>
+                                                <option data-icon="fa {{ $icon }}" value="{{ $icon }}" @if($notification->full_data->icon == $icon) selected @endif>{{ $icon }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -101,7 +102,7 @@
     $(document).ready(function() {
         $('#summernote').summernote({
             height: 300,
-        });
+        }).summernote("code",'{!! $notification->full_data->message !!}');
     });
     
     // SWEETALERT2

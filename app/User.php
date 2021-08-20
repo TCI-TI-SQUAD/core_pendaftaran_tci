@@ -60,17 +60,19 @@ class User extends Authenticatable
         }
     }
 
-    public function getCreatedAtAttribute($date)
-    {
+    public function getCreatedAtAttribute($date){
         return Carbon::create($date)->translatedFormat('l, Y-F-d H:i:s');
     }
 
-    public function getUpdatedAtAttribute($date)
-    {
+    public function getUpdatedAtAttribute($date){
         return Carbon::create($date)->translatedFormat('l, Y-F-d H:i:s');
     }
 
     public function notifications(){
         return $this->morphMany(UserNotification::class, 'notifiable' )->orderBy('created_at', 'desc');
+    }
+
+    public function MailUser(){
+        return $this->hasMany("App\MailUser","user_id","id");
     }
 }

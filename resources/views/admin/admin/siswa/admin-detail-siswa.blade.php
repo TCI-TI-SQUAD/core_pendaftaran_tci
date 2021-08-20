@@ -21,7 +21,7 @@
             @method('delete')
             <input type="hidden" name="id" value="{{ $user->id }}">
         </form>
-        <button class="btn btn-sm btn-primary"><i class="fas fa-envelope-square"></i> KIRIM E-MAIL</button>
+        <a href="{{ route('admin.email.siswa.index',[$user->id]) }}" class="btn btn-sm btn-primary"><i class="fas fa-envelope-square"></i> KIRIM E-MAIL</a>
         <a target="__blank" class="btn btn-sm btn-info" href="https://wa.me/{{ $user->phone_number }}?text=Halo, saya admin TCI, maksud saya menghubungi saudara adalah untuk "><i class="fab fa-whatsapp"></i> HUBUNGI VIA WA</a>
         <a target="__blank" class="btn btn-sm btn-success" href="http://line.me/ti/p/~{{ $user->line }}"><i class="fab fa-whatsapp"></i> LIHAT LINE ID</a>
     </div>
