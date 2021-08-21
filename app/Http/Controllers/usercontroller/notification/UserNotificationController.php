@@ -46,7 +46,7 @@ class UserNotificationController extends Controller
         // END
 
         // RETURN
-            return view('user-dashboard\user-notification\user-notification',compact(['user_notifications','filter']));
+            return view('user-dashboard.user-notification.user-notification',compact(['user_notifications','filter']));
         // END
         
     }

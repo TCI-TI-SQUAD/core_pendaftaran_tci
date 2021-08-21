@@ -17,7 +17,7 @@
         <a href="{{ Route('admin.email.siswa.create',[$user->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT E-MAIL BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
-        <table class="table responsive nowrap" width="100%" id="table_id">
+        <table class="table responsive wrap" width="100%" id="table_id">
         <thead>
             <tr>
             <th scope="col">#</th>
@@ -138,7 +138,7 @@
             ],
             columnDefs: [{
                             render: function (data, type, full, meta) {
-                                return "<div id='dvNotes' style='white-space: normal;width: 250px;'>" + data + "</div>";
+                                return "<div id='dvNotes' style='white-space: normal;width: 250px;font-size:12px;'>" + data + "</div>";
                             },
                             targets: 2
                         }]

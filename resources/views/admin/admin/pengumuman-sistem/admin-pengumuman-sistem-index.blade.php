@@ -1,40 +1,28 @@
 @extends('admin.admin-layout.admin-layout')
 
-@section('siswa','active')
+@section('pengumuman_sistem','active')
 
-@section('page-name-header','Notifikasi Peringatan')
+@section('page-name-header','Siswa')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-<li class="breadcrumb-item active"><a href="{{ route('admin.siswa') }}">Siswa</a></li>
-<li class="breadcrumb-item active"><a href="{{ route('admin.detail.siswa',[$user->id]) }}">Detail Siswa</a></li>
-<li class="breadcrumb-item active">Notifikasi Peringatan</li>
+<li class="breadcrumb-item active">Pengumuman Sistem</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="{{ route('admin.notifikasi.siswa.create',[$user->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> NOTIFIKASI BARU</a>
-    </div>
-    <div class="col-12 mb-3">
-        <table>
-            <tr>
-                <th>Nama Siswa :</th>
-                <td>{{ $user->name }}</td>
-            </tr>
-        </table>
+        <a href="{{ route('admin.create.pengumuman.sistem') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENGUMUMAN BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive wrap" width="100%" id="table_id">
         <thead>
             <tr>
             <th scope="col">#</th>
-            <th scope="col">Judul Notifikasi</th>
-            <th scope="col">Pesan</th>
-            <th scope="col">tanggal</th>
-            <th scope="col">icon</th>
-            <th scope="col">warna</th>
-            <th scope="col">Status</th>
+            <th scope="col">Nama Admin</th>
+            <th scope="col">Pesan Pengumuman</th>
+            <th scope="col">Tanggal</th>
+            <th scope="col">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -67,8 +55,10 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
 <script>
+    let table;
     $(document).ready( function () {
-        $('#table_id').DataTable({
+
+        table = $('#table_id').DataTable({
             responsive: true,
             dom: 'Bfrtip',
             buttons: [
@@ -126,49 +116,64 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.notifikasi.siswa') }}",
+                "url": "{{ Route('admin.ajax.pengumuman.sistem') }}",
                 "type": "POST",
                 "data":{
-                    "_token": "{{ csrf_token() }}",
-                    "id" : "{{ $user->id }}"
+                    "_token": "{{ csrf_token() }}"
                 }
             },
             "columns": [
                 { "data": "number" },
-                { "data": "title" },
-                { "data": "message" },
-                { "data": "datetime" },
-                { "data": "icon" },
-                {
-                    data: "color",title:"warna",
-                    render: function ( data, type, row ) {
-                        return '<div class="rounded text-center '+data+' ">'+data+'</div>';
-                    }
-                },
+                { "data": "admin.nama_admin" },
+                { "data": "pengumuman","visible" : false },
+                { "data": "tanggal" },
                 {
                     data: "id",title:"Aksi",
-                    render: function ( data, type, row ) {
-                        return '<a href="{{ route("admin.notifikasi.siswa.store.update") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteNotifikasi('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.notifikasi.siswa.delete") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                    render: function ( data, type, row, meta ) {
+                        return '<button onclick="detailData('+meta.row+')" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></button><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePengumumanSistem('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pengumuman-'+data+'" action="{{ route("admin.delete.pengumuman.sistem") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
                     }
                 }
             ],
             columnDefs: [{
                             render: function (data, type, full, meta) {
-                                return "<div id='dvNotes' style='white-space: normal;width: 350px;font-size:12px;'>" + data + "</div>";
+                                return "<div id='dvNotes' style='padding:0px;margin:0;white-space: normal;width: 300px;font-size:12px;'>" + data + "</div>";
                             },
                             targets: 2
                         }]
         });
     } );
 
-    function deleteNotifikasi(index){
+    function detailData(index){
+        try{
+            let data = table.row(index).data();
+
             Swal.fire({
-            title: 'Hapus Notifikasi Siswa ini ?',
+                title: 'DETAIL PENGUMUMAN',
+                html: 
+                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;max-height:70vh;overflow:auto;">'+
+                data.pengumuman+
+                '</div>'
+            })
+        }catch(err){
+            Swal.fire({
+                title: 'OPPSS Something Wrong',
+                html: 
+                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;">'+
+                "OPPS... SOMETHING WRONG"+
+                '</div>'
+            })
+        }
+        
+    }
+
+    function deletePengumumanSistem(index){
+            Swal.fire({
+            title: 'Hapus Pengumuman Sistem Ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus notifikasi</p>'+
+            '<p>Berikut merupakan effect apabila admin menghapus user</p>'+
             '<ul class="text-left">'+
-            '<li>User tidak akan bisa melihat notifikasi yang telah dihapus</li>'+
-            '<li>Tidak seperti data krusial lainnya, notifikasi apabila dihapus maka tidak akan bisa <span class="text-danger">DIPULIHKAN</span> </li>'+
+            '<li>User tidak akan bisa melihat pengumuman yang telah dihapus</li>'+
+            '<li>Pengumuman yang telah dihapus tidak akan dapat <span class="text-danger">DIKEMBALIKAN</span></li>'+
             '</ul>'
             ,
             icon:'warning',
@@ -179,7 +184,7 @@
             }).then((result) => {
                 
             if (result.isConfirmed) {
-                $('#delete-siswa-'+index).submit();
+                $('#delete-pengumuman-'+index).submit();
             } else if (result.isDenied) {
 
             }

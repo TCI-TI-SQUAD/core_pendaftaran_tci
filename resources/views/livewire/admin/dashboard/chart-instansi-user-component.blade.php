@@ -2,12 +2,12 @@
     <div class="container">
         <div class="row overflow-auto justify-content-center">
             <div class="col-12">
-                <canvas id="myChart" width="400" height="400" wire:ignore.self></canvas>
+                <canvas id="myChart" width="400" height="400"></canvas>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12">
-                <a href="" id="download" class="btn btn-block btn-info" download="chart.png" wire:ignore.self>DOWNLOAD CHART</a>
+                <a href="" id="download" class="btn btn-block btn-info" download="chart.png">DOWNLOAD CHART</a>
             </div>
         </div>
     </div>

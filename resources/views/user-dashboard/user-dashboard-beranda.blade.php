@@ -135,16 +135,18 @@
                     <div class="col position-relative p-0 m-0" style="left:0;right:0;bottomn:0;top:0;" id="pengumuman">
                         <div class="swiper-container mySwiper h-100 p-0">
                             <div class="swiper-wrapper p-0 m-0" style="position: absolute;left: 0;top: 0;right:0;bottom:0;z-index:19999;">
-                                <div class="swiper-slide d-flex flex-column p-3">
                                     @if(isset($pengumuman_global))
                                         @if($pengumuman_global->count())
                                             @foreach($pengumuman_global as $index => $pengumuman)
+                                            <div class="swiper-slide d-flex flex-column p-3">
                                                 <h5 class="text-center text-lg-left p-2 font-weight-bold text-white" style="background: rgb(89,15,16);background: linear-gradient(90deg, rgba(89,15,16,1) 0%, rgba(207,29,32,1) 100%);">PENGUMUMAN SISTEM {{ $index+1 }}</h5>
-                                                <div class="card overflow-auto p-2">
+                                                <div class="card overflow-auto p-2 h-100">
                                                     {!! $pengumuman->pengumuman !!}
                                                 </div>
+                                            </div>
                                             @endforeach
                                         @else
+                                        <div class="swiper-slide d-flex flex-column p-3">
                                             <div class="d-flex justify-content-center card overflow-auto m-2 p-2 text-center text-secondary font-weight-bold position-absolute" style="top:0;bottom:0;left:0;right:0;">
                                                 <div>TIDAK ADA PENGUMUMAN SISTEM</div>
                                                 
@@ -152,13 +154,15 @@
                                                 <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="" class="w-50 d-md-none d-block m-auto">
                                                 
                                             </div>
+                                        </div>
                                         @endif
                                     @else
+                                    <div class="swiper-slide d-flex flex-column p-3">
                                         <div class="card overflow-auto p-2 text-center text-secondary font-weight-bold">
                                             TIDAK ADA PENGUMUMAN SISTEM
                                         </div>
+                                    </div>
                                     @endif
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -207,7 +211,7 @@
         centeredSlides: true,
         autoplay: {
           delay: 3000,
-          disableOnInteraction: false,
+          disableOnInteraction: true,
         },
       });
         // SWEETALERT2

@@ -167,7 +167,20 @@ use Illuminate\Support\Facades\Route;
                         Route::post('siswadata','admin\siswa\AdminSiswaController@ajaxDataSiswa')->name('admin.ajax.siswa');
                     // END
                 // END
-                
+
+                // PENGUMUMAN SISTEM
+                    Route::get('pengumumansistem','admin\pengumuman_sistem\AdminPengumumanSistemController@index')->name('admin.pengumuman.sistem');
+
+                    Route::get('create/pengumumansistem','admin\pengumuman_sistem\AdminPengumumanSistemController@createPengumumanSistem')->name('admin.create.pengumuman.sistem');
+
+                    Route::post('create/pengumumansistem','admin\pengumuman_sistem\AdminPengumumanSistemController@storeCreatePengumumanSistem')->name('admin.store.create.pengumuman.sistem');
+
+                    Route::delete('delete/pengumumansistem','admin\pengumuman_sistem\AdminPengumumanSistemController@deletePengumumanSistem')->name('admin.delete.pengumuman.sistem');
+
+                    // AJAX PENGUMUMAN SISTEM
+                        Route::post('pengumumansistemdata','admin\pengumuman_sistem\AdminPengumumanSistemController@ajaxPengumumumanSistemData')->name('admin.ajax.pengumuman.sistem');
+                    // END
+                // END
 
                 // LOGOUT ADMIN
                     Route::post('logout','admin\auth\AdminAuthController@postLogout')->name('admin.logout');

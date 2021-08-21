@@ -99,6 +99,15 @@
                     </p>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a href="{{ Route('admin.pengumuman.sistem') }}" class="nav-link @yield('pengumuman_sistem')">
+                <i class="fas fa-bullhorn"></i>
+                    <p>
+                        Pengumuman Sistem
+                    </p>
+                </a>
+            </li>
           
         </ul>
       </nav>
