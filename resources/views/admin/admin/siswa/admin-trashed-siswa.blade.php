@@ -2,19 +2,16 @@
 
 @section('siswa','active')
 
-@section('page-name-header','Siswa')
+@section('page-name-header','Trashed Siswa')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-<li class="breadcrumb-item active">Siswa</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.siswa') }}">Siswa</a></li>
+<li class="breadcrumb-item">Trashed Siswa</li>
 @endsection
 
 @section('content')
 <div class="row">
-    <div class="col-12 mb-4">
-        <a href="{{ route('admin.trashed.siswa.index') }}" class="btn btn-sm btn-info"><i class="far fa-trash-alt"></i> LIHAT TRASHED SISWA</a>
-        <a href="{{ route('admin.create.siswa') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT SISWA BARU</a>
-    </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive nowrap" width="100%" id="table_id">
         <thead>
@@ -126,7 +123,7 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.siswa') }}",
+                "url": "{{ Route('admin.ajax.trashed.siswa') }}",
                 "type": "POST",
                 "data":{
                     "_token": "{{ csrf_token() }}"
@@ -150,7 +147,7 @@
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row ) {
-                        return '<a href="{{ route("admin.detail.siswa") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deleteSiswa('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.delete.siswa") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                        return '<a class="btn text-white btn-sm btn-info" onclick="deleteSiswa('+data+')"><i class="fas fa-trash-restore"></i></a> <form id="delete-siswa-'+data+'" action="{{ route("admin.trashed.siswa.restore") }}" method="POST" style=" display: none;"> @csrf @method("PUT") <input name="id" value="'+data+'" type="hidden"></form>';
                     }
                 }
             ]
@@ -159,22 +156,20 @@
 
     function deleteSiswa(index){
             Swal.fire({
-            title: 'Hapus siswa ini ?',
+            title: 'Restore siswa ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus user</p>'+
+            '<p>Berikut merupakan effect apabila admin merestore user</p>'+
             '<ul class="text-left">'+
-            '<li>User tidak akan bisa login</li>'+
-            '<li>User tidak akan terlihat di semua kelas yang telah diikuti</li>'+
-            '<li>Jumlah anggota kelas akan berkurang</li>'+
-            '<li>User masih dapat dipulihkan dengan halaman <span class="text-info">TRASHED</span></li>'+
-            '<li>User akan hilang dari semua report</li>'+
-            '<li>Saat dipulihkan user akan kembali seperti semula</li>'+
+            '<li>User akan dapat login ke dalam sistem kembali</li>'+
+            '<li>Data user akan tetap, baik pendaftaran, kelas dan lain-lain</li>'+
+            '<li>Kelas kemungkinan akan melebihi kapasitas apabila saat sebelum dipulihkan kelas user ini sudah full</li>'+
+            '<li>Mohon pastikan semua administrasi user ini sudah lengkap untuk mencegah hal yang tidak diinginkan</li>'+
             '</ul>'
             ,
             icon:'warning',
             showDenyButton: true,
             showCancelButton: false,
-            confirmButtonText: `Hapus`,
+            confirmButtonText: `Restore`,
             denyButtonText: `Batal`,
             }).then((result) => {
                 

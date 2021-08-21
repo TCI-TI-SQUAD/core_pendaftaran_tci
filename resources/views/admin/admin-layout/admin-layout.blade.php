@@ -84,7 +84,7 @@
           
             <li class="nav-item">
                 <a href="{{ Route('admin.dashboard') }}" class="nav-link @yield('dashboard')">
-                    <i class="nav-icon far fa-image"></i>
+                  <i class="fas fa-tachometer-alt"></i>
                     <p>
                         Dashboard
                     </p>
@@ -93,7 +93,7 @@
 
             <li class="nav-item">
                 <a href="{{ Route('admin.siswa') }}" class="nav-link @yield('siswa')">
-                    <i class="nav-icon far fa-image"></i>
+                <i class="fas fa-graduation-cap"></i>
                     <p>
                         Siswa
                     </p>

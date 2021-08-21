@@ -9,7 +9,7 @@ class UserNotification extends Model
     protected $table = 'notifications';
     
     protected $fillable = [
-        'type','notifiable_type','notifiable_id','data','read_at','created_at','updated_at','deleted_at'
+        'id','type','notifiable_type','notifiable_id','data','read_at','created_at','updated_at','deleted_at'
     ];
 
     public function getFullDataAttribute()

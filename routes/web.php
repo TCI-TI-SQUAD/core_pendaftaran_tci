@@ -153,6 +153,15 @@ use Illuminate\Support\Facades\Route;
                         // END
                     // END
 
+                    // TRASHED SISWA
+                        Route::get('trashed/siswa','admin\siswa\AdminSiswaTrashedController@index')->name('admin.trashed.siswa.index');
+
+                        Route::put('trashed/restore/siswa','admin\siswa\AdminSiswaTrashedController@restoreTrashedSiswa')->name('admin.trashed.siswa.restore');
+                        
+                        // AJAX TRASHED SISWA
+                            Route::post('trashedsiswadata','admin\siswa\AdminSiswaTrashedController@ajaxTrashedSiswaData')->name('admin.ajax.trashed.siswa');
+                        // END
+                    // END
 
                     // AJAX SISWA
                         Route::post('siswadata','admin\siswa\AdminSiswaController@ajaxDataSiswa')->name('admin.ajax.siswa');
