@@ -108,6 +108,15 @@
                     </p>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a href="{{ Route('admin.pendaftarankelas') }}" class="nav-link @yield('pendaftaran_kelas')">
+                <i class="far fa-registered"></i>
+                    <p>
+                        Pendaftaran Kelas
+                    </p>
+                </a>
+            </li>
           
         </ul>
       </nav>

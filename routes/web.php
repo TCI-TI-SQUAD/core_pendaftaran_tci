@@ -182,6 +182,24 @@ use Illuminate\Support\Facades\Route;
                     // END
                 // END
 
+                // PENDAFTARAN KELAS
+                    
+                    Route::get('pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@index')->name('admin.pendaftarankelas');
+
+                    Route::get('create/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@createPendaftaranKelas')->name('admin.create.pendaftarankelas');
+
+                    Route::post('create/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@storeCreatePendaftaranKelas')->name('admin.post.create.pendaftarankelas');
+
+                    Route::get('detail/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPendaftaranKelasController@detailPendaftaranKelas')->name('admin.detail.pendaftarankelas');
+
+                    Route::delete('delete/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@deletePendaftaranKelas')->name('admin.delete.pendaftarankelas');
+
+                    // AJAX
+                        Route::post('pendaftarandata','admin\pendaftaran_kelas\AdminPendaftaranKelasController@ajaxPendaftaranData')->name('admin.ajax.pendaftarandata');
+                    // END
+
+                // END
+
                 // LOGOUT ADMIN
                     Route::post('logout','admin\auth\AdminAuthController@postLogout')->name('admin.logout');
                 // END

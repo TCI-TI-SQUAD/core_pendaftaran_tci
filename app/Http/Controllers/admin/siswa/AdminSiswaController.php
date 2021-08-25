@@ -320,7 +320,9 @@ class AdminSiswaController extends Controller
 
             // PASSWORD
                 if($request->has('password')){
-                    $user->update(['password' => Hash::make($request->password)]);
+                    if($request->password != null){
+                        $user->update(['password' => Hash::make($request->password)]);
+                    }
                 }
             // END
 

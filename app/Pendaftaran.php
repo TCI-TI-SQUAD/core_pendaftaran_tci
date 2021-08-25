@@ -5,12 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Carbon\Carbon;
+
 class Pendaftaran extends Model
 {
     use SoftDeletes;
     
     protected $fillable = [
-        'nama_pendaftaran','tanggal_mulai','tanggal_selesai','status','keterangan'
+        'nama_pendaftaran','tanggal_mulai_pendaftaran','tanggal_selesai_pendaftaran','status','keterangan'
     ];
 
     public function Kelas(){
