@@ -23,6 +23,7 @@ class CreateTablePendaftaran extends Migration
             $table->enum('status',['aktif','tidak'])->default('aktif');
             $table->string('keterangan',200)->nullable();
             $table->timestamps();
+            $table->timestamp('archived_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
         });
 

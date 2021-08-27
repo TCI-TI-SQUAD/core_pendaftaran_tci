@@ -2,33 +2,28 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Pendaftaran Kelas')
+@section('page-name-header','Pengumuman Pendaftaran Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-<li class="breadcrumb-item active">Pendaftaran Kelas</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[1]) }}">Detail Pendaftaran Kelas</a></li>
+<li class="breadcrumb-item active">Pengumuman Pendaftaran Kelas</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="{{ route('admin.create.pengumuman.sistem') }}" class="btn btn-sm btn-info"><i class="far fa-edit"></i> LIHAT TRASHED PENDAFTARAN</a>
-        <a href="{{ route('admin.create.pengumuman.sistem') }}" class="btn btn-sm btn-warning"><i class="far fa-edit"></i> LIHAT ARSIP PENDAFTARAN</a>
-        <a href="{{ route('admin.create.pendaftarankelas') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENDAFTARAN BARU</a>
+        <a href="{{ route('admin.create.pengumuman.sistem') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENGUMUMAN BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive wrap" width="100%" id="table_id">
         <thead>
             <tr>
             <th scope="col">#</th>
-            <th scope="col">Nama Pendaftaran</th>
-            <th scope="col">Tanggal Mulai</th>
-            <th scope="col">Tanggal Selesai</th>
-            <th scope="col">Banyak Kelas</th>
-            <th scope="col">Status</th>
-            <th scope="col">Keterangan</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Updated At</th>
+            <th scope="col">Nama Admin</th>
+            <th scope="col">Pesan Pengumuman</th>
+            <th scope="col">Tanggal</th>
             <th scope="col">Aksi</th>
             </tr>
         </thead>
@@ -123,29 +118,31 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.pendaftarandata') }}",
+                "url": "{{ Route('admin.ajax.pengumuman.pendaftarankelas') }}",
                 "type": "POST",
                 "data":{
-                    "_token": "{{ csrf_token() }}"
+                    "_token": "{{ csrf_token() }}",
+                    "id" : {{ $pendaftaran->id }}
                 }
             },
             "columns": [
                 { "data": "number" },
-                { "data": "nama_pendaftaran" },
-                { "data": "tanggal_mulai_pendaftaran"},
-                { "data": "tanggal_selesai_pendaftaran" },
-                { "data": "kelas_count","visible" :false },
-                { "data": "status" },
-                { "data": "keterangan","visible" :false },
-                { "data": "created_at","visible" :false },
-                { "data": "updated_at","visible" :false },
+                { "data": "admin.nama_admin" },
+                { "data": "pengumuman","visible" : false },
+                { "data": "tanggal" },
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.pendaftarankelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.pendaftarankelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><button class="btn text-white btn-sm btn-warning" onclick="archivePendaftaranKelas('+data+')"><i class="fas fa-file-archive"></i></button><form id="form-archived-'+data+'" method="POST" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form> <a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                        return '<button onclick="detailData('+meta.row+')" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></button><a href="{{ route("admin.edit.siswa") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePengumumanSistem('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pengumuman-'+data+'" action="{{ route("admin.delete.pengumuman.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
                     }
                 }
             ],
+            columnDefs: [{
+                            render: function (data, type, full, meta) {
+                                return "<div id='dvNotes' style='padding:0px;margin:0;white-space: normal;width: 300px;font-size:12px;'>" + data + "</div>";
+                            },
+                            targets: 2
+                        }]
         });
     } );
 
@@ -172,53 +169,25 @@
         
     }
 
-    function deletePendaftaranKelas(index){
+    function deletePengumumanSistem(index){
             Swal.fire({
-            title: 'Archived Pendaftaran Ini ?',
+            title: 'Hapus Pengumuman Sistem Ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
+            '<p>Berikut merupakan effect apabila admin menghapus user</p>'+
             '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
-            '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
-            '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
+            '<li>User tidak akan bisa melihat pengumuman yang telah dihapus</li>'+
+            '<li>Pengumuman yang telah dihapus tidak akan dapat <span class="text-danger">DIKEMBALIKAN</span></li>'+
             '</ul>'
             ,
             icon:'warning',
             showDenyButton: true,
             showCancelButton: false,
-            confirmButtonText: `Archived`,
+            confirmButtonText: `Hapus`,
             denyButtonText: `Batal`,
             }).then((result) => {
                 
             if (result.isConfirmed) {
-                $('#delete-pendaftaran-kelas-'+index).submit();
-            } else if (result.isDenied) {
-
-            }
-            })
-        }
-    
-        function archivePendaftaranKelas(index){
-            Swal.fire({
-            title: 'Archive Pendaftaran Kelas Ini ?',
-            html: 
-            '<p>Berikut merupakan effect apabila admin melakukan Archive Pendaftaran Kelas</p>'+
-            '<ul class="text-left">'+
-            '<li>Archive dapat digunakan untuk menyimpan Pendaftaran yang dirasa sudah tidak diperlukan untuk tampil di halaman index Pendaftaran </li>'+
-            '<li>Tidak akan ada yang terjadi apabila anda melakukan Archive sebuah pendaftaran, Pendaftaran hanya pindah ke halaman Archive tanpa ada efek pada sisi User </li>'+
-            '</ul>'
-            ,
-            icon:'warning',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Archive`,
-            denyButtonText: `Batal`,
-            }).then((result) => {
-                
-            if (result.isConfirmed) {
-                $('#form-archived-'+index).submit();
+                $('#delete-pengumuman-'+index).submit();
             } else if (result.isDenied) {
 
             }

@@ -174,12 +174,12 @@
                         PENGUMUMAN PENDAFTARAN
                     </div>
                     
-                    <div class="swiper-container mySwiper2 h-100" id="pengumuman-responsive">
-                        <div class="swiper-wrapper position-absolute" style="top:0px;left:0;right:0;bottom:10px;">
+                    <div class="swiper-container mySwiper2 h-100 position-relative" id="pengumuman-responsive">
+                        <div class="swiper-wrapper position-absolute" style="top:0px;left:0;right:0;bottom:0px;">
                             @if(isset($pendaftaran->PengumumanPendaftaran))
                                 @if($pendaftaran->PengumumanPendaftaran->count() > 0)
                                     @foreach($pendaftaran->PengumumanPendaftaran as $pengumuman)
-                                    <div class="swiper-slide overflow-auto pb-5 pl-1 pr-1 pt-1">
+                                    <div class="swiper-slide p-2 overflow-auto pb-5">
                                         {!! $pengumuman->pengumuman !!}
                                     </div>
                                     @endforeach

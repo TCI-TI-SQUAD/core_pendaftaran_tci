@@ -12,10 +12,15 @@
 
 @section('content')
 <div class="row">
-    <a href="" class="btn btn-sm btn-info mx-1"><i class="far fa-edit"></i> EDIT PENDAFTARAN</a>
+    <a href="{{ route('admin.edit.pendaftarankelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-info mx-1"><i class="far fa-edit"></i> EDIT PENDAFTARAN</a>
     <a href="" class="btn btn-sm btn-primary mx-1"><i class="fas fa-school"></i> LIHAT KELAS</a>
-    <a href="" class="btn btn-sm btn-danger mx-1"><i class="far fa-trash-alt"></i> DELETE PENDAFTARAN</a>
-    <a href="" class="btn btn-sm btn-warning mx-1"><i class="fas fa-bullhorn"></i> PENGUMUMAN PENDAFTARAN</a>
+    <button onclick="deletePendaftaranKelas()" class="btn btn-sm btn-danger mx-1"><i class="far fa-trash-alt"></i> DELETE PENDAFTARAN</button>
+    <form action="{{ route('admin.delete.pendaftarankelas') }}" method="POST" id="form-delete-pendaftaran">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="id" value="{{ $pendaftaran->id }}">
+    </form>
+    <a href="{{ route('admin.index.pengumuman.pendaftarankelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-warning mx-1"><i class="fas fa-bullhorn"></i> PENGUMUMAN PENDAFTARAN</a>
     
     <div class="col-12 jumbotron mt-3 p-2">
         <div class="container-fluid p-2">
@@ -64,32 +69,34 @@
 @push('js')
 <script>
 
-    function peringatanPendaftaran(){
-            Swal.fire({
-            title: 'Yakin Membuat Pendaftaran Baru ?',
-            html: 
-            '<p>Berikut merupakan effect apabila admin membuat pendaftaran baru</p>'+
-            '<ul class="text-left">'+
-            '<li>Pendaftaran yang berstatus aktif akan terlihat pada sisi user</li>'+
-            '<li>Pendaftaran yang baru dibuat tidak langsung berisikan kelas melainkan admin harus menginputkan kelas setelah membuat pendaftaran baru</li>'+
-            '<li>Pendaftaran dapat diakses dalam jangka waktu tanggal mulai pendaftaran hingga tanggal selesai pendaftaran</li>'+
-            '<li>Jadi apabila tanggal saat ini berada diluar range tanggal mulai dan selesai maka pendaftaran tidak dapat dilakukan oleh user</li>'+
-            '</ul>'
-            ,
-            icon:'warning',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Submit`,
-            denyButtonText: `Batal`,
-            }).then((result) => {
+    function deletePendaftaranKelas(){
+        Swal.fire({
+        title: 'Delete Pendaftaran Ini ?',
+        html: 
+        '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
+        '<ul class="text-left">'+
+        '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
+        '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
+        '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
+        '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
+        '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
+        '</ul>'
+        ,
+        icon:'warning',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: `Hapus`,
+        denyButtonText: `Batal`,
+        }).then((result) => {
+            
+        if (result.isConfirmed) {
+            $('#form-delete-pendaftaran').submit();
+        } else if (result.isDenied) {
 
-            if (result.isConfirmed) {
-                $('#pendaftaran-form').submit();
-            } else if (result.isDenied) {
-
-            }
-            })
         }
+        })
+    }
+    
     // SWEETALERT2
         @if(Session::has('status'))
             Swal.fire({

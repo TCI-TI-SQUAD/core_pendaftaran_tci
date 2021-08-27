@@ -187,12 +187,26 @@ use Illuminate\Support\Facades\Route;
                     Route::get('pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@index')->name('admin.pendaftarankelas');
 
                     Route::get('create/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@createPendaftaranKelas')->name('admin.create.pendaftarankelas');
-
                     Route::post('create/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@storeCreatePendaftaranKelas')->name('admin.post.create.pendaftarankelas');
 
                     Route::get('detail/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPendaftaranKelasController@detailPendaftaranKelas')->name('admin.detail.pendaftarankelas');
 
+                    Route::get('edit/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPendaftaranKelasController@editPendaftaranKelas')->name('admin.edit.pendaftarankelas');
+                    Route::put('edit/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@storeEditPendaftaranKelas')->name('admin.store.edit.pendaftarankelas');
+
+                    Route::put('archive/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@archivedPendaftaranKelas')->name('admin.archived.pendaftarankelas');
+
                     Route::delete('delete/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@deletePendaftaranKelas')->name('admin.delete.pendaftarankelas');
+
+                    // PENGUMUMAN PENDAFTARAN
+                        Route::get('pengumuman/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@index')->name('admin.index.pengumuman.pendaftarankelas');
+
+                        Route::delete('delete/pengumuman/pendaftarankelas','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@deletePengumumanPendaftaranKelas')->name('admin.delete.pengumuman.pendaftarankelas');
+
+                        // AJAX
+                            Route::post('pengumumanpendaftarankelasdata','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@ajaxPengumumanPendaftaranKelas')->name('admin.ajax.pengumuman.pendaftarankelas');
+                        // END
+                    // END
 
                     // AJAX
                         Route::post('pendaftarandata','admin\pendaftaran_kelas\AdminPendaftaranKelasController@ajaxPendaftaranData')->name('admin.ajax.pendaftarandata');
