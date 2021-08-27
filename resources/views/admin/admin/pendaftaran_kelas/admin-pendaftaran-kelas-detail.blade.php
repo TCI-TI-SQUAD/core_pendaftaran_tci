@@ -13,7 +13,7 @@
 @section('content')
 <div class="row">
     <a href="{{ route('admin.edit.pendaftarankelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-info mx-1"><i class="far fa-edit"></i> EDIT PENDAFTARAN</a>
-    <a href="" class="btn btn-sm btn-primary mx-1"><i class="fas fa-school"></i> LIHAT KELAS</a>
+    <a href="{{ route('admin.kelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-primary mx-1"><i class="fas fa-school"></i> LIHAT KELAS</a>
     <button onclick="deletePendaftaranKelas()" class="btn btn-sm btn-danger mx-1"><i class="far fa-trash-alt"></i> DELETE PENDAFTARAN</button>
     <form action="{{ route('admin.delete.pendaftarankelas') }}" method="POST" id="form-delete-pendaftaran">
         @csrf

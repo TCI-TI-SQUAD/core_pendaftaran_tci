@@ -7,14 +7,14 @@
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
-<li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[1]) }}">Detail Pendaftaran Kelas</a></li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[$pendaftaran->id]) }}">Detail Pendaftaran Kelas</a></li>
 <li class="breadcrumb-item active">Pengumuman Pendaftaran Kelas</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-12 mb-4">
-        <a href="{{ route('admin.create.pengumuman.sistem') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENGUMUMAN BARU</a>
+        <a href="{{ route('admin.create.pengumuman.pendaftarankelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENGUMUMAN BARU</a>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive wrap" width="100%" id="table_id">

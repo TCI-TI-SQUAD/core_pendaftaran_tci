@@ -201,10 +201,26 @@ use Illuminate\Support\Facades\Route;
                     // PENGUMUMAN PENDAFTARAN
                         Route::get('pengumuman/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@index')->name('admin.index.pengumuman.pendaftarankelas');
 
+                        Route::get('create/pengumuman/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@createPengumumanPendaftaranKelas')->name('admin.create.pengumuman.pendaftarankelas');
+
+                        Route::post('create/pengumumman/pendaftaran','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@postCreatePengumumanPendaftaranKelas')->name('admin.post.create.pengumuman.pendaftarankelas');
+
                         Route::delete('delete/pengumuman/pendaftarankelas','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@deletePengumumanPendaftaranKelas')->name('admin.delete.pengumuman.pendaftarankelas');
 
                         // AJAX
                             Route::post('pengumumanpendaftarankelasdata','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@ajaxPengumumanPendaftaranKelas')->name('admin.ajax.pengumuman.pendaftarankelas');
+                        // END
+                    // END
+
+                    // KELAS PENDAFTARAN
+                        Route::get('kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@index')->name('admin.kelas');
+
+                        Route::get('create/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@createKelas')->name('admin.create.kelas');
+
+                        Route::post('create/kelas/pendaftarankelas','admin\pendaftaran_kelas\kelas\AdminKelasController@postCreateKelas')->name('admin.post.create.kelas');
+
+                        // AJAX
+                            Route::post('kelasdata','admin\pendaftaran_kelas\kelas\AdminKelasController@ajaxKelasData')->name('admin.ajax.kelas');
                         // END
                     // END
 

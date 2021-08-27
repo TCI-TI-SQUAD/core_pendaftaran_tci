@@ -46,7 +46,9 @@ class JadwalKelasController extends Controller
         // MAIN LOGIC
             try{
 
-                $kelas = Kelas::with('JadwalKelas')
+                $kelas = Kelas::with(['JadwalKelas' => function($q_jadwal){
+                                    $q_jadwal->orderBy("waktu_mulai");
+                                }])
                                 ->withCount(['DetailKelas' => function($querydetailkelas){
                                     $querydetailkelas->whereHas('User');
                                 }])
@@ -54,7 +56,7 @@ class JadwalKelasController extends Controller
                                     $query->where('status','aktif')->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'));
                                 })->where('status','buka')->findOrFail($id_kelas);
-                dd($kelas);
+
                 $periods = CarbonPeriod::create($kelas->tanggal_mulai,$kelas->tanggal_selesai);
 
                 if($kelas->JadwalKelas->count() <= 0){
@@ -68,17 +70,17 @@ class JadwalKelasController extends Controller
 
                 $real_period = [];
 
-                foreach($periods as $index => $period){
+                foreach($periods as $period){
                     foreach($kelas->JadwalKelas as $jadwal){
                         if(strtolower($period->format('l')) == $jadwal->hari){
-                            $real_period[$index]['period'] = $period;
-                            $real_period[$index]['jadwal'] = $jadwal;
+                            $array = ['period' => $period,"jadwal" => $jadwal];
+                            $real_period[] = $array;
                         }
                     }
                 }
 
                 $real_period = array_values($real_period);
-                
+
                 return view('user-dashboard.user-jadwal-kelas',compact(['kelas','real_period']));
 
             }catch(ModelNotFoundException $err){
