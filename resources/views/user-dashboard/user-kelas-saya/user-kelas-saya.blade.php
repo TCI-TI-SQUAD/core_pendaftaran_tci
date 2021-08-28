@@ -2,7 +2,7 @@
 
 @push('css')
 <link href="{{ asset('asset\css\user\user-pembayaran.css') }}" rel="stylesheet">
-<link rel="stylesheet"href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="{{ asset('plugins\swiper\swiper-bundle.min.css') }}">
 @endpush
 
 @section('navigation-wide')
@@ -140,7 +140,6 @@
                             <!-- Swiper -->
                             <div class="swiper-container mySwiper p-0">
                                 <div class="swiper-wrapper p-0">
-                                    
                                     @if(isset($detail_kelas))
                                         @if(count($detail_kelas) > 0)
                                             @foreach($detail_kelas as $detail)
@@ -282,7 +281,7 @@
 @endsection
 
 @push('js')
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script type="text/javascript" src="{{ asset('plugins\swiper\swiper-bundle.min.js') }}"></script>
 <script>
       var swiper = new Swiper(".mySwiper", {
         slidesPerView: 1,

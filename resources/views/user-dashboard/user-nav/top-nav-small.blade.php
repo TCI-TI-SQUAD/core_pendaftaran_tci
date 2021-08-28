@@ -30,7 +30,7 @@
     <div class="navigation-block-child mt-3">
             <div class="text-center" style="margin:10px;width:50px;"><i class="fas fa-sign-in-alt"></i></div>
             <div style="flex-grow:2;margin:10px;"  class="{{ isset($notification) ? 'font-weight-bold' : '' }}">
-                Notification <div class="badge badge-pill badge-danger">@if(isset($notifications)) {{ $notifications }} @endif </div>
+                Notification @if(isset($notifications)) <div class="badge badge-pill badge-danger">{{ $notifications }} </div>@endif 
             </div>
     </div>
 </a>

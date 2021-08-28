@@ -51,7 +51,6 @@ class AdminAuthController extends Controller
 
     public function postLogout(){
         Auth::guard('admin')->logout();
-
         return redirect()->route('admin.auth.login')->with([
             'status'=> 'success',
             'icon' => 'success',

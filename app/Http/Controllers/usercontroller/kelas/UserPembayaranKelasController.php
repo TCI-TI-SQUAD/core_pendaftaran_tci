@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Illuminate\Database\QueryException;
+
 use Validator;
 use Crypt;
 use Auth;
@@ -47,20 +49,37 @@ class UserPembayaranKelasController extends Controller
 
         // MAIN LOGIC
             try{
+                // FILTER KELAS
+                $filter_kelas = function($query_kelas){
+                    $query_kelas;
+                };
+
+                // FILTER TRANSAKSI
+                $filter_transaksi = function($query_transaksi){
+                    $query_transaksi;
+                };
+
                 $detail_kelas = DetailKelas::with([
-                    'Kelas' => function($query_kelas){
-                        $query_kelas->withTrashed();
-                    },
-                    'Transaksi' => function($query_transaksi){
-                        $query_transaksi->withTrashed();
-                    },
-                ])->whereHas('Kelas')->whereHas('Transaksi')->where('id_user',Auth::user()->id)->findOrFail($id_detail_kelas);
+                        'Kelas' => $filter_kelas,
+                        'Transaksi' => $filter_transaksi
+                    ])
+                    ->whereHas('Kelas',$filter_kelas)
+                    ->whereHas('Transaksi',$filter_transaksi)
+                    ->where('id_user',Auth::user()->id)
+                    ->findOrFail($id_detail_kelas);
                 
             }catch(ModelNotFoundException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
                     'icon' => 'error',
-                    'title' => 'Kelas Tidak Ditemukan 2',
+                    'title' => 'Kelas Tidak Ditemukan`',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem'
+                ]);
+            }catch(QueryException $err){
+                return redirect()->route('user.pendaftaran')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan',
                     'message' => 'Kelas tidak ditemukan di dalam sistem'
                 ]);
             }
@@ -173,19 +192,33 @@ class UserPembayaranKelasController extends Controller
 
         // AMBIL KELAS
             try{
+                // FILTER KELAS
                 $filter_kelas = function($query_kelas){
                     $query_kelas->withTrashed();
                 };
 
+                // FILTER TRANSAKSI
                 $filter_transaksi = function($query_transaksi){
                     $query_transaksi->withTrashed();
                 };
 
-                $detail_kelas = DetailKelas::with(['Kelas' => $filter_kelas,'Transaksi' => $filter_transaksi])
-                                                ->whereHas('Kelas',$filter_kelas)->whereHas('Transaksi',$filter_transaksi)
-                                                    ->where('id_user',Auth::user()->id)->findOrFail($id_detail_kelas);
+                $detail_kelas = DetailKelas::with([
+                    'Kelas' => $filter_kelas,
+                    'Transaksi' => $filter_transaksi
+                    ])
+                    ->whereHas('Kelas',$filter_kelas)
+                    ->whereHas('Transaksi',$filter_transaksi)
+                    ->where('id_user',Auth::user()->id)
+                    ->findOrFail($id_detail_kelas);
                                                     
             }catch(ModelNotFoundException $err){
+                return redirect()->route('user.pendaftaran')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem'
+                ]);
+            }catch(QueryException $err){
                 return redirect()->route('user.pendaftaran')->with([
                     'status' => 'fail',
                     'icon' => 'error',

@@ -117,6 +117,19 @@
                     </p>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <form id="logout_form" action="{{ route('admin.logout') }}" style="display:none;" method="POST">
+                  @csrf
+                  @method('POST')
+                </form>
+                <a onclick="document.getElementById('logout_form').submit()" class="nav-link font-weight-bold text-danger">
+                <i class="fas fa-power-off"></i>
+                    <p>
+                        Log Out
+                    </p>
+                </a>
+            </li>
           
         </ul>
       </nav>

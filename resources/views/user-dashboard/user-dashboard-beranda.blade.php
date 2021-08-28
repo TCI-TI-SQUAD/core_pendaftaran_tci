@@ -133,8 +133,8 @@
                 
                 
                     <div class="col position-relative p-0 m-0" style="left:0;right:0;bottomn:0;top:0;" id="pengumuman">
-                        <div class="swiper-container mySwiper h-100 p-0">
-                            <div class="swiper-wrapper p-0 m-0" style="position: absolute;left: 0;top: 0;right:0;bottom:0;z-index:19999;">
+                        <div class="swiper-container mySwiper2 h-100 p-0">
+                            <div class="swiper-wrapper p-0 m-0 w-0" style="position: absolute;left: 0;top: 0;right:0;bottom:0;z-index:19999;">
                                     @if(isset($pengumuman_global))
                                         @if($pengumuman_global->count())
                                             @foreach($pengumuman_global as $index => $pengumuman)
@@ -211,6 +211,15 @@
         centeredSlides: true,
         autoplay: {
           delay: 3000,
+          disableOnInteraction: true,
+        },
+      });
+
+      var swiper = new Swiper(".mySwiper2", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 5000,
           disableOnInteraction: true,
         },
       });

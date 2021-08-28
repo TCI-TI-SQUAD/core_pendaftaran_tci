@@ -20,6 +20,13 @@ class Prodi extends Model
         'id_fakultas' => EncryptCast::class,
     ];
 
+    public function getFullProdiName(){
+        $fakultas = $this->Fakultas()->first();
+        $universitas = $fakultas->Universitas()->first();
+
+        return $this->nama_prodi.", ".$fakultas->nama_fakultas.", ".$universitas->nama_universitas;
+    }
+
     public function Fakultas(){
         return $this->belongsTo('App\Fakultas','id_fakultas','id');
     }

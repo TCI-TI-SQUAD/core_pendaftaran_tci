@@ -1,7 +1,7 @@
 @extends('layout.main-layout.main-layout')
 
 @push('css')
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="{{ asset('plugins\swiper\swiper-bundle.min.css') }}">
 <link href="{{ asset('asset\css\user\user-pendaftaran.css') }}" rel="stylesheet">
 @endpush
 
@@ -18,7 +18,7 @@
     <div class="container-fluid">
         <div class="row mt-3 animated slideInLeft position-relative" style="z-index:10;">
             <!-- DROPDOWN -->
-            <div class="col-12">
+            <div class="col-12 text-center text-lg-left">
                 <div class="btn-group dropright">
                     
                     <button type="button" class="btn">
@@ -58,11 +58,12 @@
         <div class="row mb-3 animated slideInRight">
             <!-- KELAS -->
             <div class="col-12 col-lg-8 overflow-hidden">
-                <div class="swiper-container mySwiper w-100 h-100">
+                <div class="swiper-container mySwiper h-100">
                     <div class="swiper-pagination"></div>
-                    <div class="swiper-wrapper">
+                    
                         @if(isset($pendaftaran->Kelas))
                             @if($pendaftaran->Kelas->count() > 0)
+                            <div class="swiper-wrapper" style="max-width:0px;">
                                 @foreach($pendaftaran->Kelas as $index => $kelas)
                                     <div class="swiper-slide mb-5 mt-3">
                                         <!-- Card -->
@@ -139,8 +140,10 @@
                                         <!-- Card -->
                                     </div>
                                 @endforeach
+                                </div>
                             @else
-                                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                            <div class="swiper-wrapper">
+                                <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
                                     <div>
                                         <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
                                     </div>
@@ -149,9 +152,11 @@
                                         <h5 class="mt-5 text-center w-100">TIDAK ADA KELAS</h5>
                                     </div>
                                 </div>
+                            </div>
                             @endif
                         @else
-                            <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                        <div class="swiper-wrapper">
+                            <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
                                 <div>
                                     <img src="{{ asset('asset\image\main_asset\nodata2.png') }}" alt="NO DATA" style="display:block;margin:auto;width:200px;">
                                 </div>
@@ -160,8 +165,8 @@
                                     <h5 class="mt-5 text-center w-100">TIDAK ADA KELAS</h5>
                                 </div>
                             </div>
+                        </div>
                         @endif
-                    </div>
                 </div>
 
             </div>
@@ -174,17 +179,33 @@
                         PENGUMUMAN PENDAFTARAN
                     </div>
                     
-                    <div class="swiper-container mySwiper2 h-100 position-relative" id="pengumuman-responsive">
-                        <div class="swiper-wrapper position-absolute" style="top:0px;left:0;right:0;bottom:0px;">
+                    <div class="swiper-container mySwiper2 h-100 position-relative" id="pengumuman-responsive">                        
                             @if(isset($pendaftaran->PengumumanPendaftaran))
                                 @if($pendaftaran->PengumumanPendaftaran->count() > 0)
-                                    @foreach($pendaftaran->PengumumanPendaftaran as $pengumuman)
-                                    <div class="swiper-slide p-2 overflow-auto pb-5">
-                                        {!! $pengumuman->pengumuman !!}
+                                    <div class="swiper-wrapper position-absolute" style="top:0px;left:0;right:0;bottom:0px;max-width:0px;">
+                                        @foreach($pendaftaran->PengumumanPendaftaran as $pengumuman)
+                                        <div class="swiper-slide p-2 overflow-auto pb-5">
+                                            {!! $pengumuman->pengumuman !!}
+                                        </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 @else
-                                    <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide p-2 overflow-auto pb-5 d-flex flex-column justify-content-center align-items-center w-100">
+                                            <div>
+                                                <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:100px;">
+                                            </div>
+
+                                            <div>
+                                                <h5 class="mt-5 text-center w-100">TIDAK ADA PENGUMUMAN</h5>
+                                            </div>
+                                    </div>
+                                </div>
+                                @endif
+                            @else
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide p-2 overflow-auto pb-5 d-flex flex-column justify-content-center align-items-center w-100">
+                                    
                                         <div>
                                             <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:100px;">
                                         </div>
@@ -192,20 +213,10 @@
                                         <div>
                                             <h5 class="mt-5 text-center w-100">TIDAK ADA PENGUMUMAN</h5>
                                         </div>
-                                    </div>
-                                @endif
-                            @else
-                                <div class="d-flex flex-column justify-content-center align-items-center w-100">
-                                    <div>
-                                        <img src="{{ asset('asset\image\main_asset\nodata.png') }}" alt="NO DATA" style="display:block;margin:auto;width:100px;">
-                                    </div>
-
-                                    <div>
-                                        <h5 class="mt-5 text-center w-100">TIDAK ADA PENGUMUMAN</h5>
-                                    </div>
+                                    
                                 </div>
-                            @endif
-                        </div>
+                            </div>
+                            @endif                        
                     </div>
                     
                 </div>
@@ -218,7 +229,7 @@
 @endsection
 
 @push('js')
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script type="text/javascript" src="{{ asset('plugins\swiper\swiper-bundle.min.js') }}"></script>
 <script>
         $(document).ready(function(){
 

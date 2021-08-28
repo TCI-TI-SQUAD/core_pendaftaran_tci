@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Illuminate\Database\QueryException;
 use Validator;
 use Auth;
 use Crypt;
@@ -34,77 +35,153 @@ class UserKelasSayaController extends Controller
             try{
                 switch ($filter) {
                     case 'semua':
+                        // FILTER KELAS
                         $kelas_filter = function($query_kelas){
-                            $query_kelas->withTrashed()->with(['Pengajar' => function($query_pengajar){
-                            $query_pengajar->withTrashed();
+                            $query_kelas->whereHas("Pendaftaran")->with(['Pengajar' => function($query_pengajar){
+                                $query_pengajar->withTrashed();
                             }]);
                         };
 
-                        $detail_kelas = DetailKelas::with([
-                            'Kelas' => $kelas_filter
-                            ,'Transaksi' => function($query_transaksi){
-                                $query_transaksi->withTrashed();
-                            }])->whereHas('User')->where('id_user',Auth::user()->id)->get();
-                        
-                        return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+                        // FILTER TRANSAKSI
+                        $transaksi_filter = function($query_transaksi){
+                            $query_transaksi->withTrashed();
+                        };
+
+                        try{
+
+                            $detail_kelas = DetailKelas::with([
+                                'Kelas' => $kelas_filter,
+                                'Transaksi' => $transaksi_filter
+                            ])
+                            ->whereHas("Kelas",$kelas_filter)
+                            ->whereHas("Transaksi",$transaksi_filter)
+                            ->where('id_user',Auth::user()->id)->get();
+
+                            return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+
+                        }catch(QueryException $err){
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Gagal Mendapatkan Kelas',
+                                'message' => 'Kelas tidak ditemukan di dalam sistem',
+                            ]);
+                        }
+
                         break;
 
                     case 'menunggu':
-                        $detail_kelas = DetailKelas::with([
-                            'Kelas' => function($query){
-                                $query->with(['Pengajar' => function($query_pengajar){
-                                    $query_pengajar->withTrashed();
-                                }])->withTrashed();
-                            },
-                            'transaksi' => function($query_2){
-                                $query_2->where('status','menunggu_pembayaran')
-                                        ->orWhere('status','memilih_metode_pembayaran')
-                                            ->orWhere('status','menunggu_konfirmasi')->withTrashed();
-                            }
-                            ])->whereHas('Transaksi',function($query_3){
-                                $query_3->where('status','menunggu_pembayaran')
+                       // FILTER KELAS
+                       $kelas_filter = function($query_kelas){
+                            $query_kelas->whereHas("Pendaftaran")->with(['Pengajar' => function($query_pengajar){
+                                $query_pengajar->withTrashed();
+                            }]);
+                        };
+
+                        // FILTER TRANSAKSI
+                        $transaksi_filter = function($query_transaksi){
+                            $query_transaksi->where('status','menunggu_pembayaran')
                                             ->orWhere('status','memilih_metode_pembayaran')
-                                                ->orWhere('status','menunggu_konfirmasi')->withTrashed();;
-                            })->whereHas('User')
-                            ->where('id_user',Auth::user()->id)->get();
-                        
-                        return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+                                            ->orWhere('status','menunggu_konfirmasi')
+                                            ->withTrashed();;
+                        };
+
+                        try{
+                            
+                            $detail_kelas = DetailKelas::with([
+                                'Kelas' => $kelas_filter,
+                                'transaksi' => $transaksi_filter
+                                ])
+                                ->whereHas("Transaksi",$transaksi_filter)
+                                ->whereHas("Kelas",$kelas_filter)
+                                ->where('id_user',Auth::user()->id)->get();
+                            
+                            return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+
+                        }catch(QueryException $err){
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Gagal Mendapatkan Kelas',
+                                'message' => 'Kelas tidak ditemukan di dalam sistem',
+                            ]);
+                        }
+
                         break;
                     
                     case 'selesai':
-                        $detail_kelas = DetailKelas::with([
-                            'Kelas' => function($query_kelas){
-                                $query_kelas->withTrashed();
-                            },
-                            'transaksi' => function($query){
-                                $query->where('status','lunas')->withTrashed();
-                            }
-                            ])->whereHas('Transaksi',function($query_2){
-                                $query_2->where('status','lunas')->withTrashed();
-                            })->whereHas('User')
-                            ->where('id_user',Auth::user()->id)->get();
+                        // FILTER KELAS
+                        $kelas_filter = function($query_kelas){
+                            $query_kelas->whereHas("Pendaftaran")->with(['Pengajar' => function($query_pengajar){
+                                $query_pengajar->withTrashed();
+                            }]);
+                        };
+
+                        // FILTER TRANSAKSI
+                        $transaksi_filter = function($query_transaksi){
+                            $query_transaksi->where('status','lunas')
+                                            ->withTrashed();;
+                        };
+
+                        try{
                             
-                        return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+                            $detail_kelas = DetailKelas::with([
+                                'Kelas' => $kelas_filter,
+                                'transaksi' => $transaksi_filter,
+                                ])
+                                ->whereHas("Kelas",$kelas_filter)
+                                ->whereHas('Transaksi',$transaksi_filter)
+                                ->where('id_user',Auth::user()->id)->get();
+                                
+                            return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+
+                        }catch(QueryException $err){
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Gagal Mendapatkan Kelas',
+                                'message' => 'Kelas tidak ditemukan di dalam sistem',
+                            ]);
+                        }
+
                         break;
                     
                     case 'dibatalkan':
-                        $detail_kelas = DetailKelas::with([
-                            'Kelas' => function($query_kelas){
-                                $query_kelas->withTrashed();
-                            },
-                            'transaksi' => function($query){
-                                $query->where('status','dibatalkan_user')
-                                        ->orWhere('status','ditolak_admin')
-                                            ->orWhere('status','expired_system')->withTrashed();
-                            },
-                            ])->whereHas('Transaksi',function($query_2){
-                                $query_2->where('status','dibatalkan_user')
+                        // FILTER KELAS
+                        $kelas_filter = function($query_kelas){
+                            $query_kelas->whereHas("Pendaftaran")->with(['Pengajar' => function($query_pengajar){
+                                $query_pengajar->withTrashed();
+                            }]);
+                        };
+
+                        // FILTER TRANSAKSI
+                        $transaksi_filter = function($query_transaksi){
+                            $query_transaksi->where('status','dibatalkan_user')
                                             ->orWhere('status','ditolak_admin')
-                                                ->orWhere('status','expired_system')->withTrashed();
-                            })->whereHas('User')
-                            ->where('id_user',Auth::user()->id)->get();
+                                            ->orWhere('status','expired_system')->withTrashed();
+                        };
+
+                        try{
                             
-                        return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+                            $detail_kelas = DetailKelas::with([
+                                'Kelas' => $kelas_filter,
+                                'transaksi' => $transaksi_filter,
+                                ])
+                                ->whereHas("Kelas",$kelas_filter)
+                                ->whereHas('Transaksi',$transaksi_filter)
+                                ->where('id_user',Auth::user()->id)->get();
+                                
+                            return view('user-dashboard.user-kelas-saya.user-kelas-saya',compact(['detail_kelas','filter']));
+
+                        }catch(QueryException $err){
+                            return redirect()->back()->with([
+                                'status' => 'fail',
+                                'icon' => 'error',
+                                'title' => 'Gagal Mendapatkan Kelas',
+                                'message' => 'Kelas tidak ditemukan di dalam sistem',
+                            ]);
+                        }
+
                         break;
 
                     default:

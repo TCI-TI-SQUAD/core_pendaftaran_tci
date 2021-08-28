@@ -11,8 +11,8 @@ class JadwalKelas extends Model
     
     protected $fillable = [
         'id_kelas',
-        'hari'.
-        'tanggal_waktu_mulai',
-        'tanggal_waktu_selesai'
+        'hari',
+        'waktu_mulai',
+        'waktu_selesai',
     ];
 }

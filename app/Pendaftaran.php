@@ -12,7 +12,14 @@ class Pendaftaran extends Model
     use SoftDeletes;
     
     protected $fillable = [
-        'nama_pendaftaran','tanggal_mulai_pendaftaran','tanggal_selesai_pendaftaran','status','keterangan','created_at','archived_at','deleted_at'
+        'nama_pendaftaran',
+        'tanggal_mulai_pendaftaran',
+        'tanggal_selesai_pendaftaran',
+        'status',
+        'keterangan',
+        'created_at',
+        'archived_at',
+        'deleted_at'
     ];
 
     public function Kelas(){

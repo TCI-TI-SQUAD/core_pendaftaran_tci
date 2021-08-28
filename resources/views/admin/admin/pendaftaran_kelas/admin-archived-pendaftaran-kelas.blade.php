@@ -2,20 +2,16 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Pendaftaran Kelas')
+@section('page-name-header','Archived Pendaftaran Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
-<li class="breadcrumb-item active">Pendaftaran Kelas</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
+<li class="breadcrumb-item active">Archived Pendaftaran Kelas</li>
 @endsection
 
 @section('content')
 <div class="row">
-    <div class="col-12 mb-4">
-        <a href="{{ route('admin.trashed.pendaftarankelas') }}" class="btn btn-sm btn-info"><i class="far fa-edit"></i> LIHAT TRASHED PENDAFTARAN</a>
-        <a href="{{ route('admin.index.archived.pendaftarankelas') }}" class="btn btn-sm btn-warning"><i class="far fa-edit"></i> LIHAT ARSIP PENDAFTARAN</a>
-        <a href="{{ route('admin.create.pendaftarankelas') }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT PENDAFTARAN BARU</a>
-    </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive wrap" width="100%" id="table_id">
         <thead>
@@ -123,7 +119,7 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.pendaftarandata') }}",
+                "url": "{{ Route('admin.ajax.archived.pendaftarankelas') }}",
                 "type": "POST",
                 "data":{
                     "_token": "{{ csrf_token() }}"
@@ -142,47 +138,22 @@
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.pendaftarankelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.pendaftarankelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><button class="btn text-white btn-sm btn-warning" onclick="archivePendaftaranKelas('+data+')"><i class="fas fa-file-archive"></i></button><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="form-archived-'+data+'" method="POST" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form><form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form>';
+                        return '<button class="btn btn-sm btn-info" onclick="unArchivedPendaftaranKelas('+data+')"><i class="fas fa-trash-restore"></i></button><form id="form-unarchived-'+data+'" method="POST" action="{{ route("admin.unarchived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
                     }
                 }
             ],
         });
     } );
 
-    function detailData(index){
-        try{
-            let data = table.row(index).data();
-
+    function unArchivedPendaftaranKelas(index){
             Swal.fire({
-                title: 'DETAIL PENGUMUMAN',
-                html: 
-                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;max-height:70vh;overflow:auto;">'+
-                data.pengumuman+
-                '</div>'
-            })
-        }catch(err){
-            Swal.fire({
-                title: 'OPPSS Something Wrong',
-                html: 
-                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;">'+
-                "OPPS... SOMETHING WRONG"+
-                '</div>'
-            })
-        }
-        
-    }
-
-    function deletePendaftaranKelas(index){
-            Swal.fire({
-            title: 'Archived Pendaftaran Ini ?',
+            title: 'unArchived Pendaftaran Ini ?',
             html: 
             '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
             '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
-            '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
-            '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
+            '<li>unArchived tidak akan mempengaruhi perilaku sistem</li>'+
+            '<li>Pendaftaran kelas yang telah dikeluarkan hanya akan tampil di halaman index pendaftaran kelas setelah dilakukan unArchived</li>'+
+            '<li>Pendaftaran yang sudah tidak diperlukan sebaiknya dibiarkan sebagai Archived</li>'+
             '</ul>'
             ,
             icon:'warning',
@@ -193,37 +164,12 @@
             }).then((result) => {
                 
             if (result.isConfirmed) {
-                $('#delete-pendaftaran-kelas-'+index).submit();
+                $('#form-unarchived-'+index).submit();
             } else if (result.isDenied) {
 
             }
             })
-        }
-    
-        function archivePendaftaranKelas(index){
-            Swal.fire({
-            title: 'Archive Pendaftaran Kelas Ini ?',
-            html: 
-            '<p>Berikut merupakan effect apabila admin melakukan Archive Pendaftaran Kelas</p>'+
-            '<ul class="text-left">'+
-            '<li>Archive dapat digunakan untuk menyimpan Pendaftaran yang dirasa sudah tidak diperlukan untuk tampil di halaman index Pendaftaran </li>'+
-            '<li>Tidak akan ada yang terjadi apabila anda melakukan Archive sebuah pendaftaran, Pendaftaran hanya pindah ke halaman Archive tanpa ada efek pada sisi User </li>'+
-            '</ul>'
-            ,
-            icon:'warning',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Archive`,
-            denyButtonText: `Batal`,
-            }).then((result) => {
-                
-            if (result.isConfirmed) {
-                $('#form-archived-'+index).submit();
-            } else if (result.isDenied) {
-
-            }
-            })
-        }
+    }
     
     // SWEETALERT2
         @if(Session::has('status'))

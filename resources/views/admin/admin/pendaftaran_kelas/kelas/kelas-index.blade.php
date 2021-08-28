@@ -2,7 +2,7 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Pendaftaran Kelas')
+@section('page-name-header','Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
@@ -35,6 +35,7 @@
             <th scope="col">Tanggal Mulai</th>
             <th scope="col">Tanggal Selesai</th>
             <th scope="col">Kuota</th>
+            <th scope="col">Peserta</th>
             <th scope="col">Harga</th>
             <th scope="col">Status</th>
             <th scope="col">Created at</th>
@@ -70,7 +71,6 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
 <script>
     let table;
     $(document).ready( function () {
@@ -147,6 +147,7 @@
                 { "data": "tanggal_mulai" },
                 { "data": "tanggal_selesai" },
                 { "data": "kuota" },
+                { "data": "detail_kelas_count" },
                 {
                     data: "harga",title:"Harga",
                     render: function ( data, type, row, meta ) {
@@ -159,7 +160,7 @@
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.pendaftarankelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.pendaftarankelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
+                        return '<a href="{{ route("admin.detail.kelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.pendaftarankelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
                     }
                 }
             ],

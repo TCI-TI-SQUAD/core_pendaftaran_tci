@@ -194,9 +194,29 @@ use Illuminate\Support\Facades\Route;
                     Route::get('edit/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPendaftaranKelasController@editPendaftaranKelas')->name('admin.edit.pendaftarankelas');
                     Route::put('edit/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@storeEditPendaftaranKelas')->name('admin.store.edit.pendaftarankelas');
 
-                    Route::put('archive/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@archivedPendaftaranKelas')->name('admin.archived.pendaftarankelas');
-
                     Route::delete('delete/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@deletePendaftaranKelas')->name('admin.delete.pendaftarankelas');
+
+                    // TRASHED PENDAFTARAN
+                        Route::get('trashed/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@indexTrashedPendaftaranKelas')->name('admin.trashed.pendaftarankelas');
+
+                        Route::put('restore/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@restorePendaftaranKelas')->name('admin.restore.pendaftarankelas');
+
+                        // AJAX TRASEHD PENDAFTARAN
+                            Route::post('trashedpendaftarankelasdata','admin\pendaftaran_kelas\AdminPendaftaranKelasController@ajaxTrashedPendaftaranKelas')->name('admin.ajax.trashed.pendaftarankelas');
+                        // END
+                    // END
+
+                    // ARCHIVED PENDAFTARAN
+                        Route::get("archived/pendaftarankelas",'admin\pendaftaran_kelas\AdminPendaftaranKelasController@indexArchivedPendaftaranKelas')->name('admin.index.archived.pendaftarankelas');
+
+                        Route::put('archive/pendaftarankelas','admin\pendaftaran_kelas\AdminPendaftaranKelasController@archivedPendaftaranKelas')->name('admin.archived.pendaftarankelas');
+
+                        Route::put("unarchived/pendaftarankelas",'admin\pendaftaran_kelas\AdminPendaftaranKelasController@unArchivedPendaftaranKelas')->name('admin.unarchived.pendaftarankelas');
+
+                        // AJAX ARCHIVED PENDAFTARAN
+                            Route::post("archivedpendaftarankelasdata",'admin\pendaftaran_kelas\AdminPendaftaranKelasController@ajaxArchivedPendaftaranData')->name('admin.ajax.archived.pendaftarankelas');
+                        // END
+                    // END
 
                     // PENGUMUMAN PENDAFTARAN
                         Route::get('pengumuman/pendaftarankelas/{id?}','admin\pendaftaran_kelas\AdminPengumumanPendaftaranKelasController@index')->name('admin.index.pengumuman.pendaftarankelas');
@@ -215,9 +235,12 @@ use Illuminate\Support\Facades\Route;
                     // KELAS PENDAFTARAN
                         Route::get('kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@index')->name('admin.kelas');
 
-                        Route::get('create/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@createKelas')->name('admin.create.kelas');
+                        Route::get('detail/kelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@detailKelas')->name('admin.detail.kelas');
 
+                        Route::get('create/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@createKelas')->name('admin.create.kelas');
                         Route::post('create/kelas/pendaftarankelas','admin\pendaftaran_kelas\kelas\AdminKelasController@postCreateKelas')->name('admin.post.create.kelas');
+
+                        Route::delete('delete/kelas','admin\pendaftaran_kelas\kelas\AdminKelasController@deleteKelas')->name('admin.delete.kelas');
 
                         // AJAX
                             Route::post('kelasdata','admin\pendaftaran_kelas\kelas\AdminKelasController@ajaxKelasData')->name('admin.ajax.kelas');

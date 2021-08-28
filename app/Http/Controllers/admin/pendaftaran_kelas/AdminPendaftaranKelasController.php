@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin\pendaftaran_kelas;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Illuminate\Database\QueryException;
 
 use App\Pendaftaran;
 use Carbon\Carbon;
@@ -141,6 +142,58 @@ class AdminPendaftaranKelasController extends Controller
 
     }
 
+    public function indexArchivedPendaftaranKelas(Request $request){
+        return view('admin.admin.pendaftaran_kelas.admin-archived-pendaftaran-kelas');
+    }
+
+    public function unArchivedPendaftaranKelas(Request $request){
+        // VALIDATOR
+            $validator = Validator::make($request->all(),[
+                'id' => 'required|exists:pendaftarans,id',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Tidak Ditemukan Di Dalam Sistem !',
+                    'message' => 'Pastikan pendaftaran terkait tidak dihapus sebelumnya'
+                ]);
+            }
+        // END
+
+        // MAIN LOGIC
+            try{
+                Pendaftaran::findOrFail($request->id)->update([
+                    'archived_at' => null,
+                ]);
+            }catch(ModelNotFoundException $err){
+                return redirect()->route('admin.index.archived.pendaftarankelas')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Tidak Ditemukan Di Dalam Sistem !',
+                    'message' => 'Pastikan pendaftaran terkait tidak dihapus sebelumnya'
+                ]);
+            }catch(QueryException $err){
+                return redirect()->route('admin.index.archived.pendaftarankelas')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Gagal melakukan unArchived',
+                    'message' => 'Sistem gagal melakukan unArchived, mohon hubungi developer sistem !'
+                ]);
+            }
+        // END
+
+        // RETURN
+            return redirect()->route('admin.index.archived.pendaftarankelas')->with([
+                'status' => 'fail',
+                'icon' => 'success',
+                'title' => 'unArchived Berhasil Dilakukan',
+                'message' => 'Pendaftaran terkait telah dipindahkan ke halaman index'
+            ]);
+        // END
+    }
+
     public function archivedPendaftaranKelas(Request $request){
         // SECURITY
             $validator = Validator::make($request->all(),[
@@ -180,7 +233,7 @@ class AdminPendaftaranKelasController extends Controller
                 'message' => 'Arsip pendaftaran berhasil dilakukan',
             ]);
         // END
-    }
+    }    
 
     public function detailPendaftaranKelas(Request $request){
         // SECURITY
@@ -245,8 +298,82 @@ class AdminPendaftaranKelasController extends Controller
         // END
     }
 
+    public function indexTrashedPendaftaranKelas(){
+        return view('admin.admin.pendaftaran_kelas.admin-trashed-pendaftaran-kelas');
+    }
+
+    public function restorePendaftaranKelas(Request $request){
+        // SECURITY
+            $validator = Validator::make($request->all(),[
+                'id' => 'required|exists:pendaftarans,id',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->route('admin.trashed.pendaftarankelas')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Kelas Tidak Ditemukan',
+                    'message' => 'Pendaftaran kelas tidak ditemukan di dalam sistem'
+                ]);
+            }
+        // END
+
+        // MAIN LOGIC
+            try{
+                Pendaftaran::withTrashed()->findOrFail($request->id)->restore();
+            }catch(ModelNotFoundException $err){
+                return redirect()->route('admin.trashed.pendaftarankelas')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Kelas Tidak Ditemukan',
+                    'message' => 'Pendaftaran kelas tidak ditemukan di dalam sistem'
+                ]);
+            }catch(QueryException $err){
+                return redirect()->route('admin.trashed.pendaftarankelas')->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Pendaftaran Kelas Tidak Ditemukan',
+                    'message' => 'Pendaftaran kelas tidak ditemukan di dalam sistem'
+                ]);
+            }
+        // END
+
+        // RETURN
+            return redirect()->route('admin.trashed.pendaftarankelas')->with([
+                'status' => 'success',
+                'icon' => 'success',
+                'title' => 'Berhasil Restore Pendaftaran !',
+                'message' => 'Pendaftaran telah berhasil dipulihkan'
+            ]);
+        // END
+    }
+
     public function ajaxPendaftaranData(){
         $pendaftarans = json_encode(["data" => Pendaftaran::withCount('Kelas')->where("archived_at",null)->get()
+                                        ->map(function($value,$index){
+                                            $value['number'] = $index += 1;
+                                            $value['tanggal_mulai_pendaftaran'] = Carbon::create($value['tanggal_mulai_pendaftaran'])->translatedFormat("l, Y-m-d H:i:s");
+                                            $value['tanggal_selesai_pendaftaran'] = Carbon::create($value['tanggal_selesai_pendaftaran'])->translatedFormat("l, Y-m-d H:i:s");
+                                            return $value;
+                                        })]);
+
+        return $pendaftarans;
+    }
+
+    public function ajaxArchivedPendaftaranData(){
+        $pendaftarans = json_encode(["data" => Pendaftaran::withCount('Kelas')->whereNotNull("archived_at")->get()
+                                        ->map(function($value,$index){
+                                            $value['number'] = $index += 1;
+                                            $value['tanggal_mulai_pendaftaran'] = Carbon::create($value['tanggal_mulai_pendaftaran'])->translatedFormat("l, Y-m-d H:i:s");
+                                            $value['tanggal_selesai_pendaftaran'] = Carbon::create($value['tanggal_selesai_pendaftaran'])->translatedFormat("l, Y-m-d H:i:s");
+                                            return $value;
+                                        })]);
+
+        return $pendaftarans;
+    }
+
+    public function ajaxTrashedPendaftaranKelas(){
+        $pendaftarans = json_encode(["data" => Pendaftaran::withCount('Kelas')->onlyTrashed()->get()
                                         ->map(function($value,$index){
                                             $value['number'] = $index += 1;
                                             $value['tanggal_mulai_pendaftaran'] = Carbon::create($value['tanggal_mulai_pendaftaran'])->translatedFormat("l, Y-m-d H:i:s");
