@@ -74,7 +74,7 @@
                                     @if($errors->has('email')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('email') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas  fa-phone-square-alt"></i> Phone Number</label>
-                                    <input name="phone_number" type="tel" class="form-control @if($errors->has('phone_number')) border border-danger @endif" value="{{ $user->phone_number }}" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" >
+                                    <input name="phone_number" type="tel" class="form-control @if($errors->has('phone_number')) border border-danger @endif" value="{{ $user->phone_number }}" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15" >
                                     @if($errors->has('phone_number')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('phone_number') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fab fa-line"></i> Line</label>
@@ -82,7 +82,7 @@
                                     @if($errors->has('line')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('line') }}</small></p> @endif
 
                                     <label class="mt-2"> <i class="fab fa-whatsapp-square"></i> WA</label>
-                                    <input name="wa" type="tel" class="form-control @if($errors->has('wa')) border border-danger @endif" value="{{ $user->wa }}" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15">
+                                    <input name="wa" type="tel" class="form-control @if($errors->has('wa')) border border-danger @endif" value="{{ $user->wa }}" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15">
                                     @if($errors->has('wa')) <p class="text-danger m-0 p-0"><small>{{ $errors->first('wa') }}</small></p> @endif
 
                                     <label class="mt-2"><i class="fas fa-map-marker-alt"></i> Alamat Lengkap</label>

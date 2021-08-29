@@ -237,6 +237,8 @@ use Illuminate\Support\Facades\Route;
 
                         Route::get('detail/kelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@detailKelas')->name('admin.detail.kelas');
 
+                        Route::get('edit/kelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@editKelas')->name('admin.edit.kelas');
+
                         Route::get('create/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@createKelas')->name('admin.create.kelas');
                         Route::post('create/kelas/pendaftarankelas','admin\pendaftaran_kelas\kelas\AdminKelasController@postCreateKelas')->name('admin.post.create.kelas');
 

@@ -78,13 +78,15 @@
 
     function peringatanUpdatePendaftaran(){
             Swal.fire({
-            title: 'Yakin Update Pendaftaran Baru ?',
+            title: 'Yakin Edit Pendaftaran ?',
             html:
             '<div style="max-height:70vh;overflow:auto;">'+
-            '<p>Berikut merupakan effect apabila admin membuat pendaftaran baru</p>'+
+            '<p>Berikut merupakan effect apabila admin melakuakn update pendaftaran baru</p>'+
             '<ul class="text-left">'+
             '<li>Pendaftaran yang berstatus aktif akan terlihat pada sisi user</li>'+
-            '<li>Pendaftaran yang baru dibuat tidak langsung berisikan kelas melainkan admin harus menginputkan kelas setelah membuat pendaftaran baru</li>'+
+            '<li>Mengubah nama, tanggal mulai dan selesai atau keterangan <span class="text-danger font-weight-bold">TIDAK AKAN MENGUBAH</span> Invoice / Transaksi yang telah dilakukan oleh user jadi mohon bijak dalam melakukan update data Pendaftaran Kelas</li>'+
+            '<li>Tanggal mulai harus lebih <span class="text-info">AWAL</span> dari pada tanggal selesai </li>'+
+            '<li>Input tanggal mulai <span class="text-info">SEBELUM HARI INI</span> ini diizinkan</li>'+
             '<li>Pendaftaran dapat diakses dalam jangka waktu tanggal mulai pendaftaran hingga tanggal selesai pendaftaran</li>'+
             '<li>Jadi apabila tanggal saat ini berada diluar range tanggal mulai dan selesai maka pendaftaran tidak dapat dilakukan oleh user walaupun status pendaftaran aktif</li>'+
             '<li>Perhatikan dengan baik apabila melakukan update pada tanggal</li>'+

@@ -2,14 +2,14 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Create Kelas')
+@section('page-name-header','Update Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[$pendaftaran->id]) }}">Detail Pendaftaran Kelas</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.kelas',[$pendaftaran->id]) }}">Kelas</a></li>
-<li class="breadcrumb-item active">Create Kelas</li>
+<li class="breadcrumb-item active">Updatte Kelas</li>
 @endsection
 
 @section('content')
@@ -27,61 +27,63 @@
 
                     <div class="col-12 col-lg-6">
                         <label class="mt-2" for="exampleForm1">NAMA KELAS</label>
-                        <input name="nama_kelas" type="text" id="exampleForm1" class="form-control @error('nama_kelas') border border-danger @enderror" placeholder="Masukkan Nama Kelas" value="{{ old('nama_kelas') }}">
+                        <input name="nama_kelas" type="text" id="exampleForm1" class="form-control @error('nama_kelas') border border-danger @enderror" placeholder="Masukkan Nama Kelas" value="{{ $kelas->nama_kelas }}">
                         @error('nama_kelas') <p class="p-m m-0 text-danger"><small>{{ $errors->first('nama_kelas') }}</small></p> @enderror
 
                         <label>HSK</label>
                         <select class="selectpicker w-100 @error('hsk') border border-danger @enderror" name="hsk">
                             <option value="">Pilih HSK</option>
-                            <option value="pemula" @if(old('hsk') == 'pemula') selected @endif>pemula</option>
-                            <option value="hsk 1" @if(old('hsk') == 'hsk 1') selected @endif>HSK 1</option>
-                            <option value="hsk 2" @if(old('hsk') == 'hsk 2') selected @endif>HSK 2</option>
-                            <option value="hsk 3" @if(old('hsk') == 'hsk 3') selected @endif>HSK 3</option>
-                            <option value="hsk 4" @if(old('hsk') == 'hsk 4') selected @endif>HSK 4</option>
-                            <option value="hsk 5" @if(old('hsk') == 'hsk 5') selected @endif>HSK 5</option>
-                            <option value="hsk 6" @if(old('hsk') == 'hsk 6') selected @endif>HSK 6</option>
+                            <option value="pemula" @if( $kelas->hsk == 'pemula') selected @endif>pemula</option>
+                            <option value="hsk 1" @if( $kelas->hsk == 'hsk 1') selected @endif>HSK 1</option>
+                            <option value="hsk 2" @if( $kelas->hsk == 'hsk 2') selected @endif>HSK 2</option>
+                            <option value="hsk 3" @if( $kelas->hsk == 'hsk 3') selected @endif>HSK 3</option>
+                            <option value="hsk 4" @if( $kelas->hsk == 'hsk 4') selected @endif>HSK 4</option>
+                            <option value="hsk 5" @if( $kelas->hsk == 'hsk 5') selected @endif>HSK 5</option>
+                            <option value="hsk 6" @if( $kelas->hsk == 'hsk 6') selected @endif>HSK 6</option>
                         </select>
                         @error('hsk') <p class="text-danger m-0 p-0"><small>{{ $errors->first('hsk') }}</small></p> @enderror
 
                         <label class="mt-2" for="exampleForm2">TANGGAL MULAI KELAS</label>
-                        <input name="tanggal_mulai" type="date" id="exampleForm2" class="form-control @error('tanggal_mulai') border border-danger @enderror" value="tanggal_mulai">
+                        <input name="tanggal_mulai" type="date" id="exampleForm2" class="form-control @error('tanggal_mulai') border border-danger @enderror" value="{{ $kelas->tanggal_mulai }}">
                         @error('tanggal_mulai') <p class="text-danger m-0 p-0"><small>{{ $errors->first('tanggal_mulai') }}</small></p> @enderror
                         
                         <label class="mt-2" for="exampleForm3">TANGGAL SELESAI KELAS</label>
-                        <input name="tanggal_selesai" type="date" id="exampleForm3" class="form-control @error('tanggal_selesai') border border-danger @enderror" value="tanggal_selesai">
+                        <input name="tanggal_selesai" type="date" id="exampleForm3" class="form-control @error('tanggal_selesai') border border-danger @enderror" value="{{ $kelas->tanggal_selesai }}">
                         @error('tanggal_selesai') <p class="text-danger m-0 p-0"><small>{{ $errors->first('tanggal_selesai') }}</small></p> @enderror
 
                         <label class="mt-2">KELAS BERBAYAR</label>
                         <div class="custom-control custom-checkbox text-center @error('isberbayar') border border-danger @enderror" onchange="showInputHarga()">
-                            <input name="isberbayar" type="checkbox" class="custom-control-input" id="defaultUnchecked" value="1" @if(old('isberbayar') == 1) checked @endif>
+                            <input name="isberbayar" type="checkbox" class="custom-control-input" id="defaultUnchecked" value="1" @if( $kelas->isBerbayar ) checked @endif>
                             <label class="custom-control-label" for="defaultUnchecked">CENTANG APABILA IYA</label>
                             @error('isberbayar') <p class="text-danger m-0 p-0"><small>{{ $errors->first('isberbayar') }}</small></p> @enderror
                         </div>
                         
-                        <div id="input_harga" class="@if(old('harga') == null) d-none @endif">
+                        <div id="input_harga" class="@if(!$kelas->isBerbayar) d-none @endif">
                             <label class="mt-2">HARGA</label>
                             <div class="input-group mb-2 @error('harga') border border-danger @enderror">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text">Rp. </div>
                                 </div>
-                                <input value="{{ old('harga') }}" name="harga" id="money" type="text" class="form-control" id="inlineFormInputGroup" placeholder="Harga Pendaftaran Kelas">
+                                <input value="{{ number_format($kelas->harga,0,'.','.') }}" name="harga" id="money" type="text" class="form-control" id="inlineFormInputGroup" placeholder="Harga Pendaftaran Kelas">
                             </div>
                             @error('harga') <p class="m-0 p-0 text-danger"><small>{{ $errors->first('harga') }}</small></p>@enderror
                         </div>
 
                         <label class="mt-2" for="exampleForm3">KUOTA</label>
-                        <input name="kuota" type="number" id="exampleForm3" class="form-control @error('kuota') border border-danger @enderror" placeholder="Kuota maksimal kelas" value="{{ old('kuota') }}">
+                        <input name="kuota" type="number" id="exampleForm3" class="form-control @error('kuota') border border-danger @enderror" placeholder="Kuota maksimal kelas" value="{{ $kelas->kuota }}">
                         @error('kuota') <p class="m-0 p-0 text-danger"><small>{{ $errors->first('kuota') }}</small></p> @enderror
 
-                        <label class="mt-2">IMAGE KELAS</label>
+                        <label class="mt-2">IMAGE KELAS</label><br>
+                        <a target="__blank" href="{{ asset('storage\image_kelas').'/'.$kelas->logo_kelas }}" class="btn btn-sm btn-info mb-2">LIHAT IMAGE KELAS SAAT INI</a>
                         <div class="custom-file @error('logo_kelas') border border-danger @enderror">
                             <input name="logo_kelas" id="image_kelas" type="file" class="custom-file-input" id="validatedCustomFile">
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <label class="custom-file-label" for="validatedCustomFile">Ganti Image</label>
                         </div>
-                        @error('logo_kelas') <p class="m-0 p-0 text-danger"><small>$errors->first('logo_kelas')</small></p> @enderror
+                        @error('logo_kelas') <p class="m-0 p-0 text-danger"><small>{{$errors->first('logo_kelas')}}</small></p> @enderror
 
                         <div class="col-12 p-0 m-0 mt-2">
-                            <label>DAPAT DIAKSES</label>
+                            <label>DAPAT DIAKSES</label><br>
+                            <button class="btn btn-info btn-sm my-2" type="button" onclick="resetCheckbox()">RESET CHECKBOX</button>
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">UMUM</h3>
@@ -90,10 +92,16 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-check form-check-inline p-2">
-                                            <input class="form-check-input" type="checkbox" name="umum[]" id="inlineRadio3" value="0">
-                                            <label class="form-check-label" for="inlineRadio3">UMUM</label>
-                                        </div>
+                                        @if(isset($umums))
+                                            @if($umums->count()>0)
+                                                @foreach($umums as $index => $umum)
+                                                    <div class="form-check form-check-inline p-2">
+                                                        <input class="form-check-input" type="checkbox" name="prodi[]" value="{{$umum->id}}" @if($umum->checked) checked checked-before @else unchecked-before @endif>
+                                                        <label class="form-check-label" for="inlineRadio3">{{ $umum->nama }}</label>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
 
@@ -109,7 +117,7 @@
                                             @if($prodis->count()>0)
                                                 @foreach($prodis as $index => $prodi)
                                                     <div class="form-check form-check-inline p-2">
-                                                        <input class="form-check-input prodi-checkbox" type="checkbox" name="prodi[]" value="{{$prodi->id}}">
+                                                        <input class="form-check-input prodi-checkbox" type="checkbox" name="prodi[]" value="{{$prodi->id}}" @if($prodi->checked) checked checked-before @else unchecked-before @endif>
                                                         <label class="form-check-label" for="inlineRadio3">{{ $prodi->getFullProdiName() }}</label>
                                                     </div>
                                                 @endforeach
@@ -117,7 +125,7 @@
                                         @endif
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-sm btn-primary" onclick="$('.prodi-checkbox').click()" type="button">SEMUA SEKOLAH</button>
+                                        <button class="btn btn-sm btn-primary" onclick="$('.prodi-checkbox').prop('checked', true)" type="button">SEMUA SEKOLAH</button>
                                     </div>
                                 </div>
 
@@ -133,7 +141,7 @@
                                             @if($sekolahs->count()>0)
                                                 @foreach($sekolahs as $index => $sekolah)
                                                     <div class="form-check form-check-inline p-2">
-                                                        <input class="form-check-input sekolah-checkbox" type="checkbox" name="sekolah[]" value="{{$sekolah->id}}">
+                                                        <input class="form-check-input sekolah-checkbox" type="checkbox" name="sekolah[]" value="{{$sekolah->id}}" @if($sekolah->checked) checked checked-before @else unchecked-before @endif>
                                                         <label class="form-check-label" for="inlineRadio3">{{ $sekolah->nama_sekolah }}</label>
                                                     </div>
                                                 @endforeach
@@ -141,7 +149,7 @@
                                         @endif
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-sm btn-primary" onclick="$('.sekolah-checkbox').click()" type="button">SEMUA SEKOLAH</button>
+                                        <button class="btn btn-sm btn-primary" onclick="$('.sekolah-checkbox').prop('checked', true)" type="button">SEMUA SEKOLAH</button>
                                     </div>
                                 </div>
 
@@ -157,7 +165,7 @@
                                             @if($instansis->count()>0)
                                                 @foreach($instansis as $index => $instansi)
                                                     <div class="form-check form-check-inline p-2">
-                                                        <input class="form-check-input instansi-checkbox" type="checkbox" name="instansi[]" value="{{$instansi->id}}">
+                                                        <input class="form-check-input instansi-checkbox" type="checkbox" name="instansi[]" value="{{$instansi->id}}" @if($instansi->checked) checked checked-before @else unchecked-before @endif>
                                                         <label class="form-check-label" for="inlineRadio3">{{ $instansi->nama_instansi }}</label>
                                                     </div>
                                                 @endforeach
@@ -165,7 +173,7 @@
                                         @endif
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-sm btn-primary" onclick="$('.instansi-checkbox').click()" type="button">SEMUA SEKOLAH</button>
+                                        <button class="btn btn-sm btn-primary" onclick="$('.instansi-checkbox').prop('checked', true)" type="button">SEMUA SEKOLAH</button>
                                     </div>
                                 </div>
                         </div>
@@ -173,8 +181,8 @@
                         <label>STATUS</label>
                         <select class="selectpicker w-100 @error('status') border border-danger @enderror" name="status">
                             <option value="">Pilih Status Pendaftaran</option>
-                            <option value="buka" @if(old('status') == 'buka') selected @endif>BUKA</option>
-                            <option value="tutup" @if(old('status') == 'tutup') selected @endif>TUTUP</option>
+                            <option value="buka" @if($kelas->status == 'buka') selected @endif>BUKA</option>
+                            <option value="tutup" @if($kelas->status == 'tutup') selected @endif>TUTUP</option>
                         </select>
                         @error('status') <p class="text-danger m-0 p-0"><small>{{ $errors->first('status') }}</small></p> @enderror
                         
@@ -187,7 +195,7 @@
                             @if(isset($pengajars))
                                 @if($pengajars->count() > 0)
                                     @foreach($pengajars as $index => $pengajar)
-                                        <option value="{{ $pengajar->id }}" @if(old('id_pengajar') == $pengajar->id) selected @endif>{{ $pengajar->nama_pengajar }}</option>
+                                        <option value="{{ $pengajar->id }}" @if(($kelas->id_pengajar) == $pengajar->id) selected @endif>{{ $pengajar->nama_pengajar }}</option>
                                     @endforeach
                                 @endif
                             @endif
@@ -217,43 +225,49 @@
                                     <label for="">WAKTU SELESAI</label>
                                 </div>
                             </div>
-                            <div class="container jadwal-container">
-                                <div class="row p-2 jadwal-wrapper">
-                                    <div class="col-12 col-lg-4">
-                                        <label class="d-block d-lg-none m-2">HARI</label>
-                                        <select class="custom-select w-100" name="jadwal[day][]">
-                                            <option value="">Pilih Hari</option>
-                                            <option value="sunday">SUNDAY</option>
-                                            <option value="monday">MONDAY</option>
-                                            <option value="tuesday">TUESDAY</option>
-                                            <option value="wednesday">WEDNESDAY</option>
-                                            <option value="thursday">THURSDAY</option>
-                                            <option value="friday">FRIDAY</option>
-                                            <option value="saturday">SATURDAY</option>
-                                        </select>
-                                    </div>
+                            @if(isset($kelas->JadwalKelas))
+                                @if($kelas->JadwalKelas->count() > 0)
+                                    @foreach($kelas->JadwalKelas as $index => $jadwal_kelas)
+                                        <div class="container jadwal-container">
+                                            <div class="row p-2 jadwal-wrapper">
+                                                <div class="col-12 col-lg-4">
+                                                    <label class="d-block d-lg-none m-2">HARI</label>
+                                                    <select class="custom-select w-100" name="jadwal[day][]">
+                                                        <option value="">Pilih Hari</option>
+                                                        <option value="sunday" @if($jadwal_kelas->hari == 'sunday') selected @endif</option>)>SUNDAY</option>
+                                                        <option value="monday" @if($jadwal_kelas->hari == 'monday') selected @endif>MONDAY</option>
+                                                        <option value="tuesday" @if($jadwal_kelas->hari == 'tuesday') selected @endif>TUESDAY</option>
+                                                        <option value="wednesday" @if($jadwal_kelas->hari == 'wednesday') selected @endif>WEDNESDAY</option>
+                                                        <option value="thursday" @if($jadwal_kelas->hari == 'thursday') selected @endif>THURSDAY</option>
+                                                        <option value="friday" @if($jadwal_kelas->hari == 'friday') selected @endif>FRIDAY</option>
+                                                        <option value="saturday" @if($jadwal_kelas->hari == 'saturday') selected @endif>SATURDAY</option>
+                                                    </select>
+                                                </div>
 
-                                    <div class="col-lg-4 col-12">
-                                        <label class="d-block d-lg-none m-2">WAKTU MULAI</label>
-                                        <input type="time" class="form-control" name="jadwal[waktu_mulai][]">
-                                    </div>
+                                                <div class="col-lg-4 col-12">
+                                                    <label class="d-block d-lg-none m-2">WAKTU MULAI</label>
+                                                    <input type="time" class="form-control" name="jadwal[waktu_mulai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_mulai)->format('h:i') }}">
+                                                </div>
 
-                                    <div class="col-lg-4 col-12">
-                                        <label class="d-block d-lg-none m-2">WAKTU SELESAI</label>
-                                        <input type="time" class="form-control" name="jadwal[waktu_selesai][]">
-                                    </div>
+                                                <div class="col-lg-4 col-12">
+                                                    <label class="d-block d-lg-none m-2">WAKTU SELESAI</label>
+                                                    <input type="time" class="form-control" name="jadwal[waktu_selesai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_selesai)->format('h:i') }}">
+                                                </div>
 
-                                    <div class="bg-primary w-100 my-3" style="height:2px;"></div>
-                                </div>
-                            </div>
+                                                <div class="bg-primary w-100 my-3" style="height:2px;"></div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            @endif
                         </div>
                     </div>
 
                     <div class="col-12 text-center mt-3">
-                        <button class="btn btn-md w-100 d-lg-none d-inline-block btn-primary" type="submit" name="myButton">KIRIM</button>
+                        <button class="btn btn-md w-100 d-lg-none d-inline-block btn-primary" type="button"  onclick="updateKelas()" name="myButton">KIRIM</button>
                         <a href="{{ route('admin.kelas',[$pendaftaran->id]) }}" class="btn btn-md w-25 d-lg-inline-block d-none btn-danger">BATAL</a>
                         <a href="{{ route('admin.kelas',[$pendaftaran->id]) }}" class="btn btn-md w-100 mt-3 d-lg-none d-inline-block btn-danger">BATAL</a>
-                        <button class="btn btn-md w-25 d-lg-inline-block d-none btn-primary" type="submit"name="myButton" >KIRIM</button>
+                        <button class="btn btn-md w-25 d-lg-inline-block d-none btn-primary" type="button"  onclick="updateKelas()"name="myButton" >KIRIM</button>
                     </div>
                 </div>
             </form>
@@ -275,7 +289,11 @@
 <script>
     
     $("[data-card-widget='collapse']").click()
-    
+
+    function resetCheckbox(){
+        $("[checked-before]").prop('checked', true);
+        $("[unchecked-before]").prop('checked', false);
+    }
 
     $("#money").maskMoney({
             precision:0,
@@ -309,6 +327,33 @@
         }
 
     }
+
+    function updateKelas(){
+            Swal.fire({
+            title: 'Delete Pendaftaran Ini ?',
+            html: 
+            '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
+            '<ul class="text-left">'+
+            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
+            '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
+            '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
+            '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
+            '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
+            '</ul>'
+            ,
+            icon:'warning',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Batal`,
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $("form").submit();
+            } else if (result.isDenied) {
+
+            }
+            })
+        }
     
     // SWEETALERT2
         @if(Session::has('status'))

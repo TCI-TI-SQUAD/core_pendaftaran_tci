@@ -87,7 +87,7 @@ class AdminSiswaController extends Controller
         
                         $id_instansi = $request->instansi;
                     }else if($request->status == 'umum'){
-                        $id_instansi = 0;
+                        $id_instansi = 1;
                     }
                 }
             // END
@@ -278,7 +278,7 @@ class AdminSiswaController extends Controller
         
                         $id_instansi = $request->instansi;
                     }else if($request->status == 'umum'){
-                        $id_instansi = 0;
+                        $id_instansi = 1;
                     }
                 }
             // END

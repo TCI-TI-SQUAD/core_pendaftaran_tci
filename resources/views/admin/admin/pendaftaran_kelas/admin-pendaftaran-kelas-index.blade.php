@@ -174,7 +174,7 @@
 
     function deletePendaftaranKelas(index){
             Swal.fire({
-            title: 'Archived Pendaftaran Ini ?',
+            title: 'Delete Pendaftaran Ini ?',
             html: 
             '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
             '<ul class="text-left">'+
@@ -188,7 +188,7 @@
             icon:'warning',
             showDenyButton: true,
             showCancelButton: false,
-            confirmButtonText: `Archived`,
+            confirmButtonText: `Delete`,
             denyButtonText: `Batal`,
             }).then((result) => {
                 

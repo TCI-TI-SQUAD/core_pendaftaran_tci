@@ -56,7 +56,7 @@ class User extends Authenticatable
             case 'instansi':
                 return $this->belongsTo('App\Instansi','id_instansi','id')->first()->nama_instansi;
             case 'umum':
-                return "umum";
+                return $this->belongsTo("App\Umum",'id_instansi','id')->first()->nama;
         }
     }
 

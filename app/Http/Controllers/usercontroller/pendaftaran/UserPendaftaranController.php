@@ -45,21 +45,29 @@ class UserPendaftaranController extends Controller
 
         // MAIN LOGIC
             if(
-                Pendaftaran::where('status','aktif')->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
-                            ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))->count() > 0
+                Pendaftaran::where('status','aktif')
+                            ->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
+                            ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))
+                            ->count() > 0
             ){
                 try{
+                    // KELAS FILTER
+                    $kelas_filter = function($query){
+                        $query->withCount(['DetailKelas' => function($query_detail_kelas){
+                            $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
+                                $query_transaksi->where('status','!=','dibatalkan_user')
+                                                ->where('status','!=','expired_system')
+                                                ->where('status','!=','ditolak_admin');
+                                })->whereHas('User');
+                        }])->where('tanggal_mulai','>',date('Y-m-d'))
+                            ->whereHas('KelasKerjasama',function($query_4){
+                                $query_4->where('status',Auth::user()->status)->where('id_instansi',Auth::user()->id_instansi);
+                            });
+                    };
+
                     // AMBIL SEMUA PENDAFTARAN
-                    $semua_pendaftaran = Pendaftaran::with(['Kelas' => function($query){
-                                                            $query->withCount(['DetailKelas' => function($query_2){
-                                                                $query_2->whereHas('Transaksi',function($query_3){
-                                                                    $query_3->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
-                                                                })->whereHas('User');
-                                                            }])->where('tanggal_mulai','>',date('Y-m-d'))
-                                                                ->whereHas('KelasKerjasama',function($query_4){
-                                                                    $query_4->where('status',Auth::user()->status)->where('id_instansi',Auth::user()->id_instansi);
-                                                                });
-                                                        }])->with(['PengumumanPendaftaran'])
+                    $semua_pendaftaran = Pendaftaran::with(['Kelas' => $kelas_filter])
+                                                        ->with(['PengumumanPendaftaran'])
                                                         ->where('status','aktif')
                                                         ->whereDate('tanggal_mulai_pendaftaran','<=',date('Y-m-d'))
                                                         ->whereDate('tanggal_selesai_pendaftaran','>',date('Y-m-d'))

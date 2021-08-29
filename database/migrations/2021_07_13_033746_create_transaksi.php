@@ -21,6 +21,13 @@ class CreateTransaksi extends Migration
             $table->foreignId('id_detail_kelas');
             $table->string('nama_kelas',100);
             $table->string('nama_pendaftaran',100);
+
+            // $table->text('status_pemesan');
+            // $table->text('instansi_json');
+            // $table->text('pendaftaran_json');
+            // $table->text('kelas_json');
+            // $table->boolean('isBerbayar');
+            
             $table->string('nomor_transaksi_struct');
             $table->integer('total_pembayaran');
             $table->string('file_bukti_transaksi',200)->nullable();

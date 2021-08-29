@@ -151,7 +151,7 @@
                 {
                     data: "harga",title:"Harga",
                     render: function ( data, type, row, meta ) {
-                        return 'IDR '+data;
+                        return 'Rp. '+data;
                     }
                 },
                 { "data": "status" },
@@ -160,7 +160,7 @@
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.kelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.pendaftarankelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
+                        return '<a href="{{ route("admin.detail.kelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.kelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.pendaftarankelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
                     }
                 }
             ],
@@ -192,15 +192,16 @@
 
     function deletePendaftaranKelas(index){
             Swal.fire({
-            title: 'Archived Pendaftaran Ini ?',
+            title: 'Delete Kelas Ini ?',
             html: 
             '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
             '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
-            '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
-            '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
+            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar tidak akan mampu mengakses kelas ini</li>'+
+            '<li>Kelas yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED KELAS</span> </li>'+
+            '<li>Kelas yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
+            '<li>Apabila admin ingin mengarsipkan Kelas maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
+            '<li>Apabila admin ingin menghentikan pendaftaran ke kelas ini maka tutup kelas, melalui halaman <span class="text-info">EDIT KELAS</span> </li>'+
+            '<li>User <span class="text-danger font-weight-bold">YANG SUDAH MEMBAYAR</span> juga tidak mampu melihat kelas ini, jadi mohon bijak apabila akan menghapus kelas</li>'+
             '</ul>'
             ,
             icon:'warning',

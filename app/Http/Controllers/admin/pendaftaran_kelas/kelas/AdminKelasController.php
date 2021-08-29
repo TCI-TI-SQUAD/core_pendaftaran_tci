@@ -18,6 +18,7 @@ use App\Instansi;
 use App\Prodi;
 use App\Sekolah;
 use App\KelasKerjasama;
+use App\Umum;
 
 class AdminKelasController extends Controller
 {
@@ -73,15 +74,42 @@ class AdminKelasController extends Controller
 
         // MAIN LOGIC
             try{
-                $kelas = Kelas::whereHas("Pendaftaran")->withCount(['DetailKelas' => function($query_detail_kelas){
-                                    $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
-                                        $query_transaksi->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
-                                    })->whereHas('User');
-                                }])->findOrFail($request->id);
-
+                // DETAIL KELAS FILTER
+                $detail_kelas_filter = function($query_detail_kelas){
+                    $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
+                        $query_transaksi->where('status','!=','dibatalkan_user')
+                                        ->where('status','!=','expired_system')
+                                        ->where('status','!=','ditolak_admin');
+                    })->whereHas('User');
+                };
+                
+                $kelas = Kelas::whereHas("Pendaftaran")
+                                ->withCount(['DetailKelas' => $detail_kelas_filter])
+                                ->with(["KelasKerjasama"])
+                                ->findOrFail($request->id);
+                
+                $umum = $kelas->KelasKerjasama->where('status','umum')->values();
+                $siswa = $kelas->KelasKerjasama->where('status','siswa')->values();
+                $mahasiswa = $kelas->KelasKerjasama->where('status','mahasiswa')->values();
+                $instansi = $kelas->KelasKerjasama->where('status','instansi')->values();
+                
                 $pendaftaran = $kelas->Pendaftaran()->firstOrFail();
-
+                
             }catch(ModelNotFoundException $err){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem',
+                ]);
+            }catch(QueryException $err){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem',
+                ]);
+            }catch(\Throwable $err){
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
@@ -92,7 +120,7 @@ class AdminKelasController extends Controller
         // END
 
         // RETURN
-            return view('admin.admin.pendaftaran_kelas.kelas.kelas-detail',compact(['kelas','pendaftaran']));
+            return view('admin.admin.pendaftaran_kelas.kelas.kelas-detail',compact(['kelas','pendaftaran','umum','instansi','siswa','mahasiswa']));
         // END
     }
 
@@ -128,7 +156,7 @@ class AdminKelasController extends Controller
 
                 // PENGAJAR
                     $pengajars = Pengajar::all();
-            }catch(ModelNotFoundException $err){
+            }catch(ModelNotFoundException | QueryException | \Throwable $err){
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
@@ -157,7 +185,7 @@ class AdminKelasController extends Controller
 
             $validator = Validator::make($request->all(),[
                 'id' => 'required|exists:pendaftarans,id',
-                'nama_kelas' => 'required|string|min:3|max:50',
+                'nama_kelas' => 'required|string|min:3|max:50|unique:kelas,nama_kelas',
                 'hsk' => 'required|in:pemula,hsk 1,hsk 2,hsk 3,hsk 4,hsk 5,hsk 6',
                 'tanggal_mulai' => 'required|date|before:tanggal_selesai',
                 'tanggal_selesai' => 'required|date|after:tanggal_mulai',
@@ -185,7 +213,6 @@ class AdminKelasController extends Controller
             ]);
 
             if($validator->fails()){
-                dd($validator->errors());
                 return redirect()->back()->with([
                     'status' => 'fail',
                     'icon' => 'error',
@@ -284,7 +311,7 @@ class AdminKelasController extends Controller
                     if(isset($request->umum)){
                         KelasKerjasama::create([
                             'id_kelas' => $kelas->id,
-                            'id_instansi' => 0,
+                            'id_instansi' => 1,
                             'status' => 'umum',
                         ]);
                     }
@@ -351,6 +378,143 @@ class AdminKelasController extends Controller
         // END
     }
 
+    public function editKelas(Request $request){
+        // SECURITY
+            $validator = Validator::make(["id" => $request->id],[
+                'id' => 'required|exists:kelas,id',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan !',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem',
+                ]);
+            }
+        // END
+
+        // MAIN LOGIC
+            try{
+                 // DETAIL KELAS FILTER
+                $detail_kelas_filter = function($query_detail_kelas){
+                    $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
+                        $query_transaksi->where('status','!=','dibatalkan_user')
+                                        ->where('status','!=','expired_system')
+                                        ->where('status','!=','ditolak_admin');
+                    })->whereHas('User');
+                };
+                
+                $kelas = Kelas::whereHas("Pendaftaran")
+                                ->withCount(['DetailKelas' => $detail_kelas_filter])
+                                ->with(["KelasKerjasama","JadwalKelas"])
+                                ->findOrFail($request->id);
+
+                $checked_umum = $kelas->KelasKerjasama->where('status','umum')->pluck("id_instansi")->toArray();
+                $checked_sekolah = $kelas->KelasKerjasama->where('status','siswa')->pluck("id_instansi")->toArray();
+                $checked_prodi = $kelas->KelasKerjasama->where('status','mahasiswa')->pluck("id_instansi")->toArray();
+                $checked_instansi = $kelas->KelasKerjasama->where('status','instansi')->pluck("id_instansi")->toArray();
+
+                // UMUM
+                $umums = Umum::all();
+
+                $umums->map(function($value,$index) use ($checked_umum){
+                    if(in_array($value->id,$checked_umum)){
+                        $value['checked'] = true;
+                        return $value;
+                    }else{
+                        $value['checked'] = false;
+                        return $value;
+                    }
+                });
+                
+                // INSTANSI
+                $instansis = Instansi::all();
+
+                $instansis->map(function($value,$index) use ($checked_instansi){
+                    if(in_array($value->id,$checked_instansi)){
+                        $value['checked'] = true;
+                        return $value;
+                    }else{
+                        $value['checked'] = false;
+                        return $value;
+                    }
+                });
+                
+                // SEKOLAH
+                $sekolahs = Sekolah::all();
+
+                $sekolahs->map(function($value,$index) use ($checked_sekolah){
+                    if(in_array($value->id,$checked_sekolah)){
+                        $value['checked'] = true;
+                        return $value;
+                    }else{
+                        $value['checked'] = false;
+                        return $value;
+                    }
+                });
+                
+                // PRODI
+                $prodis = Prodi::orderBy("id_fakultas")->get();
+                
+                $prodis->map(function($value,$index) use ($checked_prodi){
+                    if(in_array($value->id,$checked_prodi)){
+                        $value['checked'] = true;
+                        return $value;
+                    }else{
+                        $value['checked'] = false;
+                        return $value;
+                    }
+                });
+                
+
+                // PENGAJAR
+                $pengajars = Pengajar::all();
+                
+                // GET PENDAFTARAN
+                $pendaftaran = $kelas->Pendaftaran()->firstOrFail();
+
+            }catch(ModelNotFoundException | QueryException | \Throwable $err){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan !',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem',
+                ]);
+            }
+        // END
+
+        // RETURN
+            return view('admin.admin.pendaftaran_kelas.kelas.kelas-edit',compact(['kelas','pendaftaran','pengajars','instansis','sekolahs','prodis','umums']));
+        // END
+    }
+
+    public function storeEditKelas(Request $request){
+        // SECURITY
+            $validator = Validator::make(["id" => $request->id],[
+                'id' => 'required|exists:kelas,id',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->with([
+                    'status' => 'fail',
+                    'icon' => 'error',
+                    'title' => 'Kelas Tidak Ditemukan !',
+                    'message' => 'Kelas tidak ditemukan di dalam sistem',
+                ]);
+            }
+        // END
+
+        // MAIN LOGIC
+            // IMAGE PROCESSOR
+                $nama_file_logo_kelas = "default.jpg";
+                if($request->hasFile('logo_kelas')){
+                    $nama_file_logo_kelas = basename($request->file('logo_kelas')->store('public\image_kelas'));
+                }
+            // END
+        // END
+    }
+
     public function deleteKelas(Request $request){
         // SECURITY
             $validator = Validator::make($request->all(),[
@@ -404,21 +568,28 @@ class AdminKelasController extends Controller
 
         // MAIN LOGIC
             try{
-                $kelas = json_encode(["data" => Kelas::with("Pengajar")->whereHas("Pendaftaran")
-                                        ->withCount(['DetailKelas' => function($query_detail_kelas){
-                                            $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
-                                                $query_transaksi->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
-                                            })->whereHas('User');
-                                        }])
-                                        ->where('id_pendaftaran',$request->id)
-                                        ->get()
-                                        ->map(function($value,$index){
-                                                $value['number'] = $index+=1;
-                                                $value['tanggal_mulai'] = Carbon::create($value->tanggal_mulai)->translatedFormat("l, Y-m-d");
-                                                $value['tanggal_selesai'] = Carbon::create($value->tanggal_selesai)->translatedFormat("l, Y-m-d");
-                                                return $value;
+                // DETAIL KELAS FILTER
+                $detail_kelas_filter = function($query_detail_kelas){
+                    $query_detail_kelas->whereHas('Transaksi',function($query_transaksi){
+                        $query_transaksi->where('status','!=','dibatalkan_user')->where('status','!=','expired_system')->where('status','!=','ditolak_admin');
+                    })->whereHas('User');
+                };
+
+                $kelas = json_encode(["data" => Kelas::with("Pengajar")
+                                                ->whereHas("Pendaftaran")
+                                                ->withCount(['DetailKelas' => $detail_kelas_filter])
+                                                ->where('id_pendaftaran',$request->id)
+                                                ->get()
+                                                ->map(function($value,$index){
+                                                        $value['number'] = $index+=1;
+                                                        $value['harga'] = number_format($value['harga'],0,".",".");
+                                                        $value['tanggal_mulai'] = Carbon::create($value->tanggal_mulai)->translatedFormat("l, Y-m-d");
+                                                        $value['tanggal_selesai'] = Carbon::create($value->tanggal_selesai)->translatedFormat("l, Y-m-d");
+                                                        return $value;
                                     })]);
             }catch(ModelNotFoundException $err){
+                return abort(403, "Unathorized Access");
+            }catch(QueryException $err){
                 return abort(403, "Unathorized Access");
             }
         // END

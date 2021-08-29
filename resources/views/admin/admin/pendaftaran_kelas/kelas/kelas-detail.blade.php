@@ -85,10 +85,128 @@
                 <input type="text"  class="form-control" value="{{ $kelas->detail_kelas_count }} Orang" readonly>
             </div>
 
-            <div class="col-12 col-lg-6">
+            <div class="col-12">
                 <label>STATUS</label>
                 <input type="text"  class="form-control" value="{{ strtoupper($kelas->status) }}" readonly>
             </div>
+
+            <div class="col-12 mt-3">
+                <label for="">DATA DIAKSES :</label>
+                <div class="card">
+                    <div class="card-header bg-primary">
+                        <h3 class="card-title">UMUM</h3>
+                        <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul>
+                                    @if(isset($umum))
+                                        @if(!$umum->isEmpty())
+                                            @foreach($umum as $index => $data_umum)
+                                                <li>{{ $data_umum->getInstansiName() }}</li>
+                                            @endforeach
+                                        @else
+                                            TIDAK ADA DATA
+                                        @endif
+                                    @else
+                                        TIDAK ADA DATA
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">SISWA</h3>
+                        <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul>
+                                    @if(isset($siswa))
+                                        @if(!$siswa->isEmpty())
+                                            @foreach($siswa as $index => $data_siswa)
+                                                <li>{{ $data_siswa->getInstansiName() }}</li>
+                                            @endforeach
+                                        @else
+                                            TIDAK ADA DATA
+                                        @endif
+                                    @else
+                                        TIDAK ADA DATA
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <h3 class="card-title">MAHASISWA</h3>
+                        <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul>
+                                    @if(isset($mahasiswa))
+                                        @if(!$mahasiswa->isEmpty())
+                                            @foreach($mahasiswa as $index => $data_mahasiswa)
+                                                <li>{{ $data_mahasiswa->getInstansiName() }}</li>
+                                            @endforeach
+                                        @else
+                                            TIDAK ADA DATA
+                                        @endif
+                                    @else
+                                        TIDAK ADA DATA
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-warning">
+                        <h3 class="card-title">INSTANSI</h3>
+                        <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul>
+                                    @if(isset($instansi))
+                                        @if(!$instansi->isEmpty())
+                                            @foreach($instansi as $index => $data_instansi)
+                                                <li>{{ $data_instansi->getInstansiName() }}</li>
+                                            @endforeach
+                                        @else
+                                            TIDAK ADA DATA
+                                        @endif
+                                    @else
+                                        TIDAK ADA DATA
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -100,7 +218,7 @@
 @push('js')
 <script>
     $(document).ready(function(){
-
+        $("[data-card-widget='collapse']").click()
     });
 
     function deleteKelas(){
@@ -118,7 +236,7 @@
         icon:'warning',
         showDenyButton: true,
         showCancelButton: false,
-        confirmButtonText: `Archived`,
+        confirmButtonText: `Delete`,
         denyButtonText: `Batal`,
         }).then((result) => {
             

@@ -34,10 +34,10 @@
                     
                     <label class="mt-2">Phone Number <span class="text-danger">*</span></label>
                     @if($errors->has('phone_number'))
-                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1 border border-danger" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
+                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1 border border-danger" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15" required>
                         <p class="text-danger animated slideInUp"><small>{{ $errors->first('phone_number') }}</small></p>
                     @else
-                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
+                        <input name="phone_number" value="{{ old('phone_number') }}" type="tel" placeholder="Ex. +62999999999 " class="form-control mt-1" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15" required>
                     @endif 
 
                     <label for="exampleForm2" class="mt-2">Line ID <span class="text-danger">*</span></label>
@@ -50,10 +50,10 @@
                     
                     <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="Nomor WA yang terintegrasi dengan account WA">WA Number <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
                     @if($errors->has('wa'))
-                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1 border border-danger" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
+                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1 border border-danger" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15" required>
                         <p class="text-danger animated slideInUp"><small>{{ $errors->first('wa') }}</small></p>
                     @else
-                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1" pattern="/(\+62)([0-9]*$)/" minlength="7" maxlength="15" required>
+                        <input name="wa" value="{{ old('wa') }}" type="tel" placeholder="Nomor HP terhubung WA" class="form-control mt-1" pattern="(\+62)([0-9]*$)" minlength="7" maxlength="15" required>
                     @endif
 
                     <label for="exampleForm2" class="mt-2" data-toggle="tooltip" title="Alamat tempat tinggal pendaftar">Alamat <span class="text-danger"> * </span><i class="fas fa-question-circle"></i></label>
