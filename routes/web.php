@@ -26,8 +26,6 @@ use Illuminate\Support\Facades\Route;
     })->name('user.about-page');
 // AKHIR
 
-
-
 // USER
     Route::prefix('user')->group(function(){
         // USER AUTH
@@ -232,17 +230,36 @@ use Illuminate\Support\Facades\Route;
                         // END
                     // END
 
-                    // KELAS PENDAFTARAN
+                    // KELAS
                         Route::get('kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@index')->name('admin.kelas');
 
                         Route::get('detail/kelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@detailKelas')->name('admin.detail.kelas');
 
                         Route::get('edit/kelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@editKelas')->name('admin.edit.kelas');
+                        Route::put('edit/kelas','admin\pendaftaran_kelas\kelas\AdminKelasController@storeEditKelas')->name('admin.store.edit.kelas');
 
                         Route::get('create/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@createKelas')->name('admin.create.kelas');
                         Route::post('create/kelas/pendaftarankelas','admin\pendaftaran_kelas\kelas\AdminKelasController@postCreateKelas')->name('admin.post.create.kelas');
 
                         Route::delete('delete/kelas','admin\pendaftaran_kelas\kelas\AdminKelasController@deleteKelas')->name('admin.delete.kelas');
+
+                        // TRASHED KELAS
+                            Route::get('trashed/kelas/pendaftarankelas/{id?}','admin\pendaftaran_kelas\kelas\AdminKelasController@indexTrashedKelas')->name('admin.trashed.kelas');
+
+                            Route::put('restore/kelas/pendaftarankelas','admin\pendaftaran_kelas\kelas\AdminKelasController@restoreTrashedKelas')->name('admin.restore.trashed.kelas');
+
+                            // AJAX
+                                Route::post('trashedKelasData','admin\pendaftaran_kelas\kelas\AdminKelasController@ajaxTrashedKelasData')->name('admin.ajax.trashed.kelas');
+                            // END
+                        // END
+
+                        // PESERTA KELAS
+                            Route::get('pesertakelas/kelas/{id?}','admin\pendaftaran_kelas\kelas\peserta_kelas\PesertaKelasController@index')->name('admin.peserta.kelas.index');
+
+                            // AJAX
+                                Route::post('pesertakelasdata','admin\pendaftaran_kelas\kelas\peserta_kelas\PesertaKelasController@ajaxPesertaKelasData')->name('admin.ajax.peserta.kelas.index');
+                            // END
+                        // END
 
                         // AJAX
                             Route::post('kelasdata','admin\pendaftaran_kelas\kelas\AdminKelasController@ajaxKelasData')->name('admin.ajax.kelas');

@@ -2,49 +2,29 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Kelas')
+@section('page-name-header','Peserta Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[$pendaftaran->id]) }}">Detail Pendaftaran Kelas</a></li>
-<li class="breadcrumb-item active">Kelas</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.kelas',[$pendaftaran->id]) }}">Kelas</a></li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.detail.kelas',[$kelas->id]) }}">Detail Kelas</a></li>
+<li class="breadcrumb-item active">Peserta Kelas</li>
 @endsection
 
 @section('content')
 <div class="row">
-    <div class="col-12 mb-4">
-        <a href="{{ route('admin.trashed.kelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-info"><i class="far fa-edit"></i> LIHAT TRASHED KELAS</a>
-        <a href="{{ route('admin.create.kelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT KELAS BARU</a>
-    </div>
     <div class="col-12 mb-3">
         <table>
             <tr>
-                <th>Nama Pendaftaran :</th>
-                <td>{{ $pendaftaran->nama_pendaftaran }}</td>
+                <th>Nama Kelas :</th>
+                <td>{{ $kelas->nama_kelas }}</td>
             </tr>
         </table>
     </div>
     <div class="col-12 jumbotron p-2 shadow">
         <table class="table responsive wrap" width="100%" id="table_id">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama kelas</th>
-            <th scope="col">HSK</th>
-            <th scope="col">Tanggal Mulai</th>
-            <th scope="col">Tanggal Selesai</th>
-            <th scope="col">Kuota</th>
-            <th scope="col">Peserta</th>
-            <th scope="col">Harga</th>
-            <th scope="col">Status</th>
-            <th scope="col">Created at</th>
-            <th scope="col">Updated at</th>
-            <th scope="col">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
         </table>
     </div>
 
@@ -132,34 +112,38 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.kelas') }}",
+                "url": "{{ route('admin.ajax.peserta.kelas.index') }}",
                 "type": "POST",
                 "data":{
                     "_token": "{{ csrf_token() }}",
-                    "id" : {{ $pendaftaran->id }}
+                    "id" : "{{ $kelas->id }}"
                 }
             },
             "columns": [
-                { "data": "number" },
-                { "data": "nama_kelas" },
-                { "data": "hsk" },
-                { "data": "tanggal_mulai" },
-                { "data": "tanggal_selesai" },
-                { "data": "kuota" },
-                { "data": "detail_kelas_count" },
-                {
-                    data: "harga",title:"Harga",
-                    render: function ( data, type, row, meta ) {
-                        return 'Rp. '+data;
+                {"data" : "number","title" : "#"},
+                {"data" : "user.name","title" : "Name"},
+                {"data" : "user.username","title" : "Username","visible":false},
+                {"data" : "user.hsk","title" : "HSK",
+                    render: function(data,type,row,meta){
+                        return data.toUpperCase();
                     }
                 },
-                { "data": "status" },
-                { "data": "created_at" ,"visible" :false},
-                { "data": "updated_at" ,"visible" :false},
+                {"data" : "user.nomor_pelajar_tci","title" : "Nomor Pelajar TCI"},
+                {"data" : "user.email","title" : "Email"},
+                {"data" : "user.phone_number","title" : "Phone Number","visible":false},
+                {"data" : "user.line","title" : "Line","visible":false},
+                {"data" : "user.wa","title" : "Wa","visible":false},
+                {"data" : "user.alamat","title" : "Alamat","visible":false},
+                {"data" : "user.hak_akses","title" : "Hak Akses","visible":false},
+                {"data" : "transaksi.status","title" : "Status Transaksi",
+                    render: function(data,type,row,meta){
+                        return data.replace(/_/g, " ").toUpperCase();
+                    }
+                },
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.kelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.kelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.kelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id_pendaftaran" value="{{ $pendaftaran->id }}"/> <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
+                        return '<a href="{{ route("admin.detail.siswa") }}/'+row["user"]["id"]+'" target="__blank" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.siswa") }}/'+row["user"]["id"]+'" target="__blank" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePesertaKelas('+data+')"><i class="fas fa-user-times"></i></a><a class="btn text-white btn-sm btn-warning"><i class="fas fa-file-invoice-dollar"></i></a><form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.kelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id_pendaftaran" value="{{ $pendaftaran->id }}"/> <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
                     }
                 }
             ],
@@ -189,19 +173,17 @@
         
     }
 
-    function deletePendaftaranKelas(index){
+    function deletePesertaKelas(index){
             Swal.fire({
-            title: 'Delete Kelas Ini ?',
+            title: 'Keluarkan Peserta Kelas Ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
+            '<p>Berikut merupakan effect apabila admin menghapus Peserta Kelas</p>'+
             '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar tidak akan mampu mengakses kelas ini</li>'+
-            '<li>Kelas yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED KELAS</span> </li>'+
-            '<li>Kelas yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Kelas maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Apabila admin ingin menghentikan pendaftaran ke kelas ini maka tutup kelas, melalui halaman <span class="text-info">EDIT KELAS</span> </li>'+
-            '<li>User <span class="text-danger font-weight-bold">YANG SUDAH MEMBAYAR</span> juga tidak mampu melihat kelas ini, jadi mohon bijak apabila akan menghapus kelas</li>'+
-            '<li>Akses ini memerlukan input <span class="text-danger font-weight-bold">PASSWORD ADMIN</span> </li>'+
+            '<li>Peserta kelas akan dikeluarkan dari kelas !</li>'+
+            '<li><span class="font-weight-bold text-danger">TRANSAKSI, INVOICE, dan SEMUA DATA</span> yang berkaitan dengan kelas ini <span class="font-weight-bold text-danger">TIDAK AKAN BISA DIAKSES</span> kembali oleh peserta kelas yang sudah dihapus dari kelas</li>'+
+            '<li>Peserta yang telah dihapus dari kelas ini <span class="text-danger font-weight-bold">TIDAK DAPAT</span> dipulihkan</li>'+
+            '<li>Jadi mohon untuk menggunakan fitur ini dengan bijak</li>'+
+            '<li>Aksi ini memerlukan password admin untuk melanjutkannya</li>'+
             '</ul>' +
             '<label>PASSWORD ADMIN</label><br>'+
             '<input id="pass_admin_'+index+'" name="password" type="password" form="delete-pendaftaran-kelas-'+index+'" class="form-control border border-danger" placeholder="Password admin diperlukan"/>'

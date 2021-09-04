@@ -16,10 +16,11 @@
 <div class="row">
     <div class="col-12 jumbotron shadow p-2 mt-2">
         <div class="container-fluid">
-            <form action="{{ route('admin.post.create.kelas') }}" method="POST" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
+            <form id="form-edit" action="{{ route('admin.store.edit.kelas') }}" method="POST" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
                 <input type="hidden" value="{{ $pendaftaran->id }}" name="id">
+                <input type="hidden" value="{{ $kelas->id }}" name="id_kelas">
                 @csrf
-                @method('POST')
+                @method('PUT')
                 <div class="row">
                     <div class="col-12 text-center text-lg-left">
                         <h5>FORM CREATE KELAS</h5>
@@ -96,7 +97,7 @@
                                             @if($umums->count()>0)
                                                 @foreach($umums as $index => $umum)
                                                     <div class="form-check form-check-inline p-2">
-                                                        <input class="form-check-input" type="checkbox" name="prodi[]" value="{{$umum->id}}" @if($umum->checked) checked checked-before @else unchecked-before @endif>
+                                                        <input class="form-check-input" type="checkbox" name="umum[]" value="{{$umum->id}}" @if($umum->checked) checked checked-before @else unchecked-before @endif>
                                                         <label class="form-check-label" for="inlineRadio3">{{ $umum->nama }}</label>
                                                     </div>
                                                 @endforeach
@@ -125,7 +126,7 @@
                                         @endif
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-sm btn-primary" onclick="$('.prodi-checkbox').prop('checked', true)" type="button">SEMUA SEKOLAH</button>
+                                        <button class="btn btn-sm btn-primary" onclick="$('.prodi-checkbox').prop('checked', true)" type="button">SEMUA PRODI</button>
                                     </div>
                                 </div>
 
@@ -173,7 +174,7 @@
                                         @endif
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-sm btn-primary" onclick="$('.instansi-checkbox').prop('checked', true)" type="button">SEMUA SEKOLAH</button>
+                                        <button class="btn btn-sm btn-primary" onclick="$('.instansi-checkbox').prop('checked', true)" type="button">SEMUA INSTANSI</button>
                                     </div>
                                 </div>
                         </div>
@@ -208,6 +209,7 @@
                                     <h5 class="font-weight-bold text-center bg-primary p-2">JADWAL KELAS</h5>
                                 </div>
                                 <div class="col-12 text-right">
+                                    <button type="button" class="btn btn-sm btn-warning p-2 mx-1" onclick="resetJadwal()"><i class="fas fa-undo"></i> RESET JADWAL</button>
                                     <button type="button" class="btn btn-sm btn-danger p-2 mx-1" onclick="removeJadwal()"><i class="fas fa-minus"></i> KURANGI</button>
                                     <button type="button" class="btn btn-sm btn-primary p-2 mx-1" onclick="addJadwal()"><i class="fas fa-plus"></i> TAMBAH</button>
                                 </div>
@@ -225,16 +227,16 @@
                                     <label for="">WAKTU SELESAI</label>
                                 </div>
                             </div>
+                            <div class="container jadwal-container">
                             @if(isset($kelas->JadwalKelas))
                                 @if($kelas->JadwalKelas->count() > 0)
                                     @foreach($kelas->JadwalKelas as $index => $jadwal_kelas)
-                                        <div class="container jadwal-container">
                                             <div class="row p-2 jadwal-wrapper">
                                                 <div class="col-12 col-lg-4">
                                                     <label class="d-block d-lg-none m-2">HARI</label>
                                                     <select class="custom-select w-100" name="jadwal[day][]">
                                                         <option value="">Pilih Hari</option>
-                                                        <option value="sunday" @if($jadwal_kelas->hari == 'sunday') selected @endif</option>)>SUNDAY</option>
+                                                        <option value="sunday" @if($jadwal_kelas->hari == 'sunday') selected @endif>SUNDAY</option>
                                                         <option value="monday" @if($jadwal_kelas->hari == 'monday') selected @endif>MONDAY</option>
                                                         <option value="tuesday" @if($jadwal_kelas->hari == 'tuesday') selected @endif>TUESDAY</option>
                                                         <option value="wednesday" @if($jadwal_kelas->hari == 'wednesday') selected @endif>WEDNESDAY</option>
@@ -246,20 +248,20 @@
 
                                                 <div class="col-lg-4 col-12">
                                                     <label class="d-block d-lg-none m-2">WAKTU MULAI</label>
-                                                    <input type="time" class="form-control" name="jadwal[waktu_mulai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_mulai)->format('h:i') }}">
+                                                    <input type="time" class="form-control" name="jadwal[waktu_mulai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_mulai)->format('H:i') }}">
                                                 </div>
 
                                                 <div class="col-lg-4 col-12">
                                                     <label class="d-block d-lg-none m-2">WAKTU SELESAI</label>
-                                                    <input type="time" class="form-control" name="jadwal[waktu_selesai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_selesai)->format('h:i') }}">
+                                                    <input type="time" class="form-control" name="jadwal[waktu_selesai][]" value="{{ Carbon\Carbon::create($jadwal_kelas->waktu_selesai)->format('H:i') }}">
                                                 </div>
 
                                                 <div class="bg-primary w-100 my-3" style="height:2px;"></div>
                                             </div>
-                                        </div>
                                     @endforeach
                                 @endif
                             @endif
+                            </div>
                         </div>
                     </div>
 
@@ -289,6 +291,12 @@
 <script>
     
     $("[data-card-widget='collapse']").click()
+
+    const defaultJadwal = $(".jadwal-container").html();
+
+    function resetJadwal(){
+        $(".jadwal-container").html(defaultJadwal);
+    }
 
     function resetCheckbox(){
         $("[checked-before]").prop('checked', true);
@@ -330,29 +338,42 @@
 
     function updateKelas(){
             Swal.fire({
-            title: 'Delete Pendaftaran Ini ?',
-            html: 
-            '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
-            '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar sama-sama tidak akan mampu mengakses pendaftaran beserta kelas yang ada di dalamnya kembali</li>'+
-            '<li>Pendaftaran yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED PENDAFTARAN</span> </li>'+
-            '<li>Pendaftaran yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Pendaftaran maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Semua kelas yang berada di dalam Pendaftaran Ini tidak akan dapat diakses</li>'+
-            '</ul>'
-            ,
-            icon:'warning',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Delete`,
-            denyButtonText: `Batal`,
+                title: 'Update Pendaftaran Ini ?',
+                html: 
+                '<p>Berikut merupakan effect apabila admin melakukan update kelas</p>'+
+                '<ul class="text-left">'+
+                '<li>Update kelas merupakan aksi yang <span class="text-danger font-weight-bold">TIDAK DIREKOMENDASIKAN</span> karena kelas sudah online dan mungkin sudah ada yang membayar dengan ketentuan sebelumnya </li>'+
+                '<li>Apabila memang mengharuskan untuk memperbaharui data kelas mohon untuk memberikan informasi perubahan melalui sistem dan juga off sistem kepada user</li>'+
+                '<li>Admin dapat mengubah data yang bersifat transaksional seperti kelas berbayar atau tidak dan harga dari kelas, namun untuk user yang telah melakukan pembayaran akan tetap mendapatkan data kelas sebelumnya</li>'+
+                '<li>Tanggal selesai dan tanggal mulai tidak ada pengaruhnya di dalam sistem</li>'+
+                '<li>Perubahan hak akses tidak akan mempengaruhi transaksi yang sudah terjadi sebelumnya</li>'+
+                '<li>Perubahana pada nama kelas, keterangan kelas tidak akan mengubah invoice yang sudah terbentuk begitupun data lainnya</li>'+
+                '<li>Aksi ini memerlukan input <span class="text-danger font-weight-bold">PASSWORD ADMIN</span> untuk menjalankannya </li>'+
+                '</ul>'+
+                '<label>PASSWORD ADMIN</label><br>'+
+                '<input id="pass_admin" name="password" type="password" form="form-edit" class="form-control border border-danger" placeholder="Password admin diperlukan"/>'
+                ,
+                icon:'warning',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Update`,
+                denyButtonText: `Batal`,
             }).then((result) => {
-            if (result.isConfirmed) {
-                $("form").submit();
-            } else if (result.isDenied) {
+                    if (result.isConfirmed) {
+                        if($("#pass_admin").val()){
+                            $("form").submit();
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Password Admin Diperlukan !',
+                                text: 'Aksi merupakan tindakan yang krusial, diperlukan password admin untuk melanjutkan',
+                            })
+                        }
+                    } else if (result.isDenied) {
 
-            }
+                    }
             })
+
         }
     
     // SWEETALERT2

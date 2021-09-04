@@ -2,21 +2,18 @@
 
 @section('pendaftaran_kelas','active')
 
-@section('page-name-header','Kelas')
+@section('page-name-header','Trashed Kelas')
 
 @section('breadcrumb-item')
 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Admin</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.pendaftarankelas') }}">Pendaftaran Kelas</a></li>
 <li class="breadcrumb-item active"><a href="{{ route('admin.detail.pendaftarankelas',[$pendaftaran->id]) }}">Detail Pendaftaran Kelas</a></li>
-<li class="breadcrumb-item active">Kelas</li>
+<li class="breadcrumb-item active"><a href="{{ route('admin.kelas',[$pendaftaran->id]) }}">Kelas</a></li>
+<li class="breadcrumb-item active">Trashed Kelas</li>
 @endsection
 
 @section('content')
 <div class="row">
-    <div class="col-12 mb-4">
-        <a href="{{ route('admin.trashed.kelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-info"><i class="far fa-edit"></i> LIHAT TRASHED KELAS</a>
-        <a href="{{ route('admin.create.kelas',[$pendaftaran->id]) }}" class="btn btn-sm btn-success"><i class="far fa-edit"></i> BUAT KELAS BARU</a>
-    </div>
     <div class="col-12 mb-3">
         <table>
             <tr>
@@ -132,7 +129,7 @@
             }
             ],
             "ajax": {
-                "url": "{{ Route('admin.ajax.kelas') }}",
+                "url": "{{ Route('admin.ajax.trashed.kelas') }}",
                 "type": "POST",
                 "data":{
                     "_token": "{{ csrf_token() }}",
@@ -159,70 +156,32 @@
                 {
                     data: "id",title:"Aksi",
                     render: function ( data, type, row, meta ) {
-                        return '<a href="{{ route("admin.detail.kelas") }}/'+data+'" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a><a href="{{ route("admin.edit.kelas") }}/'+data+'" class="btn text-white btn-sm btn-info"><i class="far fa-edit"></i></a><a class="btn text-white btn-sm btn-danger" onclick="deletePendaftaranKelas('+data+')"><i class="far fa-trash-alt"></i></a> <form id="delete-pendaftaran-kelas-'+data+'" action="{{ route("admin.delete.kelas") }}" method="POST" style=" display: none;"> @csrf @method("DELETE") <input name="id_pendaftaran" value="{{ $pendaftaran->id }}"/> <input name="id" value="'+data+'" type="hidden"></form><form id="form-archived-'+data+'" method="POST" style="display:none;" action="{{ route("admin.archived.pendaftarankelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
+                        return '<a class="btn btn-sm btn-primary text-white" onclick="restoreKelas('+data+')"><i class="fas fa-trash-restore"></i></a><form id="form-restore-'+data+'" method="POST" style="display:none;" action="{{ route("admin.restore.trashed.kelas") }}"> @csrf @method("PUT") <input type="hidden" name="id" value="'+data+'"></form>';
                     }
                 }
             ],
         });
     } );
 
-    function detailData(index){
-        try{
-            let data = table.row(index).data();
-
+    function restoreKelas(index){
             Swal.fire({
-                title: 'DETAIL PENGUMUMAN',
-                html: 
-                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;max-height:70vh;overflow:auto;">'+
-                data.pengumuman+
-                '</div>'
-            })
-        }catch(err){
-            Swal.fire({
-                title: 'OPPSS Something Wrong',
-                html: 
-                '<div style="border-top:2px solid purple;border-bottom:2px solid purple;">'+
-                "OPPS... SOMETHING WRONG"+
-                '</div>'
-            })
-        }
-        
-    }
-
-    function deletePendaftaranKelas(index){
-            Swal.fire({
-            title: 'Delete Kelas Ini ?',
+            title: 'Restore Kelas Ini ?',
             html: 
-            '<p>Berikut merupakan effect apabila admin menghapus Pendaftaran Kelas</p>'+
+            '<p>Berikut merupakan effect apabila admin melakukan restore data kelas !</p>'+
             '<ul class="text-left">'+
-            '<li>User yang  telah mendaftar dan juga user yang belum mendaftar tidak akan mampu mengakses kelas ini</li>'+
-            '<li>Kelas yang telah dihapus masih dapat dipulihkan dari halaman <span class="text-info">TRASHED KELAS</span> </li>'+
-            '<li>Kelas yang dipulihkan maka akan masih menyimpan data sama seperti sebelum dihapus</li>'+
-            '<li>Apabila admin ingin mengarsipkan Kelas maka pilih opsi <span class="text-info">PENGARSIPAN</span> </li>'+
-            '<li>Apabila admin ingin menghentikan pendaftaran ke kelas ini maka tutup kelas, melalui halaman <span class="text-info">EDIT KELAS</span> </li>'+
-            '<li>User <span class="text-danger font-weight-bold">YANG SUDAH MEMBAYAR</span> juga tidak mampu melihat kelas ini, jadi mohon bijak apabila akan menghapus kelas</li>'+
-            '<li>Akses ini memerlukan input <span class="text-danger font-weight-bold">PASSWORD ADMIN</span> </li>'+
-            '</ul>' +
-            '<label>PASSWORD ADMIN</label><br>'+
-            '<input id="pass_admin_'+index+'" name="password" type="password" form="delete-pendaftaran-kelas-'+index+'" class="form-control border border-danger" placeholder="Password admin diperlukan"/>'
+            '<li>Kelas yang direstrore akan muncul kembali di halaman user</li>'+
+            '<li>semua data kelas akan pulih baik jumlah peserta, jumlah transaksi dan lainnya</li>'+
+            '</ul>'
             ,
             icon:'warning',
             showDenyButton: true,
             showCancelButton: false,
-            confirmButtonText: `Delete`,
+            confirmButtonText: `Restore`,
             denyButtonText: `Batal`,
             }).then((result) => {
                 
             if (result.isConfirmed) {
-                if($("#pass_admin_"+index).val()){
-                    $('#delete-pendaftaran-kelas-'+index).submit();
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Password Admin Diperlukan !',
-                        text: 'Aksi merupakan tindakan yang krusial, diperlukan password admin untuk melanjutkan',
-                    })
-                }
+                $('#form-restore-'+index).submit();
             } else if (result.isDenied) {
 
             }
